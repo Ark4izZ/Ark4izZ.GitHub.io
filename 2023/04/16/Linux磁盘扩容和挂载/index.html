@@ -1,0 +1,563 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Linux磁盘扩容和挂载 | Ak4izZ&#39;s 滴博客儿</title>
+  <meta name="author" content="Ak4izZ">
+  
+  <meta name="description" content="今天用虚拟机下东西的时候忘了它总共只有20G的磁盘，然后下到一半机器就噶米了,正好折腾的时候记录一下"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Linux磁盘扩容和挂载"/>
+  <meta property="og:site_name" content="Ak4izZ&#39;s 滴博客儿"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="Ak4izZ&#39;s 滴博客儿" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Ak4izZ&#39;s 滴博客儿</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Linux磁盘扩容和挂载</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>今天用虚拟机下东西的时候忘了它总共只有20G的磁盘，然后下到一半机器就噶米了,正好折腾的时候记录一下</p>
+<img src="/2023/04/16/Linux%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9%E5%92%8C%E6%8C%82%E8%BD%BD/image-20230414214920214.png" class>
+
+<span id="more"></span>
+
+<h1 id="新增分区"><a href="#新增分区" class="headerlink" title="新增分区"></a>新增分区</h1><p>第一时间关机了，在VM上设置给它又扩展了30个G，但还是怎么启动都启动不起来。</p>
+<p>还好ssh能连上（但是为啥可以连上）</p>
+<h2 id="查看磁盘用量"><a href="#查看磁盘用量" class="headerlink" title="查看磁盘用量"></a>查看磁盘用量</h2><p>常用命令</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">lsblk  查看当前磁盘情况
+<span class="token function">df</span> <span class="token parameter variable">-lh</span>  查看文件系统情况 <span class="token parameter variable">-l</span> 查看挂载点
+<span class="token function">parted</span> <span class="token parameter variable">-l</span> 会列出文件系统类型
+<span class="token function">fdisk</span> <span class="token parameter variable">-l</span> 查看当前未挂载硬盘<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 看一下磁盘空间用量，df -lh 查看文件系统情况 -l查看挂载点</span>
+root@ak4izz-vm:/<span class="token comment"># df -h</span>
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           389M  <span class="token number">1</span>.7M  388M   <span class="token number">1</span>% /run
+/dev/sda3        20G   19G     <span class="token number">0</span> <span class="token number">100</span>% /
+tmpfs           <span class="token number">1</span>.9G     <span class="token number">0</span>  <span class="token number">1</span>.9G   <span class="token number">0</span>% /dev/shm
+tmpfs           <span class="token number">5</span>.0M  <span class="token number">4</span>.0K  <span class="token number">5</span>.0M   <span class="token number">1</span>% /run/lock
+/dev/sda2       512M  <span class="token number">6</span>.1M  506M   <span class="token number">2</span>% /boot/efi
+tmpfs           389M   60K  389M   <span class="token number">1</span>% /run/user/0
+
+
+
+root@ak4izz-vm:/<span class="token comment"># du -s -h ./*</span>
+<span class="token number">0</span>       ./bin
+193M    ./boot
+<span class="token number">4</span>.0K    ./cdrom
+<span class="token number">0</span>       ./dev
+12M     ./etc
+<span class="token number">5</span>.5G    ./home
+<span class="token number">0</span>       ./lib
+<span class="token number">0</span>       ./lib32
+<span class="token number">0</span>       ./lib64
+<span class="token number">0</span>       ./libx32
+16K     ./lost+found
+12K     ./media
+<span class="token number">4</span>.0K    ./mnt
+<span class="token number">1</span>.1G    ./opt
+du: cannot access <span class="token string">'./proc/1496/task/1496/fd/4'</span><span class="token builtin class-name">:</span> No such <span class="token function">file</span> or directory
+du: cannot access <span class="token string">'./proc/1496/task/1496/fdinfo/4'</span><span class="token builtin class-name">:</span> No such <span class="token function">file</span> or directory
+du: cannot access <span class="token string">'./proc/1496/fd/3'</span><span class="token builtin class-name">:</span> No such <span class="token function">file</span> or directory
+du: cannot access <span class="token string">'./proc/1496/fdinfo/3'</span><span class="token builtin class-name">:</span> No such <span class="token function">file</span> or directory
+<span class="token number">0</span>       ./proc
+284K    ./root
+<span class="token number">1</span>.8M    ./run
+<span class="token number">0</span>       ./sbin
+<span class="token number">7</span>.8G    ./snap
+<span class="token number">4</span>.0K    ./srv
+<span class="token number">2</span>.1G    ./swapfile
+<span class="token number">0</span>       ./sys
+140K    ./tmp
+<span class="token number">5</span>.0G    ./usr
+<span class="token number">4</span>.5G    ./var<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>结果这么一看，原来是没给他创建分区</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@ak4izz-vm:/<span class="token comment"># fdisk -l</span>
+
+<span class="token operator">&lt;</span>---SNIP---<span class="token operator">></span>
+Disk /dev/sda: <span class="token number">50</span> GiB, <span class="token number">53687091200</span> bytes, <span class="token number">104857600</span> sectors
+Disk model: VMware Virtual S
+Units: sectors of <span class="token number">1</span> * <span class="token number">512</span> <span class="token operator">=</span> <span class="token number">512</span> bytes
+Sector size <span class="token punctuation">(</span>logical/physical<span class="token punctuation">)</span>: <span class="token number">512</span> bytes / <span class="token number">512</span> bytes
+I/O size <span class="token punctuation">(</span>minimum/optimal<span class="token punctuation">)</span>: <span class="token number">512</span> bytes / <span class="token number">512</span> bytes
+Disklabel type: gpt
+Disk identifier: 57CFCFBD-DECE-4DB9-B92F-059A2451A3B0
+
+Device       Start      End  Sectors  Size Type
+/dev/sda1     <span class="token number">2048</span>     <span class="token number">4095</span>     <span class="token number">2048</span>    1M BIOS boot
+/dev/sda2     <span class="token number">4096</span>  <span class="token number">1054719</span>  <span class="token number">1050624</span>  513M EFI System
+/dev/sda3  <span class="token number">1054720</span> <span class="token number">41940991</span> <span class="token number">40886272</span> <span class="token number">19</span>.5G Linux filesystem
+
+<span class="token operator">&lt;</span>---SNIP---<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="创建分区"><a href="#创建分区" class="headerlink" title="创建分区"></a>创建分区</h2><p><strong>分区</strong>的目的是便于管理，就像Windows中的C盘、D盘等。Linux只能创建四个主分区</p>
+<p> fdisk 是一个创建和维护分区表的程序，它兼容 DOS 类型的分区表、BSD 或者 SUN 类型的磁盘列表。</p>
+<p>这里磁盘是&#x2F;dev&#x2F;sda，那么就<code>fdisk /dev/sda</code>。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@ak4izz-vm:/<span class="token comment"># fdisk /dev/sda</span>
+
+Welcome to <span class="token function">fdisk</span> <span class="token punctuation">(</span>util-linux <span class="token number">2.37</span>.2<span class="token punctuation">)</span>.
+Changes will remain <span class="token keyword">in</span> memory only, <span class="token keyword">until</span> you decide to <span class="token function">write</span> them.
+Be careful before using the <span class="token function">write</span> command.
+
+GPT PMBR size mismatch <span class="token punctuation">(</span><span class="token number">41943039</span> <span class="token operator">!=</span> <span class="token number">104857599</span><span class="token punctuation">)</span> will be corrected by write.
+This disk is currently <span class="token keyword">in</span> use - repartitioning is probably a bad idea.
+It<span class="token string">'s recommended to umount all file systems, and swapoff all swap
+partitions on this disk.
+
+
+Command (m for help): m
+
+Help:
+
+  GPT
+   M   enter protective/hybrid MBR
+
+  Generic
+   d   delete a partition
+   F   list free unpartitioned space
+   l   list known partition types
+   n   add a new partition
+   p   print the partition table
+   t   change a partition type
+   v   verify the partition table
+   i   print information about a partition
+
+  Misc
+   m   print this menu
+   x   extra functionality (experts only)
+
+  Script
+   I   load disk layout from sfdisk script file
+   O   dump disk layout to sfdisk script file
+
+  Save &amp; Exit
+   w   write table to disk and exit
+   q   quit without saving changes
+
+  Create a new label
+   g   create a new empty GPT partition table
+   G   create a new empty SGI (IRIX) partition table
+   o   create a new empty DOS partition table
+   s   create a new empty Sun partition table
+
+
+Command (m for help): n
+Partition number (4-128, default 4): 4
+First sector (41940992-104857566, default 41940992): 
+Last sector, +/-sectors or +/-size&#123;K,M,G,T,P&#125; (41940992-104857566, default 104857566): 
+
+Created a new partition 4 of type '</span>Linux filesystem' and of size <span class="token number">30</span> GiB.
+
+Command <span class="token punctuation">(</span>m <span class="token keyword">for</span> <span class="token builtin class-name">help</span><span class="token punctuation">)</span>: w
+The partition table has been altered.
+Syncing disks.
+
+root@ak4izz-vm:/<span class="token comment"># reboot</span>
+
+root@ak4izz-vm:~<span class="token comment"># fdisk -l</span>
+<span class="token operator">&lt;</span>---SNIP---<span class="token operator">></span>
+Disk /dev/sda: <span class="token number">50</span> GiB, <span class="token number">53687091200</span> bytes, <span class="token number">104857600</span> sectors
+Disk model: VMware Virtual S
+Units: sectors of <span class="token number">1</span> * <span class="token number">512</span> <span class="token operator">=</span> <span class="token number">512</span> bytes
+Sector size <span class="token punctuation">(</span>logical/physical<span class="token punctuation">)</span>: <span class="token number">512</span> bytes / <span class="token number">512</span> bytes
+I/O size <span class="token punctuation">(</span>minimum/optimal<span class="token punctuation">)</span>: <span class="token number">512</span> bytes / <span class="token number">512</span> bytes
+Disklabel type: gpt
+Disk identifier: 57CFCFBD-DECE-4DB9-B92F-059A2451A3B0
+
+Device        Start       End  Sectors  Size Type
+/dev/sda1      <span class="token number">2048</span>      <span class="token number">4095</span>     <span class="token number">2048</span>    1M BIOS boot
+/dev/sda2      <span class="token number">4096</span>   <span class="token number">1054719</span>  <span class="token number">1050624</span>  513M EFI System
+/dev/sda3   <span class="token number">1054720</span>  <span class="token number">41940991</span> <span class="token number">40886272</span> <span class="token number">19</span>.5G Linux filesystem
+/dev/sda4  <span class="token number">41940992</span> <span class="token number">104857566</span> <span class="token number">62916575</span>   30G Linux filesystem
+<span class="token operator">&lt;</span>---SNIP---<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>到新分选择要输入第一个扇区(First sector)的时候直接婚车就好了，填了个歪的浪费空间。</p>
+<p>最后w保存退出，重启一下系统，再次查看一下是否分区成功。</p>
+<h2 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h2><p>mkfs.ext4 &#x3D; make filesystem Ext4</p>
+<p>该功能就是用于对磁盘设备进行Ext4格式化操作，并写入文件系统</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@ak4izz-vm:~<span class="token comment"># mkfs.ext4 /dev/sda4</span>
+<span class="token function">mke2fs</span> <span class="token number">1.46</span>.5 <span class="token punctuation">(</span><span class="token number">30</span>-Dec-2021<span class="token punctuation">)</span>
+Creating filesystem with <span class="token number">7864320</span> 4k blocks and <span class="token number">1969920</span> inodes
+Filesystem UUID: 0ef2c1b4-c3df-49ce-b8e4-bb44a047fb48
+Superblock backups stored on blocks: 
+        <span class="token number">32768</span>, <span class="token number">98304</span>, <span class="token number">163840</span>, <span class="token number">229376</span>, <span class="token number">294912</span>, <span class="token number">819200</span>, <span class="token number">884736</span>, <span class="token number">1605632</span>, <span class="token number">2654208</span>, 
+        <span class="token number">4096000</span>
+
+Allocating group tables: <span class="token keyword">done</span>                            
+Writing inode tables: <span class="token keyword">done</span>                            
+Creating journal <span class="token punctuation">(</span><span class="token number">32768</span> blocks<span class="token punctuation">)</span>: <span class="token keyword">done</span>
+Writing superblocks and filesystem accounting information: <span class="token keyword">done</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h2><p>Linux中的所有设备都必须挂载之后才能使用，即必须给他分配挂载点，也就是系统中的某个目录，因为Linux中设备都会以文件的形式存储，设备一般保存在&#x2F;dev目录下，以sda、sda1、sda2……命名。sda1：第一块硬盘的第一个分区。sba1：第二块硬盘的第二个分区。</p>
+<h3 id="临时挂载"><a href="#临时挂载" class="headerlink" title="临时挂载"></a>临时挂载</h3><p>先看一下之前的分区都挂载在哪里。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@ak4izz-vm:~<span class="token comment"># lsblk</span>
+
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+sda      <span class="token number">8</span>:0    <span class="token number">0</span>    50G  <span class="token number">0</span> disk 
+├─sda1   <span class="token number">8</span>:1    <span class="token number">0</span>     1M  <span class="token number">0</span> part 
+├─sda2   <span class="token number">8</span>:2    <span class="token number">0</span>   513M  <span class="token number">0</span> part /boot/efi
+├─sda3   <span class="token number">8</span>:3    <span class="token number">0</span>  <span class="token number">19</span>.5G  <span class="token number">0</span> part /var/snap/firefox/common/host-hunspell
+│                                /
+└─sda4   <span class="token number">8</span>:4    <span class="token number">0</span>    30G  <span class="token number">0</span> part <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>可以看到sda3挂载到了根目录下，那么sda4就不能放在根目录，因为会覆盖掉之前的数据，甚至导致系统不可用。</p>
+<p>因此新建一个空目录，然后使用<code>mount</code>把他挂载上去。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@ak4izz-vm:/<span class="token comment"># mkdir /mnt/data</span>
+root@ak4izz-vm:/<span class="token comment"># mount /dev/sda4 /mnt/data</span>
+
+root@ak4izz-vm:/<span class="token comment"># lsblk</span>
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+<span class="token operator">&lt;</span>---SNIP---<span class="token operator">></span>
+sda      <span class="token number">8</span>:0    <span class="token number">0</span>    50G  <span class="token number">0</span> disk 
+├─sda1   <span class="token number">8</span>:1    <span class="token number">0</span>     1M  <span class="token number">0</span> part 
+├─sda2   <span class="token number">8</span>:2    <span class="token number">0</span>   513M  <span class="token number">0</span> part /boot/efi
+├─sda3   <span class="token number">8</span>:3    <span class="token number">0</span>  <span class="token number">19</span>.5G  <span class="token number">0</span> part /var/snap/firefox/common/host-hunspell
+│                                /
+└─sda4   <span class="token number">8</span>:4    <span class="token number">0</span>    30G  <span class="token number">0</span> part /mnt/data
+<span class="token operator">&lt;</span>---SNIP---<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这样<code>/mnt/data</code>目录中的文件就会被存放在&#x2F;dev&#x2F;sda4中。</p>
+<p>对于磁盘等长期使用的设备，临时挂载是很麻烦的，因为每次重启之后都需要进行挂载。但有些情况下可能需要手动挂载文件系统。例如，如果你插入了一个新的 USB 存储设备，那么它可能需要手动挂载才能访问。在这种情况下，可以使用 <code>mount</code> 命令手动挂载设备。</p>
+<p>Linux 系统启动时会执行一个叫做 <code>mountall</code> 的程序，该程序会自动查找并挂载在 <code>/etc/fstab</code> 文件中指定的所有文件系统。因此，如果你已经在 <code>/etc/fstab</code> 文件中添加了相应的条目，那么在下一次系统启动时，这些文件系统会自动挂载到指定的挂载点上。下面就将介绍设置如何自动挂载。</p>
+<h3 id="x2F-etc-x2F-fstab"><a href="#x2F-etc-x2F-fstab" class="headerlink" title="&#x2F;etc&#x2F;fstab"></a>&#x2F;etc&#x2F;fstab</h3><p>在实现自动挂载之前，先了解一下这个文件的内容</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># /etc/fstab: static file system information.</span>
+<span class="token comment">#</span>
+<span class="token comment"># Use 'blkid' to print the universally unique identifier for a</span>
+<span class="token comment"># device; this may be used with UUID= as a more robust way to name devices</span>
+<span class="token comment"># that works even if disks are added and removed. See fstab(5).</span>
+<span class="token comment">#</span>
+<span class="token comment"># &lt;file system> &lt;mount point>   &lt;type>  &lt;options>       &lt;dump>  &lt;pass></span>
+<span class="token comment"># / was on /dev/sda3 during installation</span>
+<span class="token assign-left variable">UUID</span><span class="token operator">=</span>babf37e1-d5b4-4c21-b5e2-361cbe5f3b4d /               ext4    <span class="token assign-left variable">errors</span><span class="token operator">=</span>remount-ro <span class="token number">0</span>       <span class="token number">1</span>
+<span class="token comment"># /boot/efi was on /dev/sda2 during installation</span>
+<span class="token assign-left variable">UUID</span><span class="token operator">=</span>BEA0-EF18  /boot/efi       vfat    <span class="token assign-left variable">umask</span><span class="token operator">=</span>0077      <span class="token number">0</span>       <span class="token number">1</span>
+/swapfile                                 none            swap    sw              <span class="token number">0</span>       <span class="token number">0</span>
+/dev/fd0        /media/floppy0  auto    rw,user,noauto,exec,utf8 <span class="token number">0</span>       <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>第一列<code>&lt;file system&gt;</code>，磁盘设备文件或者该设备的label和uuid(使用LABEL&#x3D;XXX或者UUID&#x3D;XXX)，使用<code>blkid</code>可以查看。</p>
+<p>第二列<code>&lt;mount point&gt;</code> 挂载点，如果挂载点的路径中存在空格，可以使用<code>\040</code>,<code>\011</code>代替。</p>
+<p>第三列<code>&lt;type&gt;</code>文件系统类型（fs_type），Linux支持ext4, xfs, btrfs, f2fs, vfat,ntfs, hfsplus, tmpfs, sysfs, proc, iso9660, udf, squashfs, nfs, cifs等。</p>
+<p>第四列<code>&lt;options&gt;</code> 基本的options如下:</p>
+<pre class="line-numbers language-none"><code class="language-none">defaults
+    use default options: rw, suid, dev, exec, auto, nouser, and async.
+
+noauto
+    do not mount when mount -a is given (e.g., at boot time)
+
+user
+    allow a user to mount
+
+owner
+    allow device owner to mount
+
+comment
+    or x-&lt;name&gt; for use by fstab-maintaining programs
+
+nofail
+    do not report errors for this device if it does not exist.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>第五列<code>&lt;dump&gt;</code> 能否被dump备份命令作用，0表示不备份，1表示每天备份，2表示不定期备份。</p>
+<p>第六列<code>&lt;pass&gt;</code> 开机的过程中，系统默认会以fsck检验我们系统是否为完整（clean）；0：不要检验，1：最早检验，2：1级检验完成之后检验。</p>
+<p>查看详情文档可以使用<code>man fstab</code>和<code>man mount</code>。</p>
+<h3 id="开机自动挂载"><a href="#开机自动挂载" class="headerlink" title="开机自动挂载"></a>开机自动挂载</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@ak4izz-vm:/<span class="token comment"># blkid | grep /dev/sda</span>
+/dev/sda3: <span class="token assign-left variable">UUID</span><span class="token operator">=</span><span class="token string">"babf37e1-d5b4-4c21-b5e2-361cbe5f3b4d"</span> <span class="token assign-left variable">BLOCK_SIZE</span><span class="token operator">=</span><span class="token string">"4096"</span> <span class="token assign-left variable">TYPE</span><span class="token operator">=</span><span class="token string">"ext4"</span> <span class="token assign-left variable">PARTUUID</span><span class="token operator">=</span><span class="token string">"e5f46199-32af-410d-b09e-64eab1e902c3"</span>
+/dev/sda4: <span class="token assign-left variable">UUID</span><span class="token operator">=</span><span class="token string">"0ef2c1b4-c3df-49ce-b8e4-bb44a047fb48"</span> <span class="token assign-left variable">BLOCK_SIZE</span><span class="token operator">=</span><span class="token string">"4096"</span> <span class="token assign-left variable">TYPE</span><span class="token operator">=</span><span class="token string">"ext4"</span> <span class="token assign-left variable">PARTUUID</span><span class="token operator">=</span><span class="token string">"9ec4270a-b9fe-f04a-88b3-104160f514ee"</span>
+/dev/sda2: <span class="token assign-left variable">UUID</span><span class="token operator">=</span><span class="token string">"BEA0-EF18"</span> <span class="token assign-left variable">BLOCK_SIZE</span><span class="token operator">=</span><span class="token string">"512"</span> <span class="token assign-left variable">TYPE</span><span class="token operator">=</span><span class="token string">"vfat"</span> <span class="token assign-left variable">PARTLABEL</span><span class="token operator">=</span><span class="token string">"EFI System Partition"</span> <span class="token assign-left variable">PARTUUID</span><span class="token operator">=</span><span class="token string">"3af11ce9-5add-4eb8-bc61-7351c3908746"</span>
+/dev/sda1: <span class="token assign-left variable">PARTUUID</span><span class="token operator">=</span><span class="token string">"14da4140-c494-498a-9b45-bf1e328b1cd1"</span>
+
+root@ak4izz-vm:/<span class="token comment">#	vim /etc/fstab</span>
+
+<span class="token assign-left variable">UUID</span><span class="token operator">=</span>babf37e1-d5b4-4c21-b5e2-361cbe5f3b4d /               ext4    <span class="token assign-left variable">errors</span><span class="token operator">=</span>remount-ro <span class="token number">0</span>       <span class="token number">1</span>
+<span class="token comment"># /boot/efi was on /dev/sda2 during installation</span>
+<span class="token assign-left variable">UUID</span><span class="token operator">=</span>BEA0-EF18  /boot/efi       vfat    <span class="token assign-left variable">umask</span><span class="token operator">=</span>0077      <span class="token number">0</span>       <span class="token number">1</span>
+/swapfile                                 none            swap    sw              <span class="token number">0</span>       <span class="token number">0</span>
+/dev/fd0        /media/floppy0  auto    rw,user,noauto,exec,utf8 <span class="token number">0</span>       <span class="token number">0</span>
+<span class="token assign-left variable">UUID</span><span class="token operator">=</span>0ef2c1b4-c3df-49ce-b8e4-bb44a047fb48       /mnt/data       ext4    defualt <span class="token number">0</span>       <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>wq</code>保存退出</p>
+<h1 id="分区拓展"><a href="#分区拓展" class="headerlink" title="分区拓展"></a>分区拓展</h1><p>以下内容来自chatgpt</p>
+<p>如果你想要使用新的分区 <code>/dev/sda4</code> 来扩展已挂载到根目录的分区 <code>/dev/sda3</code>，可以按照以下步骤进行操作：</p>
+<ol>
+<li>确保 <code>/dev/sda4</code> 分区中没有任何数据，并将其卸载（如果已经被挂载）。</li>
+<li>使用 <code>fdisk</code> 或 <code>parted</code> 命令对硬盘进行分区操作，将 <code>/dev/sda4</code> 分区设置为类型为 Linux LVM（Linux Logical Volume Manager）。</li>
+<li>创建一个新的物理卷并将 <code>/dev/sda4</code> 分区添加到其中：</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">复制代码sudo pvcreate &#x2F;dev&#x2F;sda4<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol>
+<li>将 <code>/dev/sda4</code> 分区加入到现有的卷组中：</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">复制代码sudo vgextend &lt;volume_group_name&gt; &#x2F;dev&#x2F;sda4<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol>
+<li>将卷组中的物理卷扩展到包含 <code>/dev/sda4</code> 的大小：</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">复制代码sudo lvextend -l +100%FREE &#x2F;dev&#x2F;&lt;volume_group_name&gt;&#x2F;&lt;logical_volume_name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol>
+<li>扩展文件系统以占用新增的空间：</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">复制代码sudo resize2fs &#x2F;dev&#x2F;&lt;volume_group_name&gt;&#x2F;&lt;logical_volume_name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>这将将逻辑卷 <code>/dev/&lt;volume_group_name&gt;/&lt;logical_volume_name&gt;</code> 扩展到新的空间，然后使用 <code>resize2fs</code> 命令调整文件系统以填充空闲的空间。</p>
+<p>请注意，卷组和逻辑卷名称与实际使用情况可能有所不同。你可以使用 <code>vgdisplay</code> 和 <code>lvdisplay</code> 命令来查看卷组和逻辑卷的名称。在执行此类操作之前，请务必备份你的数据以避免意外丢失。</p>
+
+	  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-04-16 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/Linux/">Linux<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Linux/">Linux<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E6%96%B0%E5%A2%9E%E5%88%86%E5%8C%BA"><span class="toc-article-text">新增分区</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%9F%A5%E7%9C%8B%E7%A3%81%E7%9B%98%E7%94%A8%E9%87%8F"><span class="toc-article-text">查看磁盘用量</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%88%9B%E5%BB%BA%E5%88%86%E5%8C%BA"><span class="toc-article-text">创建分区</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-article-text">格式化</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%8C%82%E8%BD%BD"><span class="toc-article-text">挂载</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%B4%E6%97%B6%E6%8C%82%E8%BD%BD"><span class="toc-article-text">临时挂载</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#x2F-etc-x2F-fstab"><span class="toc-article-text">&#x2F;etc&#x2F;fstab</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%BC%80%E6%9C%BA%E8%87%AA%E5%8A%A8%E6%8C%82%E8%BD%BD"><span class="toc-article-text">开机自动挂载</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%88%86%E5%8C%BA%E6%8B%93%E5%B1%95"><span class="toc-article-text">分区拓展</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2023 Ak4izZ's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>
