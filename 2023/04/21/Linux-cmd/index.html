@@ -1,0 +1,517 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Linux_cmd | Ak4izZ&#39;s 滴博客儿</title>
+  <meta name="author" content="Ak4izZ">
+  
+  <meta name="description" content="我觉得一个人要是能熟练地使用Linux命令行，那可真是泰库辣！
+随缘更"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Linux_cmd"/>
+  <meta property="og:site_name" content="Ak4izZ&#39;s 滴博客儿"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="Ak4izZ&#39;s 滴博客儿" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Ak4izZ&#39;s 滴博客儿</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Linux_cmd</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>我觉得一个人要是能熟练地使用Linux命令行，那可真是泰库辣！</p>
+<p>随缘更</p>
+<span id="more"></span>
+
+<h1 id="COMMAND-LINE-FUN"><a href="#COMMAND-LINE-FUN" class="headerlink" title="COMMAND LINE FUN"></a>COMMAND LINE FUN</h1><h2 id="history"><a href="#history" class="headerlink" title="history"></a>history</h2><p>查看输入命令的历史记录。</p>
+<p>想要快速复用曾经的某条命令，只需<code>!&#123;cmd-num&#125;</code>，如</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span>-<span class="token punctuation">[</span>~<span class="token punctuation">]</span>
+└─<span class="token comment"># history   </span>
+    <span class="token number">1</span>  <span class="token function">apt</span> update
+    <span class="token number">2</span>  <span class="token function">apt</span> upgrade
+    <span class="token number">3</span>  gobuster
+    <span class="token number">4</span>  <span class="token function">ping</span> <span class="token number">10.129</span>.59.90
+    <span class="token number">5</span>  <span class="token function">ls</span>
+    <span class="token number">6</span>  gobuster dns <span class="token parameter variable">-h</span>
+    <span class="token number">7</span>  <span class="token builtin class-name">cd</span> Desktop
+    <span class="token number">8</span>  openvpn academy-regular.ovpn
+    <span class="token number">9</span>  <span class="token function">cron</span>
+   <span class="token number">10</span>  <span class="token function">ls</span>
+   <span class="token number">11</span>  <span class="token function">clear</span>
+   <span class="token number">12</span>  <span class="token function">cron</span>
+   <span class="token number">13</span>  /etc/init.d/cron restart
+   <span class="token number">14</span>  <span class="token function">cron</span>
+   <span class="token number">15</span>  <span class="token function">rm</span> <span class="token parameter variable">-rf</span> /var/run/crond.pid
+   <span class="token number">16</span>  /etc/init.d/cron reload
+   <span class="token number">17</span>  /etc/init.d/cron restart
+   <span class="token number">18</span>  <span class="token function">cron</span>
+   <span class="token number">19</span>  base64 <span class="token parameter variable">-d</span> <span class="token operator">&lt;&lt;&lt;</span> <span class="token assign-left variable">ZmluZCAvdXNyL3NoYXJlLyB8IGdyZXAgcm9vdCB8IGdyZXAgbXlzcWwgfCB0YWlsIC1uIDE</span><span class="token operator">=</span> <span class="token operator">|</span> <span class="token function">bash</span>
+   <span class="token operator">&lt;</span>SNIP<span class="token operator">></span>
+┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span>-<span class="token punctuation">[</span>~<span class="token punctuation">]</span>
+└─<span class="token comment"># !19</span>
+                                                                                                                                     
+┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span>-<span class="token punctuation">[</span>~<span class="token punctuation">]</span>
+└─<span class="token comment"># base64 -d &lt;&lt;&lt; ZmluZCAvdXNyL3NoYXJlLyB8IGdyZXAgcm9vdCB8IGdyZXAgbXlzcWwgfCB0YWlsIC1uIDE= | bash</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>当输入<code>!19</code>并回车之后，下一行便自动填入对应命令。</p>
+<p>bash的history的记录存放在<code>.bash_history</code>文件中。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span>-<span class="token punctuation">[</span>~<span class="token punctuation">]</span>
+└─<span class="token comment"># locate .bash_history</span>
+/home/kali/.bash_history
+/var/lib/docker/overlay2/490151a3f32a92b9c6fd092c1377bd3f0631eba385932c3ac31a2df1284e1900/diff/root/.bash_history
+/var/lib/docker/overlay2/c8644cedb8e863be002300b9fde089d964f4ddaff392f61efd52e6e89bbe94c2/diff/root/.bash_history
+/var/lib/docker/overlay2/f4d82a2af45748a935dfdd6c5267269841c01f7f09ae2260b786012ab23b30d4/merged/root/.bash_history<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p>在一个完全交互的终端内，使用上下箭头可以方便地获取上一条或者下一条命令。还可以使用<code>ctrl+r</code>进入查找模式，输入关键字可以查询相关的执行过的命令。</p>
+<img src="/2023/04/21/Linux-cmd/image-20230421213425566.png" class title="image-20230421213425566">
+
+
+
+
+
+
+
+<h1 id="TEXT-SEARCHING-AND-MANIPULATION"><a href="#TEXT-SEARCHING-AND-MANIPULATION" class="headerlink" title="TEXT SEARCHING AND MANIPULATION"></a>TEXT SEARCHING AND MANIPULATION</h1><h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><p>用于在目录中寻找文件</p>
+<h2 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h2><p>grep用于查找<code>文件里符合条件</code>的<code>字符串</code>或者<code>正则表达式</code>。</p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">grep</span> <span class="token punctuation">[</span>options<span class="token punctuation">]</span> pattern <span class="token punctuation">[</span>files<span class="token punctuation">]</span>
+<span class="token function">grep</span> <span class="token punctuation">[</span>-abcEFGhHilLnqrsvVwxy<span class="token punctuation">]</span><span class="token punctuation">[</span>-A<span class="token operator">&lt;</span>显示行数<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-B<span class="token operator">&lt;</span>显示列数<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-C<span class="token operator">&lt;</span>显示列数<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-d<span class="token operator">&lt;</span>进行动作<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-e<span class="token operator">&lt;</span>范本样式<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-f<span class="token operator">&lt;</span>范本文件<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>--help<span class="token punctuation">]</span><span class="token punctuation">[</span>范本样式<span class="token punctuation">]</span><span class="token punctuation">[</span>文件或目录<span class="token punctuation">..</span>.<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><ul>
+<li>-i,–ignore-case 忽略大小写</li>
+<li>-e patterns 正则表达式</li>
+<li>-v,–invert-match 反向筛选，即过滤掉符合条件的</li>
+<li>-w –word-regexp </li>
+<li>-n 显示匹配的行号。</li>
+<li>-r 递归查找子目录的文件</li>
+<li>-l 只打印匹配的文件名</li>
+<li>-c 只打印匹配的行数</li>
+<li>-f 指定文件规则</li>
+</ul>
+<h3 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在log.txt中查找test并打印匹配行</span>
+root@VM-0-12-ubuntu:~<span class="token comment"># cat log.txt </span>
+<span class="token number">2</span> this is a <span class="token builtin class-name">test</span>
+<span class="token number">3</span> Do you like <span class="token function">awk</span>
+This<span class="token string">'s a test
+10 There are orange,apple,mongo
+
+root@VM-0-12-ubuntu:~# grep test log.txt 
+2 this is a test
+This'</span>s a <span class="token builtin class-name">test</span>
+<span class="token comment"># 在文件夹dir中递归查找所有文件中匹配正则表达式的行，并打印所在文件名和行号</span>
+<span class="token function">grep</span> <span class="token parameter variable">-r</span> <span class="token parameter variable">-n</span> pattern dir/
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
+<h2 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h2><p>awk是几乎所有Linux系统都自带的程序。他依次处理文件的每一行，并读取里面的每一个字段。对于日志、CSV这样的每行格式相同的文本文件是很方便的工具。</p>
+<h3 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">awk</span> <span class="token string">'&#123;action&#125;'</span> <span class="token function">file</span>
+<span class="token comment"># 如</span>
+root@VM-0-12-ubuntu:~<span class="token comment"># awk '&#123;print $0&#125;' log.txt</span>
+<span class="token number">2</span> this is a <span class="token builtin class-name">test</span>
+<span class="token number">3</span> Do you like <span class="token function">awk</span>
+This<span class="token string">'s a test
+10 There are orange,apple,mongo
+
+root@VM-0-12-ubuntu:~# awk '</span><span class="token punctuation">&#123;</span>print <span class="token variable">$1</span> <span class="token variable">$4</span><span class="token punctuation">&#125;</span><span class="token string">' log.txt 
+2a
+3like
+This'</span>s
+10orange,apple,mongo
+
+root@VM-0-12-ubuntu:~<span class="token comment"># awk '&#123;print $1,$4&#125;' log.txt </span>
+<span class="token number">2</span> a
+<span class="token number">3</span> like
+This's 
+<span class="token number">10</span> orange,apple,mongo<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>$0表示输出整行，不使用逗号分隔将对字符串拼接，不指定分隔符的情况下awk使用使用空格或者tab分隔。<code>&#123;&#125;</code>里面就是每一行的处理动作。</p>
+<h3 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h3><ul>
+<li><p><code>-F</code> 为指定分隔符，如这里使用冒号做分隔符（demo是&#x2F;etc&#x2F;passwd的副本）</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@VM-0-12-ubuntu:~<span class="token comment"># awk -F ':' '&#123;print $1&#125;' demo.txt </span>
+root
+daemon
+bin
+sys
+<span class="token function">sync</span>
+games<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><ul>
+<li><p><code>$NF</code>表示当前行的最后一个字段，<code>$NF-1</code>就表示倒数第二个字段，<code>NR</code>表示当前行（注意没有$）</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@VM-0-12-ubuntu:~<span class="token comment"># awk -F ':' '&#123;print NR")",$NF&#125;' demo.txt </span>
+<span class="token number">1</span><span class="token punctuation">)</span> /bin/bash
+<span class="token number">2</span><span class="token punctuation">)</span> /usr/sbin/nologin
+<span class="token number">3</span><span class="token punctuation">)</span> /usr/sbin/nologin
+<span class="token number">4</span><span class="token punctuation">)</span> /usr/sbin/nologin
+<span class="token number">5</span><span class="token punctuation">)</span> /bin/sync
+<span class="token number">6</span><span class="token punctuation">)</span> /usr/sbin/nologin
+<span class="token number">7</span><span class="token punctuation">)</span> /usr/sbin/nologin
+<span class="token number">8</span><span class="token punctuation">)</span> /usr/sbin/nologin
+<span class="token number">9</span><span class="token punctuation">)</span> /usr/sbin/nologin
+<span class="token number">10</span><span class="token punctuation">)</span> /usr/sbin/nologin
+<span class="token number">11</span><span class="token punctuation">)</span> /usr/sbin/nologin<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>在print里面，需要原样输出的字符要放在双引号里面。</p>
+</blockquote>
+</li>
+<li><p><code>FILENAME</code>：当前文件名</p>
+</li>
+<li><p><code>FS</code>：字段分隔符，默认是空格和制表符。</p>
+</li>
+<li><p><code>RS</code>：行分隔符，用于分割每一行，默认是换行符。</p>
+</li>
+<li><p><code>OFS</code>：输出字段的分隔符，用于打印时分隔字段，默认为空格。</p>
+</li>
+<li><p><code>ORS</code>：输出记录的分隔符，用于打印时分隔记录，默认为换行符。</p>
+</li>
+<li><p><code>OFMT</code>：数字输出的格式，默认为<code>％.6g</code>。</p>
+</li>
+</ul>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><ul>
+<li><p><code>toupper()</code>: 字符转换为大写</p>
+</li>
+<li><p><code>tolower()</code>：字符转为小写。</p>
+</li>
+<li><p><code>length()</code>：返回字符串长度。</p>
+</li>
+<li><p><code>substr()</code>：返回子字符串。</p>
+</li>
+<li><p><code>sin()</code>：正弦。</p>
+</li>
+<li><p><code>cos()</code>：余弦。</p>
+</li>
+<li><p><code>sqrt()</code>：平方根。</p>
+</li>
+<li><p><code>rand()</code>：随机数。</p>
+</li>
+</ul>
+<h3 id="条件"><a href="#条件" class="headerlink" title="条件"></a>条件</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"> <span class="token function">awk</span> <span class="token string">'condition &#123;action&#125;'</span> filename
+ 
+<span class="token comment"># 筛选包含bash的行 </span>
+root@VM-0-12-ubuntu:~<span class="token comment"># awk -F ':' '/bash/ &#123;print $1&#125;' demo.txt </span>
+root
+ubuntu
+lighthouse
+
+<span class="token comment"># 输出奇数行</span>
+$ <span class="token function">awk</span> <span class="token parameter variable">-F</span> <span class="token string">':'</span> <span class="token string">'NR % 2 == 1 &#123;print $1&#125;'</span> demo.txt
+root
+bin
+<span class="token function">sync</span>
+
+<span class="token comment"># 输出第三行以后的行</span>
+$ <span class="token function">awk</span> <span class="token parameter variable">-F</span> <span class="token string">':'</span> <span class="token string">'NR >3 &#123;print $1&#125;'</span> demo.txt
+sys
+<span class="token function">sync</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h2><h3 id="语法-2"><a href="#语法-2" class="headerlink" title="语法"></a>语法</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sed</span> <span class="token punctuation">[</span>-hnV<span class="token punctuation">]</span><span class="token punctuation">[</span>-e<span class="token operator">&lt;</span>script<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-f<span class="token operator">&lt;</span>script文件<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>文本文件<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="参数-2"><a href="#参数-2" class="headerlink" title="参数"></a>参数</h3><ul>
+<li>-e script, –expression&#x3D;script 执行命令</li>
+<li>-n or –quite –silent 安静处理</li>
+</ul>
+<h3 id="动作"><a href="#动作" class="headerlink" title="动作"></a>动作</h3><ul>
+<li>{n}a 新增，a 后面可以接字符串，将在目的下一行出现</li>
+<li>{n1,n2}c 取代，取代n1，n2之间的行</li>
+<li>{n1,n2}d 删除(n1到n2行)</li>
+<li>{n}i 插入 插入在目的的上一行</li>
+<li>p 打印</li>
+<li>s&#x2F;{target}&#x2F;{supplant}&#x2F;{g or int} 取代</li>
+</ul>
+<h3 id="用例-1"><a href="#用例-1" class="headerlink" title="用例"></a>用例</h3><p>用grep找出ssh_config文件中包含ssh的行。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@VM-0-12-ubuntu:~<span class="token comment"># grep ssh /etc/ssh/ssh_config</span>
+<span class="token comment"># This is the ssh client system-wide configuration file.  See</span>
+<span class="token comment"># ssh_config(5) for more information.  This file provides defaults for</span>
+<span class="token comment"># ssh_config(5) man page.</span>
+Include /etc/ssh/ssh_config.d/*.conf
+<span class="token comment">#   IdentityFile ~/.ssh/id_rsa</span>
+<span class="token comment">#   IdentityFile ~/.ssh/id_dsa</span>
+<span class="token comment">#   IdentityFile ~/.ssh/id_ecdsa</span>
+<span class="token comment">#   IdentityFile ~/.ssh/id_ed25519</span>
+<span class="token comment">#   MACs hmac-md5,hmac-sha1,umac-64@openssh.com</span>
+<span class="token comment">#   ProxyCommand ssh -q -W %h:%p gateway.example.com</span>
+<span class="token comment">#   UserKnownHostsFile ~/.ssh/known_hosts.d/%k</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>接着我们打算将所有<code>ssh</code>换成<code>SSH</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@VM-0-12-ubuntu:~<span class="token comment"># sed s/ssh/SSH/g /etc/ssh/ssh_config > ssh_config.test</span>
+root@VM-0-12-ubuntu:~<span class="token comment"># grep -i ssh ssh_config.test </span>
+<span class="token comment"># This is the SSH client system-wide configuration file.  See</span>
+<span class="token comment"># SSH_config(5) for more information.  This file provides defaults for</span>
+<span class="token comment"># SSH_config(5) man page.</span>
+Include /etc/SSH/SSH_config.d/*.conf
+<span class="token comment">#   IdentityFile ~/.SSH/id_rsa</span>
+<span class="token comment">#   IdentityFile ~/.SSH/id_dsa</span>
+<span class="token comment">#   IdentityFile ~/.SSH/id_ecdsa</span>
+<span class="token comment">#   IdentityFile ~/.SSH/id_ed25519</span>
+<span class="token comment">#   MACs hmac-md5,hmac-sha1,umac-64@openSSH.com</span>
+<span class="token comment">#   ProxyCommand SSH -q -W %h:%p gateway.example.com</span>
+<span class="token comment">#   UserKnownHostsFile ~/.SSH/known_hosts.d/%k</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>The g command tells Linux that you want the replacement performed globally</p>
+<p>即g会让Linux将全部匹配的字符替换，而去掉g只会替换第一条匹配的字符。而如果只想换掉第二个字符，就用&#96;&#96;s&#x2F;ssh&#x2F;SSH&#x2F;2&#96;就好了。</p>
+</blockquote>
+<h2 id="tee"><a href="#tee" class="headerlink" title="tee"></a>tee</h2><h3 id="语法-3"><a href="#语法-3" class="headerlink" title="语法"></a>语法</h3><h3 id="参数-3"><a href="#参数-3" class="headerlink" title="参数"></a>参数</h3><h3 id="用例-2"><a href="#用例-2" class="headerlink" title="用例"></a>用例</h3>
+	  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a href="/2023/04/22/xssCheatSheet/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/04/20/CRLF攻击原理/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-04-21 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/Linux/">Linux<span>2</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Linux/">Linux<span>2</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2023 Ak4izZ's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

