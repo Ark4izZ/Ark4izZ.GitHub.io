@@ -186,12 +186,49 @@
 
 
 
-<h1 id="TEXT-SEARCHING-AND-MANIPULATION"><a href="#TEXT-SEARCHING-AND-MANIPULATION" class="headerlink" title="TEXT SEARCHING AND MANIPULATION"></a>TEXT SEARCHING AND MANIPULATION</h1><h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><p>用于在目录中寻找文件</p>
+<h1 id="FILE-x2F-TEXT-SEARCHING-AND-MANIPULATION"><a href="#FILE-x2F-TEXT-SEARCHING-AND-MANIPULATION" class="headerlink" title="FILE&#x2F;TEXT SEARCHING AND MANIPULATION"></a>FILE&#x2F;TEXT SEARCHING AND MANIPULATION</h1><h2 id="which"><a href="#which" class="headerlink" title="which"></a>which</h2><p>which用于搜索位于<code>$PATH</code>中包含的目录下的文件。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span>-<span class="token punctuation">[</span>~<span class="token punctuation">]</span>
+└─<span class="token comment"># which openvpn                                </span>
+/usr/sbin/openvpn<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="locate"><a href="#locate" class="headerlink" title="locate"></a>locate</h2><p>locate是Kali中寻找文件最快的一个命令，他是基于一个名叫locate.db的内置数据库实现的。数据库会有cron scheduler自动更新，也可以用<code>updatedb</code>命令手动更新。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span>-<span class="token punctuation">[</span>~<span class="token punctuation">]</span>
+└─<span class="token comment"># locate backup.war</span>
+/home/kali/Desktop/backup.war<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><p>用于在目录中寻找文件，比前二者更灵活、能实现的功能也更强大。</p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><h3 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h3><p>在目标机上快速查找flag。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 快速查找flag</span>
+<span class="token function">find</span> / <span class="token parameter variable">-name</span> *flag*
+/var/lib/jenkins3/flag.txt
+/opt/tomcat/apache-tomcat-10.0.10/webapps/tomcat_flag.txt
+/proc/sys/kernel/acpi_video_flags
+/proc/sys/kernel/sched_domain/cpu0/domain0/flags
+/proc/sys/kernel/sched_domain/cpu0/domain1/flags
+/proc/sys/kernel/sched_domain/cpu1/domain0/flags
+/proc/sys/kernel/sched_domain/cpu1/domain1/flags
+/proc/sys/kernel/sched_domain/cpu2/domain0/flags
+/proc/sys/kernel/sched_domain/cpu2/domain1/flags
+/proc/sys/kernel/sched_domain/cpu3/domain0/flags
+/proc/sys/kernel/sched_domain/cpu3/domain1/flags
+/proc/sys/kernel/sched_domain/cpu4/domain0/flags
+/proc/sys/kernel/sched_domain/cpu4/domain1/flags
+/proc/sys/kernel/sched_domain/cpu5/domain0/flags
+/proc/sys/kernel/sched_domain/cpu5/domain1/flags
+/proc/kpageflags
+
+<span class="token function">cat</span> /opt/tomcat/apache-tomcat-10.0.10/webapps/tomcat_flag.txt
+t0mcat_rc3_ftw<span class="token operator">!</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
 <h2 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h2><p>grep用于查找<code>文件里符合条件</code>的<code>字符串</code>或者<code>正则表达式</code>。</p>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">grep</span> <span class="token punctuation">[</span>options<span class="token punctuation">]</span> pattern <span class="token punctuation">[</span>files<span class="token punctuation">]</span>
+<h3 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">grep</span> <span class="token punctuation">[</span>options<span class="token punctuation">]</span> pattern <span class="token punctuation">[</span>files<span class="token punctuation">]</span>
 <span class="token function">grep</span> <span class="token punctuation">[</span>-abcEFGhHilLnqrsvVwxy<span class="token punctuation">]</span><span class="token punctuation">[</span>-A<span class="token operator">&lt;</span>显示行数<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-B<span class="token operator">&lt;</span>显示列数<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-C<span class="token operator">&lt;</span>显示列数<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-d<span class="token operator">&lt;</span>进行动作<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-e<span class="token operator">&lt;</span>范本样式<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-f<span class="token operator">&lt;</span>范本文件<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>--help<span class="token punctuation">]</span><span class="token punctuation">[</span>范本样式<span class="token punctuation">]</span><span class="token punctuation">[</span>文件或目录<span class="token punctuation">..</span>.<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><ul>
+<h3 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h3><ul>
 <li>-i,–ignore-case 忽略大小写</li>
 <li>-e patterns 正则表达式</li>
 <li>-v,–invert-match 反向筛选，即过滤掉符合条件的</li>
@@ -202,7 +239,7 @@
 <li>-c 只打印匹配的行数</li>
 <li>-f 指定文件规则</li>
 </ul>
-<h3 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在log.txt中查找test并打印匹配行</span>
+<h3 id="用例-1"><a href="#用例-1" class="headerlink" title="用例"></a>用例</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在log.txt中查找test并打印匹配行</span>
 root@VM-0-12-ubuntu:~<span class="token comment"># cat log.txt </span>
 <span class="token number">2</span> this is a <span class="token builtin class-name">test</span>
 <span class="token number">3</span> Do you like <span class="token function">awk</span>
@@ -222,7 +259,7 @@ This'</span>s a <span class="token builtin class-name">test</span>
 
 
 <h2 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h2><p>awk是几乎所有Linux系统都自带的程序。他依次处理文件的每一行，并读取里面的每一个字段。对于日志、CSV这样的每行格式相同的文本文件是很方便的工具。</p>
-<h3 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">awk</span> <span class="token string">'&#123;action&#125;'</span> <span class="token function">file</span>
+<h3 id="语法-2"><a href="#语法-2" class="headerlink" title="语法"></a>语法</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">awk</span> <span class="token string">'&#123;action&#125;'</span> <span class="token function">file</span>
 <span class="token comment"># 如</span>
 root@VM-0-12-ubuntu:~<span class="token comment"># awk '&#123;print $0&#125;' log.txt</span>
 <span class="token number">2</span> this is a <span class="token builtin class-name">test</span>
@@ -243,7 +280,7 @@ This's
 <span class="token number">10</span> orange,apple,mongo<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>$0表示输出整行，不使用逗号分隔将对字符串拼接，不指定分隔符的情况下awk使用使用空格或者tab分隔。<code>&#123;&#125;</code>里面就是每一行的处理动作。</p>
-<h3 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h3><ul>
+<h3 id="参数-2"><a href="#参数-2" class="headerlink" title="参数"></a>参数</h3><ul>
 <li><p><code>-F</code> 为指定分隔符，如这里使用冒号做分隔符（demo是&#x2F;etc&#x2F;passwd的副本）</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@VM-0-12-ubuntu:~<span class="token comment"># awk -F ':' '&#123;print $1&#125;' demo.txt </span>
 root
@@ -323,9 +360,9 @@ sys
 
 
 
-<h2 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h2><h3 id="语法-2"><a href="#语法-2" class="headerlink" title="语法"></a>语法</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sed</span> <span class="token punctuation">[</span>-hnV<span class="token punctuation">]</span><span class="token punctuation">[</span>-e<span class="token operator">&lt;</span>script<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-f<span class="token operator">&lt;</span>script文件<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>文本文件<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h2><h3 id="语法-3"><a href="#语法-3" class="headerlink" title="语法"></a>语法</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sed</span> <span class="token punctuation">[</span>-hnV<span class="token punctuation">]</span><span class="token punctuation">[</span>-e<span class="token operator">&lt;</span>script<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>-f<span class="token operator">&lt;</span>script文件<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span>文本文件<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h3 id="参数-2"><a href="#参数-2" class="headerlink" title="参数"></a>参数</h3><ul>
+<h3 id="参数-3"><a href="#参数-3" class="headerlink" title="参数"></a>参数</h3><ul>
 <li>-e script, –expression&#x3D;script 执行命令</li>
 <li>-n or –quite –silent 安静处理</li>
 </ul>
@@ -337,7 +374,7 @@ sys
 <li>p 打印</li>
 <li>s&#x2F;{target}&#x2F;{supplant}&#x2F;{g or int} 取代</li>
 </ul>
-<h3 id="用例-1"><a href="#用例-1" class="headerlink" title="用例"></a>用例</h3><p>用grep找出ssh_config文件中包含ssh的行。</p>
+<h3 id="用例-2"><a href="#用例-2" class="headerlink" title="用例"></a>用例</h3><p>用grep找出ssh_config文件中包含ssh的行。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@VM-0-12-ubuntu:~<span class="token comment"># grep ssh /etc/ssh/ssh_config</span>
 <span class="token comment"># This is the ssh client system-wide configuration file.  See</span>
 <span class="token comment"># ssh_config(5) for more information.  This file provides defaults for</span>
@@ -369,7 +406,7 @@ Include /etc/SSH/SSH_config.d/*.conf
 <p>The g command tells Linux that you want the replacement performed globally</p>
 <p>即g会让Linux将全部匹配的字符替换，而去掉g只会替换第一条匹配的字符。而如果只想换掉第二个字符，就用&#96;&#96;s&#x2F;ssh&#x2F;SSH&#x2F;2&#96;就好了。</p>
 </blockquote>
-<h2 id="tee"><a href="#tee" class="headerlink" title="tee"></a>tee</h2><h3 id="语法-3"><a href="#语法-3" class="headerlink" title="语法"></a>语法</h3><h3 id="参数-3"><a href="#参数-3" class="headerlink" title="参数"></a>参数</h3><h3 id="用例-2"><a href="#用例-2" class="headerlink" title="用例"></a>用例</h3>
+<h2 id="tee"><a href="#tee" class="headerlink" title="tee"></a>tee</h2><h3 id="语法-4"><a href="#语法-4" class="headerlink" title="语法"></a>语法</h3><h3 id="参数-4"><a href="#参数-4" class="headerlink" title="参数"></a>参数</h3><h3 id="用例-3"><a href="#用例-3" class="headerlink" title="用例"></a>用例</h3>
 	  <div class="article-footer-copyright">
 
     本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
