@@ -9,7 +9,7 @@
   <title>关于Tomcat | Ak4izZ&#39;s 滴博客儿</title>
   <meta name="author" content="Ak4izZ">
   
-  <meta name="description" content="记录一下Tomacat和其他中间件啥的软件平台"> 
+  <meta name="description" content="记录一下Tomacat和Jenkins的相关内容"> 
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -131,7 +131,7 @@
 	<div class="mypage">		
 	  		
 
-	  <p>记录一下Tomacat和其他中间件啥的软件平台</p>
+	  <p>记录一下Tomacat和Jenkins的相关内容</p>
 <span id="more"></span>
 
 <h1 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h1><h2 id="Discovery-x2F-Footprinting"><a href="#Discovery-x2F-Footprinting" class="headerlink" title="Discovery&#x2F;Footprinting"></a>Discovery&#x2F;Footprinting</h2><p><strong>404page</strong><br>Tomcat的站一般404页面会显示版本信息。</p>
@@ -207,7 +207,7 @@
 
 <p>这个文件定义了一个叫AdminServlet的servlet，并映射到类<code>com.inlanefreight.api.AdminServlet</code>中。Java的这种命名方式在磁盘内的路径对应的是<code>classes/com/inlanefreight/api/AdminServlet.class</code></p>
 <p>再往下就定义了url的映射，这个配置会把发送到<code>/admin</code>的所有请求移交给<code>AdminServlet</code>处理，也就是<code>AdminServlet.class</code>。web.xml文件还是一个<code>LFI</code>验证常用的文件。</p>
-<h2 id="attacking"><a href="#attacking" class="headerlink" title="attacking"></a>attacking</h2><h3 id="CVE-2020-1938-Ghostcat"><a href="#CVE-2020-1938-Ghostcat" class="headerlink" title="CVE-2020-1938 : Ghostcat"></a>CVE-2020-1938 : Ghostcat</h3><blockquote>
+<h2 id="Attacking"><a href="#Attacking" class="headerlink" title="Attacking"></a>Attacking</h2><h3 id="CVE-2020-1938-Ghostcat"><a href="#CVE-2020-1938-Ghostcat" class="headerlink" title="CVE-2020-1938 : Ghostcat"></a>CVE-2020-1938 : Ghostcat</h3><blockquote>
 <p>before 9.0.31, 8.5.51, and 7.0.100,6.x were found vulnerable.</p>
 </blockquote>
 <p>这个漏洞是由 Tomcat 使用的 AJP 协议中的错误配置造成的。</p>
@@ -362,7 +362,7 @@ HttpUsername <span class="token operator">=</span><span class="token operator">>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>设置完了run就行了。</p>
-
+<h1 id="Jenkins"><a href="#Jenkins" class="headerlink" title="Jenkins"></a>Jenkins</h1><h2 id="Discovery-x2F-Footprintting"><a href="#Discovery-x2F-Footprintting" class="headerlink" title="Discovery&#x2F;Footprintting"></a>Discovery&#x2F;Footprintting</h2><h2 id="Attacking-1"><a href="#Attacking-1" class="headerlink" title="Attacking"></a>Attacking</h2>
 	  <div class="article-footer-copyright">
 
     本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
@@ -442,7 +442,7 @@ HttpUsername <span class="token operator">=</span><span class="token operator">>
 	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
 	   <div id="toc" class="toc collapse in">
 		   <span class="toc-title">Contents</span>
-			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#Tomcat"><span class="toc-article-text">Tomcat</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Discovery-x2F-Footprinting"><span class="toc-article-text">Discovery&#x2F;Footprinting</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#attacking"><span class="toc-article-text">attacking</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#CVE-2020-1938-Ghostcat"><span class="toc-article-text">CVE-2020-1938 : Ghostcat</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%A3%80%E6%B5%8B%E5%B7%A5%E5%85%B7"><span class="toc-article-text">检测工具</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%90%8E%E5%8F%B0getshell"><span class="toc-article-text">后台getshell</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#msfvenom"><span class="toc-article-text">msfvenom</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#msf%E8%87%AA%E5%8A%A8%E4%BC%A0%E9%A9%AC%E8%BF%9E%E6%8E%A5"><span class="toc-article-text">msf自动传马连接</span></a></li></ol></li></ol></li></ol></li></ol>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#Tomcat"><span class="toc-article-text">Tomcat</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Discovery-x2F-Footprinting"><span class="toc-article-text">Discovery&#x2F;Footprinting</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Attacking"><span class="toc-article-text">Attacking</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#CVE-2020-1938-Ghostcat"><span class="toc-article-text">CVE-2020-1938 : Ghostcat</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%A3%80%E6%B5%8B%E5%B7%A5%E5%85%B7"><span class="toc-article-text">检测工具</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%90%8E%E5%8F%B0getshell"><span class="toc-article-text">后台getshell</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#msfvenom"><span class="toc-article-text">msfvenom</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#msf%E8%87%AA%E5%8A%A8%E4%BC%A0%E9%A9%AC%E8%BF%9E%E6%8E%A5"><span class="toc-article-text">msf自动传马连接</span></a></li></ol></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#Jenkins"><span class="toc-article-text">Jenkins</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Discovery-x2F-Footprintting"><span class="toc-article-text">Discovery&#x2F;Footprintting</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Attacking-1"><span class="toc-article-text">Attacking</span></a></li></ol></li></ol>
 		</div>
 	
 	</div>
