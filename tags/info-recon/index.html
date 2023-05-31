@@ -6,15 +6,13 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>CRLF攻击原理 | Ak4izZ&#39;s 滴博客儿</title>
+  <title>info_recon | Ak4izZ&#39;s 滴博客儿</title>
   <meta name="author" content="Ak4izZ">
-  
-  <meta name="description" content="CRLF(Carriage-Return Line-Feed-回车换行)注入漏洞 是因为Web应用没有对用户输入做严格验证，导致攻击者可以输入一些恶意字符。"> 
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="CRLF攻击原理"/>
+  
   <meta property="og:site_name" content="Ak4izZ&#39;s 滴博客儿"/>
 
   
@@ -111,125 +109,141 @@
   	<div class="content">
     	 
 
+<!-- title -->
+<div class="page-header">
+  <h1 class="archive-title-tag"><i class="fa fa-archive"></i> info_recon</h1>
+</div>
 
+<div class="row page">
+  <!-- cols -->
+  
+  <div class="col-md-9">
 	
-		<div class="page-header">
-			<h1> CRLF攻击原理</h1>
+
+	  <div id="top_search"></div>
+
+	  <div class="archive">
+		
+		
+		
+			
+			
+			<h4 class="archive-ul" data-toggle="collapse" data-target="#2023">2023<b class="caret"></b></h4>
+			<ul id="2023" class="collapse in">
+			
+		
+		<li class="listing-item">
+		<span class="date_class"> 2023-05-31 </span> &raquo;
+		
+		   <span class="title"><a href="/2023/05/31/vHost-intro/" >vHost_intro</a></span>
+		
+		</li>			
+		
+		</ul>
 		</div>
+
+</div> <!-- col-md-9/col-md-12 -->
+
+
+<div class="col-md-3">
+	<div id="sidebar">
 	
+			
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
 
 
+		
+			
+	<div class="widget">
+		<h4>Categories</h4>
+		<ul class="tag_box inline list-unstyled">
+		
+			<li><a href="/categories/Linux/">Linux<span>2</span></a></li>
+		
+			<li><a href="/categories/Web/">Web<span>2</span></a></li>
+		
+			<li><a href="/categories/一些零碎的知识/">一些零碎的知识<span>1</span></a></li>
+		
+		</ul>
+	</div>
 
-<div class="row post">
-	<!-- cols -->
-	
-	<div id="top_meta"></div>
-	<div class="col-md-9">
-	
+		
+			
+	<div class="widget">
+		<h4>Tag Cloud</h4>
+		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/web/">web<span>1</span></a></li>
+		
+			<li><a href="/tags/hackthebox/">hackthebox<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>2</span></a></li>
+		
+			<li><a href="/tags/wordpress/">wordpress<span>1</span></a></li>
+		
+			<li><a href="/tags/Web/">Web<span>3</span></a></li>
+		
+			<li><a href="/tags/injection/">injection<span>1</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+		
+			<li><a href="/tags/info-recon/">info_recon<span>1</span></a></li>
+		
+		 
+		</ul>
+	</div>
 
-	<!-- content -->
-	<div class="mypage">		
-	  		
 
-	  <p>CRLF(Carriage-Return Line-Feed-回车换行)注入漏洞 是因为Web应用没有对用户输入做严格验证，导致攻击者可以输入一些恶意字符。</p>
-<span id="more"></span>
-
-<p>CRLF代表<code>\r</code>和<code>\n</code>，在windows和http请求中会用到。CR(Carriage Return)表示一行的结束，而LF(Line Feed)表示新一行的开始。</p>
-<p>两种类型的CRLF注入</p>
-<h1 id="HTTP-Response-Splitting"><a href="#HTTP-Response-Splitting" class="headerlink" title="HTTP Response Splitting"></a>HTTP Response Splitting</h1><h1 id="log-injection"><a href="#log-injection" class="headerlink" title="log injection"></a>log injection</h1>
-	  <div class="article-footer-copyright">
-
-    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+		
+			
+<div class="widget">
+  <h4>Recent Posts</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2023/05/31/vHost-intro/" ><i class="fa fa-file-o"></i>vHost_intro</a>
+      </li>
+    
+      <li>
+        <a href="/2023/05/15/splunk-PRTG/" ><i class="fa fa-file-o"></i>Splunk,PRTG</a>
+      </li>
+    
+      <li>
+        <a href="/2023/04/30/关于Tomcat/" ><i class="fa fa-file-o"></i>关于Tomcat</a>
+      </li>
+    
+      <li>
+        <a href="/2023/04/22/xssCheatSheet/" ><i class="fa fa-file-o"></i>xssCheatSheet</a>
+      </li>
+    
+      <li>
+        <a href="/2023/04/21/Linux-cmd/" ><i class="fa fa-file-o"></i>Linux_cmd</a>
+      </li>
+    
+  </ul>
 </div>
 
-	</div>
-
+		
+			
+<div class="widget">
+	<h4>Links</h4>
+	<ul class="blogroll list-unstyled">
 	
+		<li><i class="fa fa-github"></i><a href="https://github.com/Ark4izZ" title="" target="_blank"]);">Ak4izz&#39;s Github</a></li>
 	
-	<div>
-  	<center>
-
-	<div class="pagination">
-
-    
-    
-    <a href="/2023/04/21/Linux-cmd/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
-    
-
-    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
-    
-    <a href="/2023/04/19/hack-wordpress-and-Joomla/" type="button" class="btn btn-default ">Next<i
-                class="fa fa-arrow-circle-o-right"></i></a>
-    
-
-    
+	</ul>
 </div>
 
 
-    </center>
-	</div>
-	
-	<!-- comment -->
-	<!--
-<section id="comment">
-    <h2 class="title">Comments</h2>
-
-    
-</section>
-
--->
-	
-	
-	
-	</div> <!-- col-md-9/col-md-12 -->
-
-
-	
-	<div id="side_meta">
-		<div class="col-md-3" id="post_meta"> 
-
-	<!-- date -->
-	
-	<div class="meta-widget">
-	<i class="fa fa-clock-o"></i>
-	2023-04-20 
-	</div>
-	
-
-	<!-- categories -->
-    
-
-	<!-- tags -->
-	
-	<div class="meta-widget">
-	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
-    <ul id="tags" class="tag_box list-unstyled collapse in">	  
-	    
-  <li><a href="/tags/Web/">Web<span>3</span></a></li> <li><a href="/tags/injection/">injection<span>1</span></a></li>
-    </ul>
-	</div>
 		
+	</div> <!-- sidebar -->
+</div> <!-- col-md-3 -->
 
-	<!-- toc -->
-	<div class="meta-widget">
-	
-	</div>
-	
-    <hr>
-	
-</div><!-- col-md-3 -->
-
-		
-
-	</div>
-	
-		
-
-</div><!-- row -->
-
-<!--
- -->
 
 
 
