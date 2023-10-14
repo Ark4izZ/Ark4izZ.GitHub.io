@@ -406,7 +406,38 @@ Include /etc/SSH/SSH_config.d/*.conf
 <p>The g command tells Linux that you want the replacement performed globally</p>
 <p>即g会让Linux将全部匹配的字符替换，而去掉g只会替换第一条匹配的字符。而如果只想换掉第二个字符，就用&#96;&#96;s&#x2F;ssh&#x2F;SSH&#x2F;2&#96;就好了。</p>
 </blockquote>
-<h2 id="tee"><a href="#tee" class="headerlink" title="tee"></a>tee</h2><h3 id="语法-4"><a href="#语法-4" class="headerlink" title="语法"></a>语法</h3><h3 id="参数-4"><a href="#参数-4" class="headerlink" title="参数"></a>参数</h3><h3 id="用例-3"><a href="#用例-3" class="headerlink" title="用例"></a>用例</h3>
+<h2 id="tee"><a href="#tee" class="headerlink" title="tee"></a>tee</h2><p><code>tee</code> 是一个在命令行环境下常用的实用工具，它的功能是同时将数据输出到标准输出（终端）和一个或多个文件中。</p>
+<h3 id="语法-4"><a href="#语法-4" class="headerlink" title="语法"></a>语法</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">tee</span> <span class="token punctuation">[</span>选项<span class="token punctuation">]</span><span class="token punctuation">..</span>. <span class="token punctuation">[</span>文件<span class="token punctuation">]</span><span class="token punctuation">..</span>.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="参数-4"><a href="#参数-4" class="headerlink" title="参数"></a>参数</h3><ul>
+<li><code>-a</code> 或 <code>--append</code>：以追加模式将输出添加到文件中，而不是覆盖文件原有内容。</li>
+<li><code>-i</code> 或 <code>--ignore-interrupts</code>：忽略中断信号，即使接收到中断信号也继续运行。</li>
+<li><code>-p</code> 或 <code>--output-error</code>：在写入文件时遇到错误时，不输出错误消息。</li>
+</ul>
+<h3 id="用例-3"><a href="#用例-3" class="headerlink" title="用例"></a>用例</h3><ol>
+<li><p>将命令的输出保存到文件中：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">command</span> <span class="token operator">|</span> <span class="token function">tee</span> file.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>该命令会将 <code>command</code> 的输出显示在终端上，并将其保存到 <code>file.txt</code> 中。</p>
+</li>
+<li><p>追加命令的输出到现有文件：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">command</span> <span class="token operator">|</span> <span class="token function">tee</span> <span class="token parameter variable">-a</span> file.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>该命令将 <code>command</code> 的输出附加到 <code>file.txt</code> 的末尾，而不是覆盖文件原有内容。</p>
+</li>
+<li><p>将输出同时保存到多个文件：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">command</span> <span class="token operator">|</span> <span class="token function">tee</span> file1.txt file2.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>该命令将 <code>command</code> 的输出保存到 <code>file1.txt</code> 和 <code>file2.txt</code> 中。</p>
+</li>
+<li><p>将命令的输出同时显示在终端上：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">command</span> <span class="token operator">|</span> <span class="token function">tee</span> /dev/tty<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>该命令将 <code>command</code> 的输出显示在终端上，并继续将其传递给后续命令。</p>
+</li>
+</ol>
+<p>请注意，<code>tee</code> 命令不会更改数据流的内容，它只是复制数据并将其写入指定的文件。</p>
+
 	  <div class="article-footer-copyright">
 
     本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
