@@ -13,7 +13,7 @@
 with open(&#34;foo.txt&#34;) as file:
     data = file.read()
 
-只知道这么做可以防止文件句柄忘记关闭等问题的出现">
+只知道这么做可以防止文件句柄忘记关闭等问题的出现，但具体对with产生了什么作用，如何产生作用缺一概不知，今天就来理解一下python的with 。"> 
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -140,6 +140,8 @@ with open(&#34;foo.txt&#34;) as file:
     data <span class="token operator">=</span> <span class="token builtin">file</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>只知道这么做可以防止文件句柄忘记关闭等问题的出现，但具体对with产生了什么作用，如何产生作用缺一概不知，今天就来理解一下python的<code>with</code> 。</p>
+<span id="more"></span>
+
 <h1 id="with语句是什么？"><a href="#with语句是什么？" class="headerlink" title="with语句是什么？"></a>with语句是什么？</h1><p><code>with</code> 是一个关键字，适用于对资源进行访问的场合，用于简化资源的管理，特别是需要明确释放资源（如网络连接或者文件句柄）的情况下。</p>
 <p>通常情况下，你会使用 <strong><code>with</code></strong> 语句来打开一个文件或者建立一个上下文环境，并在代码块结束时自动关闭或者清理资源，即使发生异常也会如此。</p>
 <h1 id="with的工作原理"><a href="#with的工作原理" class="headerlink" title="with的工作原理"></a>with的工作原理</h1><p><code>with</code> 语句的工作原理涉及到Python中的<code>上下文管理器</code>（Context Manager）。在任何编程语言中，文件的IO、连接的建立和断开都是很常见的操作，而资源是有限的，故在使用完成之后，这些资源需要被及时的释放。在Python中对应的解决方案就是<code>上下文管理器</code> 。</p>

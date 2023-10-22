@@ -156,100 +156,6 @@
     data <span class="token operator">=</span> <span class="token builtin">file</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>只知道这么做可以防止文件句柄忘记关闭等问题的出现，但具体对with产生了什么作用，如何产生作用缺一概不知，今天就来理解一下python的<code>with</code> 。</p>
-<h1 id="with语句是什么？"><a href="#with语句是什么？" class="headerlink" title="with语句是什么？"></a>with语句是什么？</h1><p><code>with</code> 是一个关键字，适用于对资源进行访问的场合，用于简化资源的管理，特别是需要明确释放资源（如网络连接或者文件句柄）的情况下。</p>
-<p>通常情况下，你会使用 <strong><code>with</code></strong> 语句来打开一个文件或者建立一个上下文环境，并在代码块结束时自动关闭或者清理资源，即使发生异常也会如此。</p>
-<h1 id="with的工作原理"><a href="#with的工作原理" class="headerlink" title="with的工作原理"></a>with的工作原理</h1><p><code>with</code> 语句的工作原理涉及到Python中的<code>上下文管理器</code>（Context Manager）。在任何编程语言中，文件的IO、连接的建立和断开都是很常见的操作，而资源是有限的，故在使用完成之后，这些资源需要被及时的释放。在Python中对应的解决方案就是<code>上下文管理器</code> 。</p>
-<p>上下文管理器是具有特定方法：<code>__enter__</code> 和 <code>__exit__</code> 的对象，他们可以用于控制资源的获取和释放，通常与with一起使用。</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"foo.txt"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token builtin">file</span><span class="token punctuation">:</span>
-    data <span class="token operator">=</span> <span class="token builtin">file</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>这是一个标准的上下文管理器使用逻辑</p>
-<ul>
-<li>在执行 <code>open(”foo.txt”)</code> 时，获取上下文管理器。</li>
-<li>调用上下文管理器的<code>__enter__</code> 方法，执行一些预处理工作，<code>__enter__</code> 方法的返回值赋值给 <code>file</code></li>
-<li>执行 <code>data = file.read()</code> 等操作</li>
-<li>退出<code>with</code> 时（无论正常或是异常退出），调用上下文管理器的 <code>__exit__</code> 方法。</li>
-</ul>
-<p><code>__exit__</code> 方法接收三个参数，exc_type（异常类型），exc_value（异常值），和tarceback（追溯信息），如果没有发生异常，则三个参数为None。如果在with内发生了异常，则在<code>__exit__</code> 中进行处理。开发库时，清理资源，关闭文件等等操作，都可以放在exit方法当中。</p>
-<p>这里贴一个示例代码,j基于类的文件管理器，用于打开和关闭文件</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 自定义打开文件操作</span>
-<span class="token keyword">class</span> <span class="token class-name">MyOpen</span><span class="token punctuation">(</span><span class="token builtin">object</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-
-    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> file_name<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token triple-quoted-string string">"""初始化方法"""</span>
-        self<span class="token punctuation">.</span>file_name <span class="token operator">=</span> file_name
-        self<span class="token punctuation">.</span>file_handler <span class="token operator">=</span> <span class="token boolean">None</span>
-        <span class="token keyword">return</span>
-
-    <span class="token keyword">def</span> <span class="token function">__enter__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token triple-quoted-string string">"""enter方法，返回file_handler"""</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"enter:"</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>file_name<span class="token punctuation">)</span>
-        self<span class="token punctuation">.</span>file_handler <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>file_name<span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span>
-        <span class="token keyword">return</span> self<span class="token punctuation">.</span>file_handler
-
-    <span class="token keyword">def</span> <span class="token function">__exit__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> exc_type<span class="token punctuation">,</span> exc_val<span class="token punctuation">,</span> exc_tb<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token triple-quoted-string string">"""exit方法，关闭文件并返回True"""</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"exit:"</span><span class="token punctuation">,</span> exc_type<span class="token punctuation">,</span> exc_val<span class="token punctuation">,</span> exc_tb<span class="token punctuation">)</span>
-        <span class="token keyword">if</span> self<span class="token punctuation">.</span>file_handler<span class="token punctuation">:</span>
-            self<span class="token punctuation">.</span>file_handler<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
-        <span class="token keyword">return</span> <span class="token boolean">True</span>
-
-<span class="token comment"># 使用实例</span>
-<span class="token keyword">with</span> MyOpen<span class="token punctuation">(</span><span class="token string">"python_base.py"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> file_in<span class="token punctuation">:</span>
-    <span class="token keyword">for</span> line <span class="token keyword">in</span> file_in<span class="token punctuation">:</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span>
-        <span class="token keyword">raise</span> ZeroDivisionError
-<span class="token comment"># 代码块中主动引发一个除零异常，但整个程序不会引发异常</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="contextlib"><a href="#contextlib" class="headerlink" title="contextlib"></a>contextlib</h1><p><strong><code>contextlib</code></strong> 是 Python 标准库中提供的一个模块，它包含了一些用于上下文管理的工具函数和装饰器，可以帮助简化上下文管理器的创建。</p>
-<p>以下是 <strong><code>contextlib</code></strong> 中一些常用的工具函数和装饰器：</p>
-<ol>
-<li><p><strong><code>contextlib.contextmanager</code> 装饰器</strong>：</p>
-<p>这是 <strong><code>contextlib</code></strong> 模块中最重要的功能之一。它允许你将一个生成器函数转化为一个上下文管理器，而不必显式地编写一个类并实现 <strong><code>__enter__</code></strong> 和 <strong><code>__exit__</code></strong> 方法。</p>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">pythonCopy code
-<span class="token keyword">from</span> contextlib <span class="token keyword">import</span> contextmanager
-
-<span class="token decorator annotation punctuation">@contextmanager</span>
-<span class="token keyword">def</span> <span class="token function">my_context_manager</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Entering the context"</span><span class="token punctuation">)</span>
-    <span class="token keyword">yield</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Exiting the context"</span><span class="token punctuation">)</span>
-
-<span class="token keyword">with</span> my_context_manager<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Inside the context"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>在这个例子中，**<code>my_context_manager</code>** 是一个生成器函数，使用 <strong><code>@contextmanager</code></strong> 装饰器将其转化为上下文管理器。**<code>yield</code>** 语句之前的代码在 <strong><code>__enter__</code></strong> 方法中执行，**<code>yield</code>** 之后的代码在 <strong><code>__exit__</code></strong> 方法中执行。</p>
-</li>
-<li><p><strong><code>contextlib.closing</code> 函数</strong>：</p>
-<p>这个函数用于创建一个上下文管理器，用于管理支持上下文管理协议的对象（比如文件对象、网络连接等）。**<code>closing</code>** 函数会在进入上下文时获取资源，在退出上下文时释放资源。</p>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">pythonCopy code
-<span class="token keyword">from</span> contextlib <span class="token keyword">import</span> closing
-<span class="token keyword">from</span> urllib<span class="token punctuation">.</span>request <span class="token keyword">import</span> urlopen
-
-<span class="token keyword">with</span> closing<span class="token punctuation">(</span>urlopen<span class="token punctuation">(</span><span class="token string">'&lt;http://www.example.com>'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">as</span> page<span class="token punctuation">:</span>
-    <span class="token keyword">for</span> line <span class="token keyword">in</span> page<span class="token punctuation">:</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>在这个例子中，**<code>closing</code>** 函数用于确保 <strong><code>urlopen</code></strong> 返回的对象在退出上下文时会被关闭。</p>
-</li>
-<li><p><strong><code>contextlib.suppress</code> 函数</strong>：</p>
-<p>这个函数用于忽略指定类型的异常。它可以在一个上下文内部临时抑制指定类型的异常。</p>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">pythonCopy code
-<span class="token keyword">from</span> contextlib <span class="token keyword">import</span> suppress
-
-<span class="token keyword">with</span> suppress<span class="token punctuation">(</span>FileNotFoundError<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'nonexistent_file.txt'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
-        content <span class="token operator">=</span> f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>在这个例子中，**<code>suppress</code>** 函数用于在上下文中抑制 <strong><code>FileNotFoundError</code></strong> 异常，即使文件不存在，代码也会继续执行。</p>
-</li>
-</ol>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://www.biaodianfu.com/python-with.html">https://www.biaodianfu.com/python-with.html</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24709718">https://zhuanlan.zhihu.com/p/24709718</a></p>
-
 	
 	</div>
   <a type="button" href="/2023/10/14/简单了解Python的with/#more" class="btn btn-default more">Read More</a>
@@ -553,23 +459,23 @@
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Python/">Python<span>1</span></a></li>
-		
-			<li><a href="/tags/injection/">injection<span>1</span></a></li>
-		
 			<li><a href="/tags/info-recon/">info_recon<span>1</span></a></li>
 		
-			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+			<li><a href="/tags/Python/">Python<span>1</span></a></li>
 		
-			<li><a href="/tags/Linux/">Linux<span>2</span></a></li>
-		
-			<li><a href="/tags/hackthebox/">hackthebox<span>1</span></a></li>
-		
-			<li><a href="/tags/web/">web<span>1</span></a></li>
+			<li><a href="/tags/wordpress/">wordpress<span>1</span></a></li>
 		
 			<li><a href="/tags/Web/">Web<span>3</span></a></li>
 		
-			<li><a href="/tags/wordpress/">wordpress<span>1</span></a></li>
+			<li><a href="/tags/injection/">injection<span>1</span></a></li>
+		
+			<li><a href="/tags/Linux/">Linux<span>2</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+		
+			<li><a href="/tags/web/">web<span>1</span></a></li>
+		
+			<li><a href="/tags/hackthebox/">hackthebox<span>1</span></a></li>
 		
 		 
 		</ul>
