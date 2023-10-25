@@ -151,107 +151,7 @@
   <div class="row">
 	
 	
-		<span id="more"></span>
-
-<h1 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h1><p>Python的迭代器（Iterator）是一种可以逐个访问元素的对象。提供了一种统一的方法遍历数据结构中的元素，如列表、元组、集合等。要创建一个迭代器需要实现两个方法</p>
-<ul>
-<li><code>__iter__()</code> 返回迭代器对象本身，在其创建时被调用</li>
-<li><code>__next__()</code> 返回下一个元素，如果没有则抛出<code>StopIteration</code>异常</li>
-</ul>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">MyIterator</span><span class="token punctuation">:</span>
-    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> <span class="token builtin">max</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        self<span class="token punctuation">.</span><span class="token builtin">max</span> <span class="token operator">=</span> <span class="token builtin">max</span>
-        self<span class="token punctuation">.</span>current <span class="token operator">=</span> <span class="token number">0</span>
-
-    <span class="token keyword">def</span> <span class="token function">__iter__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">return</span> self
-
-    <span class="token keyword">def</span> <span class="token function">__next__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">if</span> self<span class="token punctuation">.</span>current <span class="token operator">>=</span> self<span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">:</span>
-            <span class="token keyword">raise</span> StopIteration
-        <span class="token keyword">else</span><span class="token punctuation">:</span>
-            self<span class="token punctuation">.</span>current <span class="token operator">+=</span> <span class="token number">1</span>
-            <span class="token keyword">return</span> self<span class="token punctuation">.</span>current <span class="token operator">-</span> <span class="token number">1</span>
-<span class="token comment"># 这样定义一个简单的迭代器，从0到max-1的数字</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>可迭代对象：Python中可以使用for方法去进行遍历的都叫可迭代对象。字符串、列表、元组、字典、range等</p>
-<h1 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h1><p>生成器（Generator）是特殊类型的迭代器，它允许你在迭代过程中逐个生成值，而不需要事先将所有值存储在内存中。生成器使用了一个特殊的语法，即使用函数中的 <code>yield</code> 关键字来返回值，而不是 <code>return</code>。当生成器的函数被调用时，它并不会立即执行，而是返回一个生成器对象。每当你使用 <code>next()</code> 函数获取下一个值时，生成器会从上次暂停的地方继续执行，直到遇到新的 <code>yield</code> 语句。</p>
-<p>如</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">my_generator</span><span class="token punctuation">(</span><span class="token builtin">max</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">max</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">yield</span> i
-gen <span class="token operator">=</span> my_generator<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
-wihle <span class="token boolean">True</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">next</span><span class="token punctuation">(</span>gen<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>这样的特性使其适合处理大量数据，因为他不会占用大量内存。</p>
-<img src="/2023/10/24/Python%E7%9A%84%E8%BF%AD%E4%BB%A3%E5%99%A8%E3%80%81%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E8%A3%85%E9%A5%B0%E5%99%A8/image-20231024225550067.png" class title="image-20231024225550067">
-
-
-
-<h1 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h1><p>装饰器（Decorator）是 Python 中一种用于修改或者包装函数或者类的机制。它们允许你在<strong>不修改原始函数或者类定义的情况下</strong>，<strong>动态地添加额外的功能</strong>。</p>
-<p>语法：@{Decorator_name}</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">def my_decorator<span class="token punctuation">(</span>func<span class="token punctuation">)</span>:
-    def wrapper<span class="token punctuation">(</span><span class="token punctuation">)</span>:
-        print<span class="token punctuation">(</span><span class="token string">"Before function is called."</span><span class="token punctuation">)</span>
-        func<span class="token punctuation">(</span><span class="token punctuation">)</span>
-        print<span class="token punctuation">(</span><span class="token string">"After function is called."</span><span class="token punctuation">)</span>
-    <span class="token builtin class-name">return</span> wrapper
-
-@my_decorator
-def my_function<span class="token punctuation">(</span><span class="token punctuation">)</span>:
-    print<span class="token punctuation">(</span><span class="token string">"Hello, world!"</span><span class="token punctuation">)</span>
-
-my_function<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>这里的wrapper也可以是其他函数名</p>
-<p>一个例子如<code>contextlib</code>库，提供了上下文管理器的装饰器<code>contextmanager</code>。该装饰器将一个函数中yield语句之前的代码当作上下文管理器的<code>__enter__</code> 方法执行，将其之后的代码当作<code>__exit__</code> 方法执行。同时yield返回值赋值给as之后的变量。</p>
-<pre class="line-numbers language-Python" data-language="Python"><code class="language-Python">@contextlib.contextmanager
-def open_func(file_name):
-    # __enter__方法
-    print(&#39;open file:&#39;, file_name, &#39;in __enter__&#39;)
-    file_handler &#x3D; open(file_name, &#39;r&#39;)
-
-    yield file_handler
-
-    # __exit__方法
-    print(&#39;close file:&#39;, file_name, &#39;in __exit__&#39;)
-    file_handler.close()
-    return
-
-with open_func(&#39;python_base.py&#39;) as file_in:
-    for line in file_in:
-        print(line)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h1 id="yeild"><a href="#yeild" class="headerlink" title="yeild"></a>yeild</h1><p>有几个地方写到yield，顺便再学学yield吧。</p>
-<p>上面提到生成器是可以迭代的，但是只能读取他一次，因为他并不把所有的值放在内存中，而是实时生成数据的。<code>yield</code> 是一个类似 <code>return</code> 的关键字，只是这个函数返回的是个生成器。当一个生成器函数被调用时，它不会立即执行，而是返回一个生成器对象。每次调用生成器对象的 <code>next()</code> 方法时，生成器会从上次暂停的地方继续执行，直到遇到新的 <code>yield</code> 语句。即如果没有<code>yield</code>，那么这个生成器就被认为是空的。</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"start..."</span><span class="token punctuation">)</span>
-    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
-        throw <span class="token operator">=</span> <span class="token keyword">yield</span> <span class="token number">10</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"throw:"</span><span class="token punctuation">,</span>throw<span class="token punctuation">)</span>
-g <span class="token operator">=</span> foo<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">next</span><span class="token punctuation">(</span>g<span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token operator">*</span><span class="token number">20</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">next</span><span class="token punctuation">(</span>g<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>输出</p>
-<pre class="line-numbers language-none"><code class="language-none">start...
-10
-********************
-throw: None
-10<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>foo()函数开始时，因为里面有yeild，因此程序不会直接运行，而是转换成生成器。接着遇到<code>next()</code>时，执行函数，<code>foo()</code>（或者说yield）返回一个10，因此print()便把10打印出来了，而后 再此暂停，打印<code>*</code>，接着再次next()激活函数，执行yield之后的内容，由于上次yield丢过一个10出来，因此此时变为不可用的状态，那么输出就是None，再通过循环返回<code>throw = yield 10</code>时，打印出10。</p>
-<p>如果把第二个next(g)换成g.send()，那么throw的值就会被赋成send()传递的值，之后程序会继续执行，直到再次遇到send()或者next()</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://pyzh.readthedocs.io/en/latest/the-python-yield-keyword-explained.html">https://pyzh.readthedocs.io/en/latest/the-python-yield-keyword-explained.html</a></p>
-<p><a target="_blank" rel="noopener" href="https://chat.openai.com/">https://chat.openai.com/</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24709718">https://zhuanlan.zhihu.com/p/24709718</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/d09778f4e055">https://www.jianshu.com/p/d09778f4e055</a></p>
-<h1 id="todo"><a href="#todo" class="headerlink" title="todo"></a>todo</h1><p>在@contextlib.contextmanager里，yield是如何告诉contextlib.contextmanager()，之前和之后的代码分别对应<code>__enter__</code> 和 <code>__exit__</code>的 ？</p>
-
+		<p>moremoremore</p>
 	
 	</div>
   <a type="button" href="/2023/10/24/Python的迭代器、生成器和装饰器/#more" class="btn btn-default more">Read More</a>
@@ -568,23 +468,23 @@ throw: None
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/Python/">Python<span>2</span></a></li>
-		
 			<li><a href="/tags/web/">web<span>1</span></a></li>
 		
 			<li><a href="/tags/injection/">injection<span>1</span></a></li>
-		
-			<li><a href="/tags/hackthebox/">hackthebox<span>1</span></a></li>
 		
 			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
 		
 			<li><a href="/tags/info-recon/">info_recon<span>1</span></a></li>
 		
+			<li><a href="/tags/Python/">Python<span>2</span></a></li>
+		
 			<li><a href="/tags/Web/">Web<span>3</span></a></li>
 		
-			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
-		
 			<li><a href="/tags/wordpress/">wordpress<span>1</span></a></li>
+		
+			<li><a href="/tags/hackthebox/">hackthebox<span>1</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
 		
 		 
 		</ul>
