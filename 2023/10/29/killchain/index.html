@@ -1,0 +1,338 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>killchain | Ak4izZ&#39;s 滴博客儿</title>
+  <meta name="author" content="Ak4izZ">
+  
+  <meta name="description" content="Kill Chain是洛克希德·马丁公司提出的网络杀伤链模型，用于用于识别和预防网络入侵活动。该模型确定了对手必须完成哪些任务才能实现其目标。Kill Chain将网络入侵攻击划分为了七个步骤。
+虽然杀伤链已经不适用于当今的攻击环境，但也依然有着一定的价值，比如在进行威胁建模时就非常有用。下面对Kill Chain做简单的学习。"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="killchain"/>
+  <meta property="og:site_name" content="Ak4izZ&#39;s 滴博客儿"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="Ak4izZ&#39;s 滴博客儿" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Ak4izZ&#39;s 滴博客儿</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> killchain</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>Kill Chain是洛克希德·马丁公司提出的网络杀伤链模型，用于用于识别和预防网络入侵活动。该模型确定了对手必须完成哪些任务才能实现其目标。Kill Chain将网络入侵攻击划分为了七个步骤。</p>
+<p>虽然杀伤链已经不适用于当今的攻击环境，但也依然有着一定的价值，比如在进行威胁建模时就非常有用。下面对Kill Chain做简单的学习。</p>
+<span id="more"></span>
+
+<h1 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h1><img src="/2023/10/29/killchain/THE-CYBER-KILL-CHAIN-body.png.pc-adaptive.full.medium.png" class title="Cyber">
+
+<p>Cyber Kill Chain的七个步骤分别为</p>
+<ul>
+<li>侦察（信息搜集，Reconnaissance）</li>
+<li>武器化</li>
+<li>投递</li>
+<li>漏洞利用</li>
+<li>安装部署</li>
+<li>操控和控制</li>
+<li>目标行动</li>
+</ul>
+<p>在每个阶段，攻防双方都有着各自的目标和与实施方法，下面是简单的介绍</p>
+<h2 id="Reconnaissance"><a href="#Reconnaissance" class="headerlink" title="Reconnaissance"></a>Reconnaissance</h2><p>攻击者需要搜集有关目标尽可能多的信息，从而初步决定攻击的策略。这些信息包括相关人员&#x2F;员工的电子邮件、个人信息、社交媒体信息和联系方式等。针对于目标的服务器通过主动和被动信息搜集（直接交互和间接交互）的方式来查找目标服务器上可能存在的漏洞，扩大攻击面以获取入口点&#x2F;立足点。</p>
+<p>对于防守方来说，检测被侦察是比较困难的，但如果发现了有这样的行动进行，可以尝试去理解攻击者的意图。这个阶段的防御</p>
+<ul>
+<li><p>利用威胁情报平台（微步、绿盟、360、观安等）对特定的IP防守</p>
+</li>
+<li><p>清查自身互联网资产暴露情况，收敛暴露面</p>
+</li>
+<li><p>清查开源信息情况（相关人员、数据等）</p>
+</li>
+</ul>
+<h2 id="Weaponization"><a href="#Weaponization" class="headerlink" title="Weaponization"></a>Weaponization</h2><p>攻击者利用安全漏洞开发恶意软件&#x2F;脚本。攻击者根据他们的需求和攻击意图设计恶意软件，如木马、恶意&#x2F;钓鱼邮件等。此过程还涉及攻击者试图减少被组织现有的安全解决方案检测到的机会。</p>
+<p>防御方依然是利用威胁情报和IPS、IDS系统进行防御。同时，对于已经发现的恶意软件，进行完整的恶意软件分析——不仅仅是它丢下的有效载荷，还有它是如何产生的。分析收集这些恶意文件的特征，定位持有者。</p>
+<h2 id="Delivery"><a href="#Delivery" class="headerlink" title="Delivery"></a>Delivery</h2><p>攻击方一般从两条路径实施行动：直接攻击web服务器和通过邮件、badusb、社工、水坑攻击等</p>
+<p>这个阶段是防守者阻止行动的第一个也是最重要的阶段</p>
+<ul>
+<li>分析投放媒介，攻击者是以何种方式投放的？</li>
+<li>了解目标服务和人群，其角色和职责，他们身上有着哪些攻击者需要的信息</li>
+<li>基于目标猜测对手意图</li>
+<li>收集电子邮件、日志等取证，确定攻击投放开始的时间和方式</li>
+</ul>
+<h2 id="Exploitation"><a href="#Exploitation" class="headerlink" title="Exploitation"></a>Exploitation</h2><p>攻击方利用漏洞获取目标服务器的权限，这些漏洞包括</p>
+<ul>
+<li>目标相关的软硬件、甚至是相关人员的“漏洞”</li>
+<li>触发和利用服务器上的漏洞</li>
+<li>人员触发利用的payload，如一些木马程序或者是受害者打开了恶意附件、恶意链接。</li>
+</ul>
+<p>防守方在这方面做的工作有如</p>
+<ul>
+<li>用户安全意识培训，员工内部恶意邮件测试</li>
+<li>安全开发培训</li>
+<li>常规化的漏扫和渗透测试</li>
+<li>终端的安全强化<ul>
+<li>最小权限原则</li>
+<li>密码管理</li>
+<li>补丁</li>
+<li>edr等</li>
+</ul>
+</li>
+</ul>
+<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><p>攻击者这阶段的目标是在受害者的服务器上获取持久化的立足点。一旦通过漏洞利用获取了目标的权限之后，会想办法将权限持久化，放置隐藏后门或者横向移动，在受害者环境中探索获取更多信息。</p>
+<p>防守方使用基于主机的入侵防御系统的告警和封禁，防火墙的访问控制表，了解恶意软件是否需要特权，终端进程的审查、异常文件创建的清查等，这部分到达了应急响应的排查阶段</p>
+<h2 id="Command-amp-Control-（C2）"><a href="#Command-amp-Control-（C2）" class="headerlink" title="Command &amp; Control （C2）"></a>Command &amp; Control （C2）</h2><p>远程控制的接入。恶意程序在受害者端开启一个命令通道，使得攻击者能够远程连接和接管受害者机器。大部分C2通道是通过web、dns、email等的通信协议实现的。这些远控的设备属于攻击者或者其他受害者。</p>
+<p>防守方阻止行动的最后最佳机会：封锁 C2 通道。 如果对手无法发出命令，防御者可以阻止冲击。 	</p>
+<h2 id="Action-on-Objectives"><a href="#Action-on-Objectives" class="headerlink" title="Action on Objectives"></a>Action on Objectives</h2><p>攻击者利用全部已有权限达成他们的目的</p>
+<h1 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h1><p>尽管Cyber Kill Chain模型在帮助安全团队理解和响应网络攻击方面提供了一些指导，但它也存在一些缺陷：</p>
+<ol>
+<li><strong>线性模型</strong>：Cyber Kill Chain模型是一个线性的生命周期模型，它假设攻击者按照特定的顺序依次执行每个阶段。然而，在实际情况下，攻击者可能会在不同阶段之间来回切换，甚至跳过某些阶段。攻击者会尝试任何有效的方法。成功的网络攻击与其说是从侦察到目标的一条直线，不如说更像一棵树，或者像一张图形，有节点和边。边是攻击者从一个节点到另一个节点的路径，但边有多条，并非一条单一的链路。</li>
+<li><strong>不同攻击者的行为不同</strong>：不同的攻击者（如黑客、间谍组织、犯罪团伙等）具有不同的目的、技能和模式，因此他们的行为可能不会完全符合Cyber Kill Chain模型的假设。</li>
+<li><strong>过度关注先发制人</strong>：Cyber Kill Chain模型强调了在攻击发生之前防御的重要性，但这可能会导致过度关注预防，而忽视了检测和响应。</li>
+<li><strong>缺乏对内部威胁的考虑</strong>：模型主要关注外部攻击者，而对内部威胁（如员工、合作伙伴）的考虑相对较少。</li>
+<li><strong>过分简化复杂的威胁情境</strong>：现代威胁往往涉及到复杂的技术、战术和程序，Cyber Kill Chain模型可能过于简化了实际情况。</li>
+<li><strong>忽视了供应链攻击</strong>：模型未将供应链攻击作为一个独立的阶段考虑，而这在现代网络威胁中越来越重要。</li>
+</ol>
+
+	  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/10/24/Python的迭代器、生成器和装饰器/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-10-29 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/概念/">概念<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2023 Ak4izZ's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

