@@ -465,6 +465,23 @@ bmRFeGNlcHRpb24BAApTb3VyY2VGaWxlAQAJZXZpbC5qYXZhACEAGAACAAEAGgABAAEAHAAdAAAA
 <p>值得注意的是java.lang.Runtime的构造方法是private属性的，需要使用<code>constructor.setAccessible(true);</code>才能访问构造器，否则会出现<code>java.lang.IllegalAccessException: Class classname can not access a member of class java.lang.Runtime with modifiers &quot;private&quot;</code>的错误。</p>
 <p>此外，如果JDK版本是8及以下，上面的代码是可以运行的，但如果是JDK9，则会出现<code>java.lang.reflect.InaccessibleObjectException</code>的报错，这是因为在 Java 9 中，引入了模块系统（Project Jigsaw），它将 JDK 分成了一系列互相依赖的模块。每个模块都有自己的访问控制，可以选择性地将其暴露给其他模块。</p>
 <p>在模块化系统中，访问控制会比之前更为严格，这使得一些反射操作可能会受到限制。</p>
+<p>这样的情况下可以先反射一个<code>Runtime.getruntime()</code>，获取实例，然后再利用它反射<code>exec()</code>方法</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> cmd <span class="token operator">=</span> <span class="token string">"whoami"</span><span class="token punctuation">;</span>
+<span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> runtimeClass1 <span class="token operator">=</span> <span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"java.lang.Runtime"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Method</span> getRtMethod <span class="token operator">=</span> runtimeClass1<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"getRuntime"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Object</span> rt <span class="token operator">=</span> getRtMethod<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Method</span> execM <span class="token operator">=</span> runtimeClass1<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"exec"</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+execM<span class="token punctuation">.</span><span class="token function">setAccessible</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Process</span> process <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Process</span><span class="token punctuation">)</span> execM<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>rt<span class="token punctuation">,</span> cmd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">InputStream</span> in <span class="token operator">=</span> process<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name"><span class="token namespace">org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span>IOUtils</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>in<span class="token punctuation">,</span> <span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
+
+
 <h1 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h1><h2 id="前置"><a href="#前置" class="headerlink" title="前置"></a>前置</h2><p>在Java中是实现序列化和反序列化十分简单，只需要类实现<code>java.io.Serializable</code>，此时开发者可以重写readObject()和writeObject()方法，分别用于控制序列化和反序列化过程，指定在这个过程中的行为。或者实现<code>java.io.Externalizable</code>接口，它是前者的拓展，需要开发者实现一个无参构造方法以及<code>writeExternal()</code>和<code>readExternal()</code>，对应<code>writeObject()</code>和<code>readObject()</code>方法。</p>
 <h2 id="readObject-和writeObject"><a href="#readObject-和writeObject" class="headerlink" title="readObject()和writeObject()"></a>readObject()和writeObject()</h2><p>java.io.ObjectOutPutStream的writeObject方法，把Java对象序列化，写到输出流。</p>
 <p>java.io.ObjectInputStream的readObject方法，把Java对象反序列化，从输入流中读取数据反序列化得到对象</p>
@@ -562,7 +579,8 @@ bmRFeGNlcHRpb24BAApTb3VyY2VGaWxlAQAJZXZpbC5qYXZhACEAGAACAAEAGgABAAEAHAAdAAAA
 
     
     
-    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    <a href="/2023/11/20/htb-WeatherApp/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
