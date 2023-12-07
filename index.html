@@ -137,6 +137,202 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2023/12/07/xxe/" >XXE</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-12-07  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>XML External Entity Injection，XML外部实体注入漏洞，发生于XML解析时，由于解析引擎未对XML外部实体限制，导致攻击者可以通过注入恶意代码到XML中，使服务器加载恶意的外部实体引发文件读写、SSRF、命令执行、拒绝服务等有害操作。</p>
+	
+	</div>
+  <a type="button" href="/2023/12/07/xxe/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2023/12/07/HackTheBox-Devvortex/" >HackTheBox|Devvortex</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2023-12-07  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="Devvortex"><a href="#Devvortex" class="headerlink" title="Devvortex"></a>Devvortex</h1><p>nmap扫一扫， 发现一个ssh和一个web</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled-1701926785894-63.png" class title="Untitled">
+
+<p>主页没发现什么东西，目录爆破也没发现什么可用的信息。</p>
+<p>子域名爆破</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%201.png" class title="Untitled">
+
+<p>发现一个子域名 <code>dev</code></p>
+<p>添加到host里</p>
+<p><code>echo 10.10.11.242 dev.devvortex.htb</code></p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Screenshot-2023-11-27-at-1.05.42-PM-1024x766.webp" class title="img">
+
+<p>登进去，看到另外一个站点。</p>
+<p>目录爆破</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 124ms<span class="token punctuation">]</span>
+    * FUZZ: images
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 158ms<span class="token punctuation">]</span>
+    * FUZZ: templates
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 230ms<span class="token punctuation">]</span>
+    * FUZZ: media
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 109ms<span class="token punctuation">]</span>
+    * FUZZ: modules
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 190ms<span class="token punctuation">]</span>
+    * FUZZ: plugins
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 189ms<span class="token punctuation">]</span>
+    * FUZZ: includes
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 120ms<span class="token punctuation">]</span>
+    * FUZZ: language
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 109ms<span class="token punctuation">]</span>
+    * FUZZ: components
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 128ms<span class="token punctuation">]</span>
+    * FUZZ: api
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 119ms<span class="token punctuation">]</span>
+    * FUZZ: cache
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 189ms<span class="token punctuation">]</span>
+    * FUZZ: libraries
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 101ms<span class="token punctuation">]</span>
+    * FUZZ: tmp
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 171ms<span class="token punctuation">]</span>
+    * FUZZ: layouts
+
+<span class="token punctuation">[</span>Status: <span class="token number">301</span>, Size: <span class="token number">178</span>, Words: <span class="token number">6</span>, Lines: <span class="token number">8</span>, Duration: 117ms<span class="token punctuation">]</span>
+    * FUZZ: administrator<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>发现了有意思的路径：administrator</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%202.png" class title="Untitled">
+
+<p>发现是<code>joomla</code>的登录页面，一开始想到的是弱口令，因为之前改过一个<code>joomla</code>登录爆破的脚本，结果爆了半天爆不出来，再去搜索时想起了<code>joomscan</code></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/OWASP/joomscan">https://github.com/OWASP/joomscan</a></p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%203.png" class title="Untitled">
+
+<p>对应版本搜一下现有的漏洞，还真有</p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/12175">https://xz.aliyun.com/t/12175</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Acceis/exploit-CVE-2023-23752">https://github.com/Acceis/exploit-CVE-2023-23752</a></p>
+<p>简单来说就是API接口中的身份验证控制，有一个变量public，默认情况下为false，表示不对外的接口，然而用户可以自定义public&#x3D;true，覆盖变量，导致未授权访问。</p>
+<p><code>/api/index.php/v1/config/application?public=true</code></p>
+<p>此API用于获取网站最重要的配置信息，其中包含数据库的账号与密码。</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%204.png" class title="Untitled">
+
+<p>这里记起来后边可能会有用</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">用户名：lewis
+密码：P4ntherg0t1n5r3c0n<span class="token comment">##</span>
+数据库：joomla<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%205.png" class title="Untitled">
+
+<p>登进后台之后尝试getshell，有三种<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42084004/article/details/118971341">具体的方法</a></p>
+<p>这里不知道为什么无法上传文件，配置已经改过了的</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%206.png" class title="Untitled">
+
+<p>尝试第三种方法，修改extension</p>
+<p><code>Extensions</code>–&gt;<code>Templates</code>–&gt;<code>Templates</code>–&gt;<code>xxx Details and Files</code>修改<code>error.php</code>文件 添加shell代码，save保存</p>
+<p>用<a target="_blank" rel="noopener" href="https://github.com/pentestmonkey/php-reverse-shell">pentestMonkey</a>做反弹shell</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%207.png" class title="Untitled">
+
+<p>tty升级</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%208.png" class title="Untitled">
+
+<p>看了下&#x2F;etc&#x2F;passwd只有两个用户</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">grep</span> <span class="token string">'/bin/bash'</span> /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+logan:x:1000:1000:,,,:/home/logan:/bin/bash<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>用户logan下有两个python脚本</p>
+<p>1.py</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># crash_simulator.py</span>
+
+<span class="token keyword">def</span> <span class="token function">simulate_crash</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">"This is a simulated crash"</span><span class="token punctuation">)</span>
+
+simulate_crash<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>crash_simulator.py</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># crash_simulator.py</span>
+
+<span class="token keyword">def</span> <span class="token function">simulate_crash</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">"This is a simulated crash"</span><span class="token punctuation">)</span>
+
+simulate_crash<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>没什么用。</p>
+<p>想起来还有数据库没用到，<code>mysql -u lewis -p joomla</code>成功登录mysql</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%209.png" class title="Untitled">
+
+<p>找到user表</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%2010.png" class title="Untitled">
+
+<pre class="line-numbers language-none"><code class="language-none">logan@devvortex.htb | $2y$10$IT4k5kmSGvHSO9d6M&#x2F;1w0eYiB5Ne9XzArQRFJTGThNiy&#x2F;yBtkIj12<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>john跑不出来，但是知道了加密的类型-bcrypt</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%2011.png" class title="Untitled">
+
+<p>hashcat爆破一下</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%2012.png" class title="Untitled">
+
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%2013.png" class title="Untitled">
+
+<p>得到密码<code>tequieromucho</code></p>
+<p>ssh连上logan</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%2014.png" class title="Untitled">
+
+<p>sudo -l </p>
+<img src="/2023/12/07/HackTheBox-Devvortex/Untitled%2015.png" class title="Untitled">
+
+<p><code>apport-cli</code>是什么？不懂，搜一下又是一个CVE</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/diego-tella/CVE-2023-1326-PoC">https://github.com/diego-tella/CVE-2023-1326-PoC</a></p>
+<p><a target="_blank" rel="noopener" href="https://diegojoelcondoriquispe.medium.com/cve-2023-1326-poc-c8f2a59d0e00">https://diegojoelcondoriquispe.medium.com/cve-2023-1326-poc-c8f2a59d0e00</a></p>
+<p>利用CVE成功提权。</p>
+<img src="/2023/12/07/HackTheBox-Devvortex/image-20231207132728982.png" class title="image-20231207132728982">
+
+
+	
+	</div>
+  <a type="button" href="/2023/12/07/HackTheBox-Devvortex/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2023/11/20/htb-C-O-P/" >htb-C_O_P</a>
 		</h3>
 		</div>
@@ -353,60 +549,6 @@
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/05/31/vHost-intro/" >vHost_intro</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-05-31  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>virtual host(vHost)虚拟主机是一种允许多个网站托管在同一个服务器上的一种技术，每个网站都有自己独立的域名和资源。这里简单介绍了vHost的两个分类，接着介绍了name-based-vHost的发现方法（手动和使用Fuzz工具）。</p>
-	
-	</div>
-  <a type="button" href="/2023/05/31/vHost-intro/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2023/05/15/splunk-PRTG/" >Splunk,PRTG</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2023-05-15  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>记录我在htb-academy的学习历程，这里复现了两个分析管理平台的攻击历程。一个是splunk上传脚本获取反弹shell（和tomcat部署war类似），另一个是PRTG后台的notification命令注入。</p>
-	
-	</div>
-  <a type="button" href="/2023/05/15/splunk-PRTG/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -458,9 +600,9 @@
 		
 			<li><a href="/categories/Linux/">Linux<span>3</span></a></li>
 		
-			<li><a href="/categories/Web/">Web<span>2</span></a></li>
+			<li><a href="/categories/Web/">Web<span>3</span></a></li>
 		
-			<li><a href="/categories/hackthebox/">hackthebox<span>3</span></a></li>
+			<li><a href="/categories/hackthebox/">hackthebox<span>4</span></a></li>
 		
 			<li><a href="/categories/Linux/pentest/">pentest<span>1</span></a></li>
 		
@@ -475,37 +617,43 @@
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/JavaSec/">JavaSec<span>1</span></a></li>
-		
-			<li><a href="/tags/概念/">概念<span>1</span></a></li>
-		
 			<li><a href="/tags/wordpress/">wordpress<span>1</span></a></li>
 		
-			<li><a href="/tags/http走私/">http走私<span>1</span></a></li>
+			<li><a href="/tags/JavaSec/">JavaSec<span>1</span></a></li>
 		
-			<li><a href="/tags/Python/">Python<span>2</span></a></li>
+			<li><a href="/tags/joomla/">joomla<span>1</span></a></li>
+		
+			<li><a href="/tags/ruby/">ruby<span>1</span></a></li>
+		
+			<li><a href="/tags/pickle反序列化/">pickle反序列化<span>1</span></a></li>
+		
+			<li><a href="/tags/Web/">Web<span>4</span></a></li>
 		
 			<li><a href="/tags/injection/">injection<span>1</span></a></li>
 		
 			<li><a href="/tags/Node-js/">Node.js<span>1</span></a></li>
 		
-			<li><a href="/tags/Web/">Web<span>3</span></a></li>
-		
-			<li><a href="/tags/info-recon/">info_recon<span>1</span></a></li>
-		
-			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+			<li><a href="/tags/hackthebox/">hackthebox<span>5</span></a></li>
 		
 			<li><a href="/tags/Flask/">Flask<span>1</span></a></li>
 		
+			<li><a href="/tags/Linux/">Linux<span>3</span></a></li>
+		
+			<li><a href="/tags/Python/">Python<span>2</span></a></li>
+		
 			<li><a href="/tags/XSS/">XSS<span>1</span></a></li>
+		
+			<li><a href="/tags/XXE/">XXE<span>1</span></a></li>
+		
+			<li><a href="/tags/mechine/">mechine<span>1</span></a></li>
+		
+			<li><a href="/tags/http走私/">http走私<span>1</span></a></li>
 		
 			<li><a href="/tags/web/">web<span>4</span></a></li>
 		
-			<li><a href="/tags/pickle反序列化/">pickle反序列化<span>1</span></a></li>
+			<li><a href="/tags/info-recon/">info_recon<span>1</span></a></li>
 		
-			<li><a href="/tags/hackthebox/">hackthebox<span>4</span></a></li>
-		
-			<li><a href="/tags/ruby/">ruby<span>1</span></a></li>
+			<li><a href="/tags/概念/">概念<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -519,6 +667,14 @@
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2023/12/07/xxe/" ><i class="fa fa-file-o"></i>XXE</a>
+      </li>
+    
+      <li>
+        <a href="/2023/12/07/HackTheBox-Devvortex/" ><i class="fa fa-file-o"></i>HackTheBox|Devvortex</a>
+      </li>
+    
+      <li>
         <a href="/2023/11/20/htb-C-O-P/" ><i class="fa fa-file-o"></i>htb-C_O_P</a>
       </li>
     
@@ -528,14 +684,6 @@
     
       <li>
         <a href="/2023/11/20/htb-WeatherApp/" ><i class="fa fa-file-o"></i>htb-WeatherApp</a>
-      </li>
-    
-      <li>
-        <a href="/2023/10/29/Java-ClassLoader、反射和序列化/" ><i class="fa fa-file-o"></i>Java-ClassLoader、反射和序列化</a>
-      </li>
-    
-      <li>
-        <a href="/2023/10/29/killchain/" ><i class="fa fa-file-o"></i>killchain</a>
       </li>
     
   </ul>
